@@ -1,3 +1,3 @@
-assets/
+public_html/assets/
 protected/runtime/
-themes/classic/views/
+public_html/themes/classic/views/
