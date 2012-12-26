@@ -22,6 +22,11 @@ return array(
 'Username' => 'Nombre de usuario',
 'Password' => 'Contraseña',
 'Remember me next time' => 'Recordarme en esta computadora',
+'Description' => 'Descripción',
+'Code' => 'Código',
+'Extension' => 'Extensión',
+'Md5' => 'MD5',
+'Year' => 'Año',
 
 'Index' => 'Indice',
 

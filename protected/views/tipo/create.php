@@ -8,11 +8,11 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'List Tipo', 'url'=>array('index')),
-	array('label'=>'Manage Tipo', 'url'=>array('admin')),
+	array('label'=>'Ver todos los Tipos', 'url'=>array('index')),
+	//array('label'=>'Manage Tipo', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Create Tipo</h1>
+<h1>Crear Nuevo Tipo</h1>
 
 <?php echo $this->renderPartial('_form', array('model'=>$model)); ?>

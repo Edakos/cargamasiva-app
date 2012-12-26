@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'ies':
  * @property integer $id
- * @property string $codigo
+ * @property string $code
  * @property string $name
  * @property string $notas
  * @property string $created
@@ -16,7 +16,7 @@
  * The followings are the available model relations:
  * @property Carga[] $cargas
  */
-class Ies extends CActiveRecord
+class Ies extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -45,12 +45,12 @@ class Ies extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
-			array('codigo', 'length', 'max'=>100),
+			array('code', 'length', 'max'=>100),
 			array('name', 'length', 'max'=>200),
 			array('notas, created, modified', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, codigo, name, notas, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, code, name, notas, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,17 +71,9 @@ class Ies extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'codigo' => 'Codigo',
-			'name' => 'Name',
-			'notas' => 'Notas',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
-	}
+		return array_merge(parent::attributeLabels(), array(
+        ));
+    }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
@@ -95,7 +87,7 @@ class Ies extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('codigo',$this->codigo,true);
+		$criteria->compare('code',$this->code,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('notas',$this->notas,true);
 		$criteria->compare('created',$this->created,true);

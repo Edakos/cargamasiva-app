@@ -7,13 +7,13 @@
  * @property integer $id
  * @property string $name
  * @property string $year
- * @property string $descripcion
+ * @property string $description
  *
  * The followings are the available model relations:
  * @property Pregunta[] $preguntas
  * @property Carga[] $cargas
  */
-class Formulario extends CActiveRecord
+class Formulario extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -43,10 +43,10 @@ class Formulario extends CActiveRecord
 		return array(
 			array('name', 'length', 'max'=>100),
 			array('year', 'length', 'max'=>16),
-			array('descripcion', 'safe'),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, year, descripcion', 'safe', 'on'=>'search'),
+			array('id, name, year, description', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,12 +68,8 @@ class Formulario extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'year' => 'Year',
-			'descripcion' => 'Descripcion',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**
@@ -90,10 +86,11 @@ class Formulario extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('year',$this->year,true);
-		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('description',$this->description,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
+    
 }

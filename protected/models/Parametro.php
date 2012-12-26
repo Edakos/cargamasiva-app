@@ -15,7 +15,7 @@
  * @property integer $created_by
  * @property integer $modified_by
  */
-class Parametro extends CActiveRecord
+class Parametro extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -69,18 +69,8 @@ class Parametro extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'valor' => 'Valor',
-			'texto' => 'Texto',
-			'numero' => 'Numero',
-			'fecha' => 'Fecha',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**

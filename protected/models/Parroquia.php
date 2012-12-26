@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'parroquia':
  * @property integer $id
- * @property string $codigo
+ * @property string $code
  * @property string $name
  * @property integer $canton_id
  * @property string $created
@@ -20,7 +20,7 @@
  * The followings are the available model relations:
  * @property Canton $canton
  */
-class Parroquia extends CActiveRecord
+class Parroquia extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -50,12 +50,12 @@ class Parroquia extends CActiveRecord
 		return array(
 			array('canton_id', 'required'),
 			array('canton_id, created_by, modified_by, cabecera_cantonal, capital_provincial, cambio, ojo', 'numerical', 'integerOnly'=>true),
-			array('codigo', 'length', 'max'=>100),
+			array('code', 'length', 'max'=>100),
 			array('name', 'length', 'max'=>200),
 			array('created, modified', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, codigo, name, canton_id, created, modified, created_by, modified_by, cabecera_cantonal, capital_provincial, cambio, ojo', 'safe', 'on'=>'search'),
+			array('id, code, name, canton_id, created, modified, created_by, modified_by, cabecera_cantonal, capital_provincial, cambio, ojo', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,21 +76,9 @@ class Parroquia extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'codigo' => 'Codigo',
-			'name' => 'Name',
-			'canton_id' => 'Canton',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-			'cabecera_cantonal' => 'Cabecera Cantonal',
-			'capital_provincial' => 'Capital Provincial',
-			'cambio' => 'Cambio',
-			'ojo' => 'Ojo',
-		);
-	}
+		return array_merge(parent::attributeLabels(), array(
+        ));
+    }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.
@@ -104,7 +92,7 @@ class Parroquia extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('codigo',$this->codigo,true);
+		$criteria->compare('code',$this->code,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('canton_id',$this->canton_id);
 		$criteria->compare('created',$this->created,true);

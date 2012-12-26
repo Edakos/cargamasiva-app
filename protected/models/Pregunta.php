@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'pregunta':
  * @property integer $id
- * @property string $descripcion
+ * @property string $description
  * @property integer $pregunta_id
  * @property string $name
  * @property integer $tipo_id
@@ -24,7 +24,7 @@
  * @property Tipo $tipo
  * @property Opcion[] $opcions
  */
-class Pregunta extends CActiveRecord
+class Pregunta extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -55,10 +55,10 @@ class Pregunta extends CActiveRecord
 			array('created, modified', 'required'),
 			array('pregunta_id, tipo_id, orden, created_by, modified_by, formulario_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>128),
-			array('descripcion', 'safe'),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, descripcion, pregunta_id, name, tipo_id, orden, created, modified, created_by, modified_by, formulario_id', 'safe', 'on'=>'search'),
+			array('id, description, pregunta_id, name, tipo_id, orden, created, modified, created_by, modified_by, formulario_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -84,19 +84,10 @@ class Pregunta extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'descripcion' => 'Descripcion',
-			'pregunta_id' => 'Pregunta',
-			'name' => 'Name',
-			'tipo_id' => 'Tipo',
-			'orden' => 'Orden',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-			'formulario_id' => 'Formulario',
-		);
+        return array_merge(parent::attributeLabels(), array(
+            'pregunta_id' => 'Pregunta padre',
+            'tipo_id' => 'Tipo',
+        ));
 	}
 
 	/**
@@ -111,7 +102,7 @@ class Pregunta extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('description',$this->description,true);
 		$criteria->compare('pregunta_id',$this->pregunta_id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('tipo_id',$this->tipo_id);

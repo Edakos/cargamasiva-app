@@ -8,7 +8,7 @@
  * @property string $texto
  * @property string $numero
  * @property integer $pregunta_id
- * @property string $descripcion
+ * @property string $description
  * @property integer $carga_id
  * @property string $name
  * @property string $created
@@ -20,7 +20,7 @@
  * @property Pregunta $pregunta
  * @property Carga $carga
  */
-class Respuesta extends CActiveRecord
+class Respuesta extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -51,10 +51,10 @@ class Respuesta extends CActiveRecord
 			array('created, modified', 'required'),
 			array('pregunta_id, carga_id, created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>128),
-			array('texto, numero, descripcion', 'safe'),
+			array('texto, numero, description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, texto, numero, pregunta_id, descripcion, carga_id, name, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, texto, numero, pregunta_id, description, carga_id, name, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,19 +76,8 @@ class Respuesta extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'texto' => 'Texto',
-			'numero' => 'Numero',
-			'pregunta_id' => 'Pregunta',
-			'descripcion' => 'Descripcion',
-			'carga_id' => 'Carga',
-			'name' => 'Name',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+        return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**
@@ -106,7 +95,7 @@ class Respuesta extends CActiveRecord
 		$criteria->compare('texto',$this->texto,true);
 		$criteria->compare('numero',$this->numero,true);
 		$criteria->compare('pregunta_id',$this->pregunta_id);
-		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('description',$this->description,true);
 		$criteria->compare('carga_id',$this->carga_id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('created',$this->created,true);

@@ -5,9 +5,9 @@
  *
  * The followings are the available columns in table 'conocimiento_area':
  * @property integer $id
- * @property integer $codigo
+ * @property integer $code
  * @property string $name
- * @property string $descripcion
+ * @property string $description
  * @property string $created
  * @property string $modified
  * @property integer $created_by
@@ -16,7 +16,7 @@
  * The followings are the available model relations:
  * @property ConocimientoSubarea[] $conocimientoSubareas
  */
-class ConocimientoArea extends CActiveRecord
+class ConocimientoArea extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -45,12 +45,12 @@ class ConocimientoArea extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created, modified', 'required'),
-			array('codigo, created_by, modified_by', 'numerical', 'integerOnly'=>true),
+			array('code, created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>128),
-			array('descripcion', 'safe'),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, codigo, name, descripcion, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, code, name, description, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,16 +71,8 @@ class ConocimientoArea extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'codigo' => 'Codigo',
-			'name' => 'Name',
-			'descripcion' => 'Descripcion',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**
@@ -95,9 +87,9 @@ class ConocimientoArea extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('codigo',$this->codigo);
+		$criteria->compare('code',$this->code);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('description',$this->description,true);
 		$criteria->compare('created',$this->created,true);
 		$criteria->compare('modified',$this->modified,true);
 		$criteria->compare('created_by',$this->created_by);

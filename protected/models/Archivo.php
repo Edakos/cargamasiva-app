@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'archivo':
  * @property integer $id
- * @property string $nombre
+ * @property string $name
  * @property string $md5
  * @property string $extension
  * @property string $created
@@ -16,7 +16,7 @@
  * The followings are the available model relations:
  * @property Carga[] $cargas
  */
-class Archivo extends CActiveRecord
+class Archivo extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -46,12 +46,12 @@ class Archivo extends CActiveRecord
 		return array(
 			array('created, modified', 'required'),
 			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
-			array('nombre', 'length', 'max'=>1000),
+			array('name', 'length', 'max'=>1000),
 			array('md5', 'length', 'max'=>64),
 			array('extension', 'length', 'max'=>16),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, nombre, md5, extension, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, name, md5, extension, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,16 +72,8 @@ class Archivo extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'nombre' => 'Nombre',
-			'md5' => 'Md5',
-			'extension' => 'Extension',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**
@@ -96,7 +88,7 @@ class Archivo extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('nombre',$this->nombre,true);
+		$criteria->compare('name',$this->name,true);
 		$criteria->compare('md5',$this->md5,true);
 		$criteria->compare('extension',$this->extension,true);
 		$criteria->compare('created',$this->created,true);

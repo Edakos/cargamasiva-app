@@ -13,7 +13,7 @@ $this->menu=array(
 	array('label'=>'Modificar Formulario', 'url'=>array('update', 'id'=>$model->id)),
 	array('label'=>'Borrar Formulario', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Administrar Formulario', 'url'=>array('admin')),
-    array('label'=>'Preguntas', 'url'=>array('pregunta/index', 'formulario_id' => $model->id)),
+    array('label'=>'Nueva Pregunta', 'url'=>array('pregunta/create', 'formulario_id' => $model->id)),
 );
 ?>
 
@@ -23,7 +23,7 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'year',
-		'descripcion',
+		'description',
 	),
 )); ?>
 

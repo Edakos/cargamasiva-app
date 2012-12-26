@@ -3,16 +3,17 @@
 /* @var $model Pregunta */
 
 $this->breadcrumbs=array(
-	'Preguntas'=>array('index'),
-	'Create',
+	'Formularios' => array('formulario/index'),
+    $formularioName => array('formulario/view', 'id' => $model->formulario_id),
+	'Nueva Pregunta',
 );
 
 $this->menu=array(
-	array('label'=>'List Pregunta', 'url'=>array('index')),
-	array('label'=>'Manage Pregunta', 'url'=>array('admin')),
+    array('label'=>'Ver Formulario', 'url'=>array('formulario/view', 'id' => $model->formulario_id)),
+    array('label'=>'Ver Tipos', 'url'=>array('tipo/index')),
 );
 ?>
 
-<h1>Create Pregunta</h1>
+<h1>Nueva Pregunta del formulario "<?php echo $formularioName; ?>"</h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model, 'tipos'=>$tipos, 'preguntas'=>$preguntas)); ?>

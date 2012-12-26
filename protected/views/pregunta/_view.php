@@ -5,35 +5,32 @@
 
 <div class="view">
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('id')); ?>:</b>
-	<?php echo CHtml::link(CHtml::encode($data->id), array('view', 'id'=>$data->id)); ?>
-	<br />
+    <h2>
+	<?php echo CHtml::link(CHtml::encode($data->name), array('view', 'id'=>$data->id)); ?>
+	</h2>
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('descripcion')); ?>:</b>
-	<?php echo CHtml::encode($data->descripcion); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</b>
+	<?php echo CHtml::encode($data->description); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('pregunta_id')); ?>:</b>
-	<?php echo CHtml::encode($data->pregunta_id); ?>
-	<br />
-
-	<b><?php echo CHtml::encode($data->getAttributeLabel('name')); ?>:</b>
-	<?php echo CHtml::encode($data->name); ?>
+	<?php //echo CHtml::encode($data->pregunta_id); ?>
+    <?php echo CHtml::encode(!empty($data->pregunta) ? $data->pregunta->name : ''); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('tipo_id')); ?>:</b>
-	<?php echo CHtml::encode($data->tipo_id); ?>
+	<?php echo CHtml::encode($data->tipo->name); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('orden')); ?>:</b>
 	<?php echo CHtml::encode($data->orden); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('created')); ?>:</b>
+	<b><?php /* echo CHtml::encode($data->getAttributeLabel('created')); ?>:</b>
 	<?php echo CHtml::encode($data->created); ?>
 	<br />
 
-	<?php /*
+	<?php 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('modified')); ?>:</b>
 	<?php echo CHtml::encode($data->modified); ?>
 	<br />
@@ -46,10 +43,10 @@
 	<?php echo CHtml::encode($data->modified_by); ?>
 	<br />
 
+
+	*/ ?>
 	<b><?php echo CHtml::encode($data->getAttributeLabel('formulario_id')); ?>:</b>
 	<?php echo CHtml::encode($data->formulario_id); ?>
 	<br />
-
-	*/ ?>
 
 </div>

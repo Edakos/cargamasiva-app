@@ -5,7 +5,7 @@
  * LoginForm is the data structure for keeping
  * user login form data. It is used by the 'login' action of 'SiteController'.
  */
-class LoginForm extends CFormModel
+class LoginForm extends MyFormModel
 {
 	public $username;
 	public $password;
@@ -35,25 +35,9 @@ class LoginForm extends CFormModel
 	 */
 	public function attributeLabels()
 	{
-
-        $labels = array(
+        return array_merge(parent::attributeLabels(), array(
             'rememberMe'=>Yii::t('app', 'Remember me next time'),
-        );
-        
-        
-        foreach($this->attributeNames() as $name) {
-            if (!isset($labels[$name])) {
-                $labels[$name] = Yii::t('app', $this->generateAttributeLabel($name));
-            }
-        }
-        
-        
-        return $labels;
-/*
-		return array(
-			'rememberMe'=>'Remember me next time',
-		);
-*/ 
+        )); 
 	}
 
 	/**

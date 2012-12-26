@@ -16,7 +16,7 @@
  * @property Pregunta[] $preguntas
  * @property Formulario $formulario
  */
-class Seccion extends CActiveRecord
+class Seccion extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -71,16 +71,9 @@ class Seccion extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'formulario_id' => 'Formulario',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
-	}
+		return array_merge(parent::attributeLabels(), array(
+        ));
+    }
 
 	/**
 	 * Retrieves a list of models based on the current search/filter conditions.

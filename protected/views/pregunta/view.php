@@ -16,21 +16,17 @@ $this->menu=array(
 );
 ?>
 
-<h1>View Pregunta #<?php echo $model->id; ?></h1>
+<h1>Pregunta "<?php echo $model->name; ?>"</h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'descripcion',
+		'description',
 		'pregunta_id',
 		'name',
 		'tipo_id',
 		'orden',
-		'created',
-		'modified',
-		'created_by',
-		'modified_by',
 		'formulario_id',
 	),
 )); ?>

@@ -25,7 +25,7 @@ $this->menu=array(
 		'texto',
 		'numero',
 		'pregunta_id',
-		'descripcion',
+		'description',
 		'carga_id',
 		'name',
 		'created',

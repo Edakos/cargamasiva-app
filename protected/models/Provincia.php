@@ -5,7 +5,7 @@
  *
  * The followings are the available columns in table 'provincia':
  * @property integer $id
- * @property string $codigo
+ * @property string $code
  * @property string $name
  * @property string $created
  * @property string $modified
@@ -15,7 +15,7 @@
  * The followings are the available model relations:
  * @property Canton[] $cantons
  */
-class Provincia extends CActiveRecord
+class Provincia extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -44,12 +44,12 @@ class Provincia extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
-			array('codigo', 'length', 'max'=>100),
+			array('code', 'length', 'max'=>100),
 			array('name', 'length', 'max'=>200),
 			array('created, modified', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, codigo, name, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, code, name, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -70,15 +70,8 @@ class Provincia extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'codigo' => 'Codigo',
-			'name' => 'Name',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**
@@ -93,7 +86,7 @@ class Provincia extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('codigo',$this->codigo,true);
+		$criteria->compare('code',$this->code,true);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('created',$this->created,true);
 		$criteria->compare('modified',$this->modified,true);

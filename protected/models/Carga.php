@@ -19,7 +19,7 @@
  * @property Formulario $formulario
  * @property Ies $ies
  */
-class Carga extends CActiveRecord
+class Carga extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -75,16 +75,8 @@ class Carga extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'archivo_id' => 'Archivo',
-			'ies_id' => 'Ies',
-			'formulario_id' => 'Formulario',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**

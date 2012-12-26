@@ -14,7 +14,7 @@
  * The followings are the available model relations:
  * @property Pregunta[] $preguntas
  */
-class Tipo extends CActiveRecord
+class Tipo extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -68,14 +68,8 @@ class Tipo extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**

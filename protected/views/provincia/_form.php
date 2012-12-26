@@ -16,9 +16,9 @@
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'codigo'); ?>
-		<?php echo $form->textField($model,'codigo',array('size'=>60,'maxlength'=>100)); ?>
-		<?php echo $form->error($model,'codigo'); ?>
+		<?php echo $form->labelEx($model,'code'); ?>
+		<?php echo $form->textField($model,'code',array('size'=>60,'maxlength'=>100)); ?>
+		<?php echo $form->error($model,'code'); ?>
 	</div>
 
 	<div class="row">

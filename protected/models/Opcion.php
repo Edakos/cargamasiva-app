@@ -6,7 +6,7 @@
  * The followings are the available columns in table 'opcion':
  * @property integer $id
  * @property string $name
- * @property string $descripcion
+ * @property string $description
  * @property integer $pregunta_id
  * @property string $created
  * @property string $modified
@@ -16,7 +16,7 @@
  * The followings are the available model relations:
  * @property Pregunta $pregunta
  */
-class Opcion extends CActiveRecord
+class Opcion extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -47,10 +47,10 @@ class Opcion extends CActiveRecord
 			array('created, modified', 'required'),
 			array('pregunta_id, created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>128),
-			array('descripcion', 'safe'),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, descripcion, pregunta_id, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, name, description, pregunta_id, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -71,16 +71,8 @@ class Opcion extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'name' => 'Name',
-			'descripcion' => 'Descripcion',
-			'pregunta_id' => 'Pregunta',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**
@@ -96,7 +88,7 @@ class Opcion extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
-		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('description',$this->description,true);
 		$criteria->compare('pregunta_id',$this->pregunta_id);
 		$criteria->compare('created',$this->created,true);
 		$criteria->compare('modified',$this->modified,true);

@@ -6,14 +6,14 @@
  * The followings are the available columns in table 'registro':
  * @property integer $id
  * @property string $contexto
- * @property string $descripcion
+ * @property string $description
  * @property string $creado
  * @property string $created
  * @property string $modified
  * @property integer $created_by
  * @property integer $modified_by
  */
-class Registro extends CActiveRecord
+class Registro extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
@@ -44,10 +44,10 @@ class Registro extends CActiveRecord
 			array('creado, created, modified', 'required'),
 			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('contexto', 'length', 'max'=>1000),
-			array('descripcion', 'safe'),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, contexto, descripcion, creado, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, contexto, description, creado, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,16 +67,8 @@ class Registro extends CActiveRecord
 	 */
 	public function attributeLabels()
 	{
-		return array(
-			'id' => 'ID',
-			'contexto' => 'Contexto',
-			'descripcion' => 'Descripcion',
-			'creado' => 'Creado',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'created_by' => 'Created By',
-			'modified_by' => 'Modified By',
-		);
+		return array_merge(parent::attributeLabels(), array(
+        ));
 	}
 
 	/**
@@ -92,7 +84,7 @@ class Registro extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('contexto',$this->contexto,true);
-		$criteria->compare('descripcion',$this->descripcion,true);
+		$criteria->compare('description',$this->description,true);
 		$criteria->compare('creado',$this->creado,true);
 		$criteria->compare('created',$this->created,true);
 		$criteria->compare('modified',$this->modified,true);

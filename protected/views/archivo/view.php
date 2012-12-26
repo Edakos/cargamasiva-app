@@ -4,7 +4,7 @@
 
 $this->breadcrumbs=array(
 	'Archivos'=>array('index'),
-	$model->id,
+	$model->name,
 );
 
 $this->menu=array(
@@ -22,7 +22,7 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'nombre',
+		'name',
 		'md5',
 		'extension',
 		'created',

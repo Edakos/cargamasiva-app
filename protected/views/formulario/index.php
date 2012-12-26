@@ -7,8 +7,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Formulario', 'url'=>array('create')),
-	array('label'=>'Manage Formulario', 'url'=>array('admin')),
+	array('label'=>'Crear nuevo Formulario', 'url'=>array('create')),
+	array('label'=>'Manegar Formularios', 'url'=>array('admin')),
 );
 ?>
 

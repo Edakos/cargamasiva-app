@@ -5,7 +5,7 @@
  * ContactForm is the data structure for keeping
  * contact form data. It is used by the 'contact' action of 'SiteController'.
  */
-class ContactForm extends CFormModel
+class ContactForm extends MyFormModel
 {
 	public $name;
 	public $email;
@@ -35,27 +35,8 @@ class ContactForm extends CFormModel
 	 */
 	public function attributeLabels()
 	{
-        $labels = array(
+        return array_merge(parent::attributeLabels(), array(
             'verifyCode'=>Yii::t('app', 'Verification Code'),
-        );
-        
-        
-        foreach($this->attributeNames() as $name) {
-            if (!isset($labels[$name])) {
-                $labels[$name] = Yii::t('app', $this->generateAttributeLabel($name));
-            }
-        }
-        
-        
-        return $labels;
-        /*
-		return array(
-			'verifyCode'=>Yii::t('app', 'Verification Code'),
-            'name'=>Yii::t('app', 'Name'),
-            'body'=>Yii::t('app', 'Body'),
-            'email'=>Yii::t('app', 'Email'),
-            'subject'=>Yii::t('app', 'Subject'),
-		);
-        */
+        ));
 	}
 }

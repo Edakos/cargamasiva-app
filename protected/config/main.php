@@ -16,6 +16,7 @@ return array(
 
 	// autoloading model and component classes
 	'import'=>array(
+		'application.components.MyActiveRecord',
 		'application.models.*',
 		'application.components.*',
 	),
