@@ -24,7 +24,7 @@
 	<div id="header">
         <?php //echo CHtml::image('images/senescyt.png'); ?>
 		<div id="logo">
-            <?php echo CHtml::link(CHtml::image(Yii::app()->request->baseUrl . '/images/carga-masiva.png', CHtml::encode(Yii::app()->name), array('width' => '200', 'height' => '100')), Yii::app()->createAbsoluteUrl(Yii::app()->request->url)); ?>
+            <?php echo CHtml::link(CHtml::image(Yii::app()->request->baseUrl . '/images/carga-masiva.png', CHtml::encode(Yii::app()->name), array('width' => '200', 'height' => '100')), Yii::app()->homeUrl); ?>
             <?php echo CHtml::link(CHtml::image(Yii::app()->request->baseUrl . '/images/senescyt.png'), 'http://www.senescyt.gob.ec'); ?>
             
             <?php //echo CHtml::image('images/sniese.png'); ?>

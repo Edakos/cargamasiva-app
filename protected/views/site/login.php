@@ -9,6 +9,31 @@ $this->breadcrumbs=array(
 );
 ?>
 
+<div style="clear:both;">
+<div style="float:left;width:50%;">
+<h2>¡Bienvenido!</h2>
+<p>
+El presente sistema tiene como objetivo la actualización de datos de las instituciones de educación superior del Ecuador, correspondiente a los años 2011 y 2012.
+</p>
+
+<div style="clear:both;">
+<?php echo CHtml::link(CHtml::image('/images/info_icon.png', 'Acerca de', array('width' => 100, 'height' => 100, 'style' => 'float:left;')), '/site/page?view=about');?>
+<div style="float:left;width:280px;padding:10px;">
+<h3>Sobre este sistema</h3>
+Entérese de los antecedentes y objetivos de este sistema.
+</div>
+</div>
+
+<div style="clear:both;">
+<?php echo CHtml::link(CHtml::image('/images/smoke_signals.gif', 'Contacto', array('width' => 100, 'height' => 100, 'style' => 'float:left;')), '/site/contact');?>
+<div style="float:left;width:280px;padding:10px;">
+<h3>Contáctese con nosotros</h3>
+Utilice el formulario de contacto para hacernos llegar sus observaciones y preguntas.
+</div>
+</div>
+
+</div>
+<div style="float:left;width:300px;margin:20px;padding:20px;background-color:#eee;border:solid 1px #ccc;">
 <h1><?php echo Yii::t('app', 'Login'); ?></h1>
 
 <p><?php echo Yii::t('app', 'Please fill out the following form with your login credentials'); ?>:</p>
@@ -51,3 +76,6 @@ $this->breadcrumbs=array(
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->
+
+</div>
+</div>
