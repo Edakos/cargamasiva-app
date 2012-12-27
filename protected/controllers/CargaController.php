@@ -175,8 +175,8 @@ class CargaController extends Controller
             'Formulario',
             array(
                 'criteria' => array(
-                    'condition'=>'levantamiento_id=:levantamientoId',
-                    'params'=>array(':levantamientoId'=>'2'),
+                    'condition'=>'levantamiento_id=:levantamientoId and name<>:name',
+                    'params'=>array(':levantamientoId'=>'2', ':name' =>'IES'),
                 )
             )
         );
