@@ -16,6 +16,8 @@ $this->breadcrumbs=array(
 El presente sistema tiene como objetivo la actualización de datos de las instituciones de educación superior del Ecuador, correspondiente a los años 2011 y 2012.
 </p>
 
+<hr/>
+
 <div style="clear:both;">
 <?php echo CHtml::link(CHtml::image('/images/info_icon.png', 'Acerca de', array('width' => 100, 'height' => 100, 'style' => 'float:left;')), '/site/page?view=about');?>
 <div style="float:left;width:280px;padding:10px;">
@@ -23,6 +25,8 @@ El presente sistema tiene como objetivo la actualización de datos de las instit
 Entérese de los antecedentes y objetivos de este sistema.
 </div>
 </div>
+
+<hr/>
 
 <div style="clear:both;">
 <?php echo CHtml::link(CHtml::image('/images/smoke_signals.gif', 'Contacto', array('width' => 100, 'height' => 100, 'style' => 'float:left;')), '/site/contact');?>
@@ -32,8 +36,10 @@ Utilice el formulario de contacto para hacernos llegar sus observaciones y pregu
 </div>
 </div>
 
+<hr/>
+
 </div>
-<div style="float:left;width:300px;margin:20px;padding:20px;background-color:#eee;border:solid 1px #ccc;margin-bottom:40px;">
+<div style="float:right;width:300px;margin:20px;padding:20px;background-color:#eee;border:solid 1px #ccc;margin-bottom:40px;">
 <h1>Inicio de sesión</h1>
 
 <!--p><?php //echo Yii::t('app', 'Please fill out the following form with your login credentials'); ?>:</p-->

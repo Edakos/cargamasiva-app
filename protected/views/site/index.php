@@ -4,17 +4,56 @@
 $this->pageTitle=Yii::app()->name;
 ?>
 
-<h1><?php echo Yii::t('app', 'Welcome to') . ' '. CHtml::encode(Yii::app()->name); ?></i></h1>
+<h1>1001 Escuela Politécnica Nacional</h1>
 
-<p>Congratulations! You have successfully created your Yii application.</p>
+<div style="clear:both;">
 
-<p>You may change the content of this page by modifying the following two files:</p>
-<ul>
-	<li>View file: <code><?php echo __FILE__; ?></code></li>
-	<li>Layout file: <code><?php echo $this->getLayoutFile('main'); ?></code></li>
-</ul>
+<div style="float:left;width:45%;">
+    <hr/>
+<h2>Levantamiento de datos 2011 y 2012</h2>
+<p><?php echo CHtml::link('Descarga el Manual de Usuario', '#'); ?> para la actualización de datos.</p>
+<p>A continuación se listan los formularios para la carga de datos:</p>
+<?php
+$this->widget('zii.widgets.grid.CGridView', array(
+    'dataProvider'=>$dataProvider2012,
+    'columns'=>array(
+        'description:html:Formulario',  
+        array(
+            'class'=>'CLinkColumn',
+            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : $data->name . ".xlsx"',
+            'header'=>'Archivo',
+            'urlExpression'=>'$data->name == "IES" ? "/formulario/view/" . $data->id : "/archivo/download/" . $data->name . ".xlsx"',
+        ),
+    ),
+));
+?>
+<hr/>
+<p>Descarga del <?php echo CHtml::link('Formulario Institucional', '#'); ?>, imprimir y remitir a la SENESCYT con la respectiva firma del rector.</p>
+<hr/>
+<p>Descarga del <?php echo CHtml::link('reporte de estado de las carreras y programas académicos', '#'); ?> (Información del Sistema Académico de la SENESCYT</p>
+</div>
+<div style="float:right;width:45%;">
+    <hr/>
+<h2>Levantamiento de datos 2010</h2>
+<p>Si desea revisar los datos 2010 que envió la institución a la SENESCYT, puede descargar los siguientes archivos:</p>
+<?php
+$this->widget('zii.widgets.grid.CGridView', array(
+    'dataProvider'=>$dataProvider2010,
+    'columns'=>array(
+        'description:html:Formulario',  
+        array(
+            'class'=>'CLinkColumn',
+            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : $data->name . ".xlsx"',
+            'header'=>'Archivo',
+            'urlExpression'=>'$data->name == "IES" ? "/formulario/view/" . $data->id : "/archivo/download/" . $data->name . ".xlsx"',
+        ),
+    ),
+));
+?>
+<hr/>
+<p>Descarga de la <?php echo CHtml::link('ficha de presentación de información y documentos físicos', '#'); ?> que la institución entregó a la SENESCYT. 
+</p>
+</div>
 
-<p>For more details on how to further develop this application, please read
-the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-should you have any questions.</p>
+</div>
+

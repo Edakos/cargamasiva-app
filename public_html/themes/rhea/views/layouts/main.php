@@ -46,13 +46,19 @@
 				array('label'=>Yii::t('app', 'Home'), 'url'=>array('site/index'), 'visible'=>!Yii::app()->user->isGuest),
 				array('label'=>Yii::t('app', 'About'), 'url'=>array('site/page', 'view'=>'about'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>Yii::t('app', 'Contact'), 'url'=>array('site/contact'), 'visible'=>Yii::app()->user->isGuest),
-				
+
+/*
                 array('label'=>Yii::t('app', 'Formularios'), 'url'=>array('formulario/index'), 'visible'=>!Yii::app()->user->isGuest),
                 array('label'=>Yii::t('app', 'Tipos de dato'), 'url'=>array('tipo/index'), 'visible'=>!Yii::app()->user->isGuest),
                 array('label'=>Yii::t('app', 'IES'), 'url'=>array('ies/index'), 'visible'=>!Yii::app()->user->isGuest),
                 array('label'=>Yii::t('app', 'Archivos'), 'url'=>array('archivo/index'), 'visible'=>!Yii::app()->user->isGuest),
                 array('label'=>Yii::t('app', 'Areas del conocimiento'), 'url'=>array('conocimientoArea/index'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Provincias'), 'url'=>array('provincia/index'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Provincias'), 'url'=>array('provincia/index'), 'visible'=>!Yii::app()->user->isGuest),                
+*/ 
+
+                array('label'=>Yii::t('app', 'Formulario'), 'url'=>array('formulario/llenar'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Cargas'), 'url'=>array('carga/create'), 'visible'=>!Yii::app()->user->isGuest),
+
 				array('label'=>Yii::t('app', 'Cerrar sesión') . ' ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
 		)); ?>

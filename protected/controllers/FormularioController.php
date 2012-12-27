@@ -57,13 +57,14 @@ class FormularioController extends Controller
             'Pregunta', 
             array(
                 'criteria'=>array(
-                'condition'=>'formulario_id=:formularioId',
-                'params'=>array(':formularioId'=>$id),
-            ),
-            'pagination'=>array(
-                'pageSize'=>10,
-            ),
-        ));
+                    'condition'=>'formulario_id=:formularioId',
+                    'params'=>array(':formularioId'=>$id),
+                ),
+                'pagination'=>array(
+                    'pageSize'=>10,
+                ),
+            )
+        );
         
         $this->render('view',array(
             'model'=>$model,

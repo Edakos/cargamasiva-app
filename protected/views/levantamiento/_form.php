@@ -27,30 +27,6 @@
 		<?php echo $form->error($model,'description'); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->labelEx($model,'created'); ?>
-		<?php echo $form->textField($model,'created'); ?>
-		<?php echo $form->error($model,'created'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'modified'); ?>
-		<?php echo $form->textField($model,'modified'); ?>
-		<?php echo $form->error($model,'modified'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'created_by'); ?>
-		<?php echo $form->textField($model,'created_by'); ?>
-		<?php echo $form->error($model,'created_by'); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->labelEx($model,'modified_by'); ?>
-		<?php echo $form->textField($model,'modified_by'); ?>
-		<?php echo $form->error($model,'modified_by'); ?>
-	</div>
-
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
 	</div>

@@ -30,7 +30,30 @@ class SiteController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+        $formDataProvider2012 = new CActiveDataProvider(
+            'Formulario',
+            array(
+                'criteria' => array(
+                    'condition'=>'levantamiento_id=:levantamientoId',
+                    'params'=>array(':levantamientoId'=>'2'),
+                )
+            )
+        );
+        
+        $formDataProvider2010 = new CActiveDataProvider(
+            'Formulario',
+            array(
+                'criteria' => array(
+                    'condition'=>'levantamiento_id=:levantamientoId',
+                    'params'=>array(':levantamientoId'=>'1'),
+                )
+            )
+        );
+        
+		$this->render('index', array(
+            'dataProvider2012' => $formDataProvider2012,
+            'dataProvider2010' => $formDataProvider2010,
+        ));
 	}
 
 	/**
