@@ -1,6 +1,6 @@
 <?php
 
-class CargaController extends Controller
+class DocumentoController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -32,7 +32,7 @@ class CargaController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','realizar'),
+				'actions'=>array('create','update'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -62,14 +62,14 @@ class CargaController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Carga;
+		$model=new Documento;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Carga']))
+		if(isset($_POST['Documento']))
 		{
-			$model->attributes=$_POST['Carga'];
+			$model->attributes=$_POST['Documento'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -91,9 +91,9 @@ class CargaController extends Controller
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Carga']))
+		if(isset($_POST['Documento']))
 		{
-			$model->attributes=$_POST['Carga'];
+			$model->attributes=$_POST['Documento'];
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -122,7 +122,7 @@ class CargaController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Carga');
+		$dataProvider=new CActiveDataProvider('Documento');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -133,10 +133,10 @@ class CargaController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Carga('search');
+		$model=new Documento('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Carga']))
-			$model->attributes=$_GET['Carga'];
+		if(isset($_GET['Documento']))
+			$model->attributes=$_GET['Documento'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -150,7 +150,7 @@ class CargaController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Carga::model()->findByPk($id);
+		$model=Documento::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -162,39 +162,10 @@ class CargaController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='carga-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='documento-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
-    
-    public function actionRealizar() 
-    {
-        $formDataProvider2012 = new CActiveDataProvider(
-            'Formulario',
-            array(
-                'criteria' => array(
-                    'condition'=>'levantamiento_id=:levantamientoId',
-                    'params'=>array(':levantamientoId'=>'2'),
-                )
-            )
-        );
-        
-        $docDataProvider2012 = new CActiveDataProvider(
-            'Documento',
-            array(
-                'criteria' => array(
-                    'condition'=>'levantamiento_id=:levantamientoId',
-                    'params'=>array(':levantamientoId'=>'2'),
-                )
-            )
-        );
-
-        $this->layout = 'column1';
-        $this->render('realizar', array(
-            'formDataProvider2012' => $formDataProvider2012,
-            'docDataProvider2012' => $docDataProvider2012,
-        ));
-    }
 }

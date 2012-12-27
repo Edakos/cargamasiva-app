@@ -27,6 +27,7 @@ return array(
 'Extension' => 'Extensión',
 'Md5' => 'MD5',
 'Year' => 'Año',
+'Operations' => 'Opciones',
 
 'Index' => 'Indice',
 

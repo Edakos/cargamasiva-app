@@ -1,27 +1,28 @@
 <?php
 
 /**
- * This is the model class for table "levantamiento".
+ * This is the model class for table "documento".
  *
- * The followings are the available columns in table 'levantamiento':
+ * The followings are the available columns in table 'documento':
  * @property integer $id
  * @property string $name
+ * @property string $year
  * @property string $description
  * @property string $created
  * @property string $modified
  * @property integer $created_by
  * @property integer $modified_by
+ * @property integer $levantamiento_id
  *
  * The followings are the available model relations:
- * @property Documento[] $documentos
- * @property Formulario[] $formularios
+ * @property Levantamiento $levantamiento
  */
-class Levantamiento extends MyActiveRecord
+class Documento extends MyActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Levantamiento the static model class
+	 * @return Documento the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -33,7 +34,7 @@ class Levantamiento extends MyActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'levantamiento';
+		return 'documento';
 	}
 
 	/**
@@ -44,12 +45,14 @@ class Levantamiento extends MyActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
+			array('created, modified', 'required'),
+			array('created_by, modified_by, levantamiento_id', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>100),
-			array('description, created, modified', 'safe'),
+			array('year', 'length', 'max'=>16),
+			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, name, description, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, name, year, description, created, modified, created_by, modified_by, levantamiento_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -61,8 +64,7 @@ class Levantamiento extends MyActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'documentos' => array(self::HAS_MANY, 'Documento', 'levantamiento_id'),
-			'formularios' => array(self::HAS_MANY, 'Formulario', 'levantamiento_id'),
+			'levantamiento' => array(self::BELONGS_TO, 'Levantamiento', 'levantamiento_id'),
 		);
 	}
 
@@ -88,11 +90,13 @@ class Levantamiento extends MyActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('name',$this->name,true);
+		$criteria->compare('year',$this->year,true);
 		$criteria->compare('description',$this->description,true);
 		$criteria->compare('created',$this->created,true);
 		$criteria->compare('modified',$this->modified,true);
 		$criteria->compare('created_by',$this->created_by);
 		$criteria->compare('modified_by',$this->modified_by);
+		$criteria->compare('levantamiento_id',$this->levantamiento_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

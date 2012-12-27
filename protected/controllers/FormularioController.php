@@ -32,7 +32,7 @@ class FormularioController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'llenar'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -184,4 +184,10 @@ class FormularioController extends Controller
 			Yii::app()->end();
 		}
 	}
+    
+    public function actionLlenar()
+    {
+        $this->layout = 'column2_formulario';
+        $this->render('llenar');
+    }
 }

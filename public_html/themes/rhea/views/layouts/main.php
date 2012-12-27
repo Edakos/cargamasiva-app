@@ -56,8 +56,8 @@
                 array('label'=>Yii::t('app', 'Provincias'), 'url'=>array('provincia/index'), 'visible'=>!Yii::app()->user->isGuest),                
 */ 
 
-                array('label'=>Yii::t('app', 'Formulario'), 'url'=>array('formulario/llenar'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Cargas'), 'url'=>array('carga/create'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Llenar Formulario'), 'url'=>array('formulario/llenar'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Realizar Cargas'), 'url'=>array('carga/realizar'), 'visible'=>!Yii::app()->user->isGuest),
 
 				array('label'=>Yii::t('app', 'Cerrar sesión') . ' ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),

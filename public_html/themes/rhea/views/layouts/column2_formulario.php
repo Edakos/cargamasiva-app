@@ -4,7 +4,7 @@
 		<div id="sidebar">
 		<?php
 			$this->beginWidget('zii.widgets.CPortlet', array(
-				'title'=>'Opciones',
+				'title'=>'Secciones',
 			));
 			$this->widget('zii.widgets.CMenu', array(
 				'items'=>$this->menu,
