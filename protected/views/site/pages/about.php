@@ -6,7 +6,7 @@ $this->breadcrumbs=array(
 	Yii::t('app', 'About'),
 );
 ?>
-<h1><?php echo Yii::t('app', 'About'); ?></h1>
+<h1>Sobre este sistema</h1>
 
 <p>La Ley Orgánica de Educación Superior vigente, en su artículo 183, literal e), establece que es una función de la Secretaría Nacional de Educación Superior Ciencia, Tecnología e Innovación “Diseñar, implementar, administrar y coordinar el Sistema Nacional de Datos de la Educación Superior del Ecuador-SNIESE”.
 <p/><p>
@@ -14,7 +14,7 @@ En cumplimiento de la disposición antes referida, se llevará a cabo el proceso
 <p/><p>
 El objetivo de este proceso es contar con datos actualizados, completos y validados de las instituciones que forman parte del Sistema de Educación Superior del Ecuador.
 <p/><p>
-La recopilación de datos se realizará a través del portal web de la SENESCYT (http://www.educacionsuperior.gob.ec), mediante formularios electrónicos que deberán ser diligenciados por cada institución.
+La recopilación de datos se realizará a través del <?php echo CHtml::link('portal web de la SENESCYT', 'http://www.educacionsuperior.gob.ec'); ?>, mediante formularios electrónicos que deberán ser diligenciados por cada institución.
 <p/><p>
 Una vez completados los formularios, las instituciones recibirán un reporte de los datos enviados el cual deberá ser firmado por el Rector(a), quien en su calidad de primera autoridad ejecutiva certificará que la datos suministrada es verídica, completa, verificable y que corresponde a los datos oficiales de la institución.
 <p/><p>

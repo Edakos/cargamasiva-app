@@ -41,4 +41,5 @@ return array(
 'Por favor ingrese las letras tal y como son mostradas en la imagen superior.<br/>No se distinguen entre mayúsculas y minúsculas.',
 'Please fill out the following form with your login credentials'=>
 'Por favor llene el siguiente formulario con su usuario y contraseña',
+'Incorrect username or password.' => 'Nombre de usuario o contraseña incorrectos.',
 );

@@ -41,26 +41,26 @@
 				//array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				//array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
                 
-                array('label'=>Yii::t('app', 'Login'), 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Login'), 'url'=>array('site/login'), 'visible'=>Yii::app()->user->isGuest),
                 
-				array('label'=>Yii::t('app', 'Home'), 'url'=>array('/site/index'), 'visible'=>!Yii::app()->user->isGuest),
-				array('label'=>Yii::t('app', 'About'), 'url'=>array('/site/page', 'view'=>'about'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>Yii::t('app', 'Contact'), 'url'=>array('/site/contact'), 'visible'=>Yii::app()->user->isGuest),
+				array('label'=>Yii::t('app', 'Home'), 'url'=>array('site/index'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>Yii::t('app', 'About'), 'url'=>array('site/page', 'view'=>'about'), 'visible'=>Yii::app()->user->isGuest),
+				array('label'=>Yii::t('app', 'Contact'), 'url'=>array('site/contact'), 'visible'=>Yii::app()->user->isGuest),
 				
-                array('label'=>Yii::t('app', 'Formularios'), 'url'=>array('/formulario'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Tipos de dato'), 'url'=>array('/tipo'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'IES'), 'url'=>array('/ies'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Archivos'), 'url'=>array('/archivo'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Areas del conocimiento'), 'url'=>array('/conocimientoArea'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Provincias'), 'url'=>array('/provincia'), 'visible'=>!Yii::app()->user->isGuest),
-				array('label'=>Yii::t('app', 'Logout') . ' ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
+                array('label'=>Yii::t('app', 'Formularios'), 'url'=>array('formulario/index'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Tipos de dato'), 'url'=>array('tipo/index'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'IES'), 'url'=>array('ies/index'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Archivos'), 'url'=>array('archivo/index'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Areas del conocimiento'), 'url'=>array('conocimientoArea/index'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Provincias'), 'url'=>array('provincia/index'), 'visible'=>!Yii::app()->user->isGuest),
+				array('label'=>Yii::t('app', 'Cerrar sesión') . ' ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
 		)); ?>
 	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
+	<?php if(isset($this->breadcrumbs) && !Yii::app()->user->isGuest):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
-			'homeLink'=>''
+			'homeLink' => CHtml::link('Inicio de ' . Yii::app()->user->name, '/site/index'),
 		)); ?><!-- breadcrumbs -->
 	<?php endif?>
 

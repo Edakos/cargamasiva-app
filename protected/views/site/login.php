@@ -33,10 +33,10 @@ Utilice el formulario de contacto para hacernos llegar sus observaciones y pregu
 </div>
 
 </div>
-<div style="float:left;width:300px;margin:20px;padding:20px;background-color:#eee;border:solid 1px #ccc;">
-<h1><?php echo Yii::t('app', 'Login'); ?></h1>
+<div style="float:left;width:300px;margin:20px;padding:20px;background-color:#eee;border:solid 1px #ccc;margin-bottom:40px;">
+<h1>Inicio de sesión</h1>
 
-<p><?php echo Yii::t('app', 'Please fill out the following form with your login credentials'); ?>:</p>
+<!--p><?php //echo Yii::t('app', 'Please fill out the following form with your login credentials'); ?>:</p-->
 
 <div class="form">
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -78,4 +78,6 @@ Utilice el formulario de contacto para hacernos llegar sus observaciones y pregu
 </div><!-- form -->
 
 </div>
+
 </div>
+
