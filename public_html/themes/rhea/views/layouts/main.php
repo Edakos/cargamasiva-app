@@ -187,14 +187,14 @@ $(document).click(function () {
                 
                 array('label'=>Yii::t('app', 'Configuración'), 'url'=>array('site/admin'), 'visible'=>!Yii::app()->user->isGuest), //cambio de contraseña, agregar elaborado (ver si el usuario tiene nombre), revisado, aprobado, rector (ver si se carga)
 
-				array('label'=>Yii::t('app', 'Cerrar sesión') . ' ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
+				//array('label'=>Yii::t('app', 'Cerrar sesión') . ' ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
 		)); ?>
 	</div><!-- mainmenu -->
 	<?php if(isset($this->breadcrumbs) && !Yii::app()->user->isGuest):?>
 		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
-			'homeLink' => CHtml::link('Inicio de ' . Yii::app()->user->name, '/site/index'),
+			'homeLink' => CHtml::link('Inicio', '/site/index'),
 		)); ?><!-- breadcrumbs -->
 	<?php endif?>
 
