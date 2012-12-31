@@ -7,6 +7,7 @@ class UsuarioController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
+    public $defaultAction = 'admin';
 
 	/**
 	 * @return array action filters
@@ -33,7 +34,7 @@ class UsuarioController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update', 'modificar', 'clave'),
 				//'users'=>array('@'),
                 'users'=>array('*'),
 			),
@@ -73,8 +74,12 @@ class UsuarioController extends Controller
 		if(isset($_POST['Usuario']))
 		{
 			$model->attributes=$_POST['Usuario'];
-			if($model->save())
+			if($model->save()) {
 				$this->redirect(array('view','id'=>$model->id));
+            } else {
+                //echo 'Algo pasó!!!';
+                //print_r($model->errors);
+            }
 		}
 
 		$this->render('create',array(
@@ -101,6 +106,8 @@ class UsuarioController extends Controller
 				$this->redirect(array('view','id'=>$model->id));
 		}
 
+        $model->password = '';
+        
 		$this->render('update',array(
 			'model'=>$model,
 		));
@@ -142,13 +149,15 @@ class UsuarioController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Usuario('search');
+		$model = new Usuario('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Usuario']))
-			$model->attributes=$_GET['Usuario'];
+		
+        if (isset($_GET['Usuario'])) {
+			$model->attributes = $_GET['Usuario'];
+        }
 
-		$this->render('admin',array(
-			'model'=>$model,
+		$this->render('admin', array(
+			'model' => $model,
 		));
 	}
 
@@ -159,9 +168,10 @@ class UsuarioController extends Controller
 	 */
 	public function loadModel($id)
 	{
-		$model=Usuario::model()->findByPk($id);
-		if($model===null)
-			throw new CHttpException(404,'The requested page does not exist.');
+		$model = Usuario::model()->findByPk($id);
+		if ($model === null) {
+			throw new CHttpException(404, 'The requested page does not exist.');
+        }
 		return $model;
 	}
 
@@ -171,10 +181,60 @@ class UsuarioController extends Controller
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='usuario-form')
-		{
+		if (isset($_POST['ajax']) && $_POST['ajax'] === 'usuario-form') {
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
+    
+    public function actionClave() 
+    {
+		//$model  =$this->loadModel(Yii::app()->user->id);
+        $model = new UsuarioClaveForm;
+
+		// if it is ajax validation request
+		if (isset($_POST['ajax']) && $_POST['ajax'] === 'usuarioClave-form') {
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+        
+        // collect user input data
+		if (isset($_POST['UsuarioClaveForm'])) {
+			$model->attributes = $_POST['UsuarioClaveForm'];
+            
+			if ($model->validate() && $model->save()) {
+                $this->redirect(Yii::app()->homeUrl);
+            }
+		}
+        
+        //$model->password = '';
+        //$model->password_new = '';
+        //$model->password_new_repeat = '';
+		$this->render('clave',array(
+			'model'=>$model,
+		));
+    }
+    
+    public function actionModificar() 
+    {
+		$model = $this->loadModel(Yii::app()->user->id);
+        
+
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if(isset($_POST['Usuario']))
+		{
+			$model->attributes=$_POST['Usuario'];
+			if($model->save(false))
+				$this->redirect(Yii::app()->homeUrl);
+		}
+        
+
+		$this->render('modificar',array(
+			'model'=>$model,
+		));
+    }
 }
+
+

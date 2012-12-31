@@ -7,6 +7,9 @@
  */
 class UserIdentity extends CUserIdentity
 {
+    const ERROR_USER_DISABLED = 40;
+    const ERROR_USER_DELETED = 60;
+    
     private $_id;
     /**
     * Authenticates a user using the User data model.
@@ -18,6 +21,10 @@ class UserIdentity extends CUserIdentity
         
         if ($user === null) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;
+        } else if ($user->disabled) {
+            $this->errorCode = self::ERROR_USER_DISABLED;
+        } else if ($user->deleted) {
+            $this->errorCode = self::ERROR_USER_DELETED;
         } else {
             if ($user->password !== $user->encrypt($this->password)) {
                 $this->errorCode = self::ERROR_PASSWORD_INVALID;

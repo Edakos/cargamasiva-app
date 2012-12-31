@@ -43,5 +43,18 @@ class MyActiveRecord extends CActiveRecord
         }
         return parent::beforeValidate();
     }
-
+    
+    /*
+    protected function beforeSave() 
+    {
+        $attrs = $this->attributeNames();
+        
+        foreach ($attrs as $attr) {
+            if (empty($this->$attr)) {
+                $this->$attr = null;
+            }
+        }
+        return parent::beforeSave();
+    }
+*/
 }

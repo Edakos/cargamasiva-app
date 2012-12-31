@@ -33,6 +33,17 @@ return array(
 'Cedula' => 'Cédula',
 'Address' => 'Dirección',
 'Cellphone' => 'Teléfono móvil',
+'Disabled' => 'Deshabilitado',
+'Deleted' => 'Borrado',
+'Reset Password' => 'Cambio de contraseña',
+'Password New' => 'Nueva contraseña',
+'Password New Repeat' => 'Repita nueva contraseña',
+'Last Login Time' => 'Fecha de último acceso',
+'Created' => 'Creado',
+'Modified' => 'Modificado',
+'Created By' => 'Creado por',
+'Modified By' => 'Modificado por',
+'Seacrh' => 'Buscar',
 
 'Index' => 'Indice',
 
@@ -48,4 +59,5 @@ return array(
 'Please fill out the following form with your login credentials'=>
 'Por favor llene el siguiente formulario con su usuario y contraseña',
 'Incorrect username or password.' => 'Nombre de usuario o contraseña incorrectos.',
+'Are you sure you want to delete this item?' => '¿Está seguro que desea borrar este registro?'
 );

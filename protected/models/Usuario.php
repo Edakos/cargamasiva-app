@@ -21,10 +21,13 @@
  * @property integer $modified_by
  * @property boolean $deleted
  * @property boolean $disabled
+ * @property boolean $reset_password
+ * 
  */
 class Usuario extends MyActiveRecord
 {
     public $password_repeat;
+    private $_password;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -51,15 +54,16 @@ class Usuario extends MyActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('email, username, password', 'required'),
+			array('username', 'required'),
+            array('username, password', 'required', 'on' => 'insert'),
 			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('email, username, password, name, cedula, address, cellphone', 'length', 'max'=>256),
-			array('birthday, password_repeat, deleted, disabled', 'safe'),
+			array('birthday, password_repeat, deleted, disabled, reset_password', 'safe'),
             array('email, username, cedula', 'unique'),
             array('password', 'compare'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, email, username, password, name, cedula, address, cellphone, birthday, last_login_time, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, email, username, password, name, cedula, address, cellphone, birthday, last_login_time, created, modified, created_by, modified_by, disabled, reset_password', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -110,20 +114,43 @@ class Usuario extends MyActiveRecord
 		$criteria->compare('modified_by',$this->modified_by);
         $criteria->compare('deleted',$this->deleted);
 		$criteria->compare('disabled',$this->disabled);
+        $criteria->compare('reset_password',$this->reset_password);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
     
-    protected function afterValidate()
+    //protected function afterValidate()
+    protected function beforeSave()
     {
-        parent::afterValidate();
-        $this->password = $this->encrypt($this->password);
+        parent::beforeSave();
+        if (!empty($this->password)) {
+            $this->password = $this->encrypt($this->password);
+            //echo "beforeSave: password=ecrypt(" . $this->password . ")";
+        } else {
+            $this->password = $this->_password;
+            //echo "beforeSave: password=_password(" . $this->_password . ")";
+        }
+        
+        
+        if (empty($this->birthday)) {
+            $this->birthday = null;
+        }
+        
+        return true;
     }
     
     public function encrypt($value)
     {
         return md5($value);
+    }
+    
+    protected function afterFind() {
+        parent::afterFind();
+        $this->_password = $this->password;
+        //echo "afterFind: this->_password=this->password: " . $this->_password;
+        
+        return true;
     }
 }

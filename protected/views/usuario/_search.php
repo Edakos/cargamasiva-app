@@ -10,40 +10,40 @@
 	'action'=>Yii::app()->createUrl($this->route),
 	'method'=>'get',
 )); ?>
-
 	<div class="row">
 		<?php echo $form->label($model,'id'); ?>
-		<?php echo $form->textField($model,'id'); ?>
+		<?php echo $form->textField($model,'id',array('size'=>10,'maxlength'=>10)); ?>
 	</div>
 
-	<div class="row">
-		<?php echo $form->label($model,'email'); ?>
-		<?php echo $form->textField($model,'email',array('size'=>60,'maxlength'=>256)); ?>
-	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'username'); ?>
-		<?php echo $form->textField($model,'username',array('size'=>60,'maxlength'=>256)); ?>
+		<?php echo $form->textField($model,'username',array('size'=>50,'maxlength'=>256)); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'name'); ?>
-		<?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>256)); ?>
+		<?php echo $form->textField($model,'name',array('size'=>50,'maxlength'=>256)); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'cedula'); ?>
-		<?php echo $form->textField($model,'cedula',array('size'=>60,'maxlength'=>256)); ?>
+		<?php echo $form->textField($model,'cedula',array('size'=>50,'maxlength'=>256)); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'email'); ?>
+		<?php echo $form->textField($model,'email',array('size'=>50,'maxlength'=>256)); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'address'); ?>
-		<?php echo $form->textField($model,'address',array('size'=>60,'maxlength'=>256)); ?>
+		<?php echo $form->textField($model,'address',array('size'=>50,'maxlength'=>256)); ?>
 	</div>
 
 	<div class="row">
 		<?php echo $form->label($model,'cellphone'); ?>
-		<?php echo $form->textField($model,'cellphone',array('size'=>60,'maxlength'=>256)); ?>
+		<?php echo $form->textField($model,'cellphone',array('size'=>50,'maxlength'=>256)); ?>
 	</div>
 
 	<div class="row">
@@ -77,13 +77,14 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'deleted'); ?>
-		<?php echo $form->checkBox($model,'deleted'); ?>
-	</div>
-
-	<div class="row">
 		<?php echo $form->label($model,'disabled'); ?>
 		<?php echo $form->checkBox($model,'disabled'); ?>
+	</div>
+    
+
+	<div class="row">
+		<?php echo $form->label($model,'reset_password'); ?>
+		<?php echo $form->checkBox($model,'reset_password'); ?>
 	</div>
 
 	<div class="row buttons">

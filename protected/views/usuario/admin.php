@@ -3,13 +3,12 @@
 /* @var $model Usuario */
 
 $this->breadcrumbs=array(
-	'Usuarios'=>array('index'),
-	'Manage',
+	'Usuarios'
 );
 
 $this->menu=array(
-	array('label'=>'List Usuario', 'url'=>array('index')),
-	array('label'=>'Create Usuario', 'url'=>array('create')),
+	//array('label'=>'List Usuario', 'url'=>array('index')),
+	array('label'=>'Nuevo usuario', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
@@ -26,14 +25,14 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Manage Usuarios</h1>
+<h1>Administrar Usuarios</h1>
 
 <p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
+El sistema soporta operadores de comparación (&lt;, &lt;=, &gt;, &gt;=, &lt;&gt;
+, =) al inicio de cada búsqueda, para especificar cómo debe ser realizada la comparación.
 </p>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<?php echo CHtml::link('Búsqueda avanzada','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -46,9 +45,7 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'filter'=>$model,
 	'columns'=>array(
 		'id',
-		'email',
 		'username',
-		'password',
 		'name',
 		'cedula',
 		/*

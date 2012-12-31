@@ -13,6 +13,7 @@ return array(
 	'name'=>'Carga Masiva',
 	'language' => 'es',
 	'sourceLanguage'=>'en',
+    //'homeUrl' => '/site/index',
     
     'theme'=>'rhea',
     
