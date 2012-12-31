@@ -25,6 +25,8 @@ return array(
 		'application.components.MyActiveRecord',
 		'application.models.*',
 		'application.components.*',
+        'application.modules.rights.*', // con módulo Rights
+        'application.modules.rights.components.*', // con módulo Rights
 	),
 
 	'modules'=>array(
@@ -49,6 +51,27 @@ return array(
             'appLayout' => 'webroot.themes.bootstrap.views.layouts.main', // the layout used by the module.
             'viewDir' => null, // the path to view files to use with this module.
         ),		
+        'rights'=>array(
+            'install'=>false,
+
+            'superuserName'=>'admin', 
+            'authenticatedName'=>'autenticado',
+            'userClass'=>'Usuario',
+            'userIdColumn'=>'id',
+            'userNameColumn'=>'username',
+            'enableBizRule'=>true,
+            'enableBizRuleData'=>false,
+            'displayDescription'=>true,
+            'flashSuccessKey'=>'RightsSuccess',
+            'flashErrorKey'=>'RightsError',
+            'baseUrl'=>'/rights',
+            'layout'=>'rights.views.layouts.main',
+            'appLayout'=>'webroot.themes.rhea.views.layouts.main',
+            'cssFile'=>'rights.css',
+            'install'=>false,
+            'debug'=>false,
+
+        ),
 	),
 
 	// application components
@@ -56,17 +79,22 @@ return array(
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+            'class'=>'RWebUser', // con módulo Rights
 		),
         
         'authManager'=>array(
-            'class'=>'CDbAuthManager',
+            //'class'=>'CDbAuthManager', // con módulo Auth
+            'class'=>'RDbAuthManager', // con módulo Rights
+
             'connectionID'=>'db',
             'itemTable'=>'auth_item',
             'itemChildTable'=>'auth_item_child',
             'assignmentTable'=>'auth_assignment',
-            'behaviors' => array(
-                'auth.components.AuthBehavior',
-            ),
+            'rightsTable' => 'rights', // con módulo Rights
+            'defaultRoles' => array('invitado'), // con módulo Rights
+            //'behaviors' => array( // con módulo Auth
+            //    'auth.components.AuthBehavior', // con módulo Auth
+            //), // con módulo Auth
         ),	
         	
 		'urlManager'=>array(

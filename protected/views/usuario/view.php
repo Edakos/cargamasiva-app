@@ -24,7 +24,8 @@ $this->menu=array(
 	'attributes'=>array(
 		'id',
 		'username',
-		'name',
+		'first_name',
+        'last_name',
 		'cedula',
         'email',
 		'address',

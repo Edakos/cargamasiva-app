@@ -22,9 +22,15 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'name'); ?>
-		<?php echo $form->textField($model,'name',array('size'=>50,'maxlength'=>256)); ?>
+		<?php echo $form->label($model,'first_name'); ?>
+		<?php echo $form->textField($model,'first_name',array('size'=>50,'maxlength'=>256)); ?>
 	</div>
+
+	<div class="row">
+		<?php echo $form->label($model,'last_name'); ?>
+		<?php echo $form->textField($model,'last_name',array('size'=>50,'maxlength'=>256)); ?>
+	</div>
+
 
 	<div class="row">
 		<?php echo $form->label($model,'cedula'); ?>

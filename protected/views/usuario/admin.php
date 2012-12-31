@@ -46,7 +46,8 @@ El sistema soporta operadores de comparación (&lt;, &lt;=, &gt;, &gt;=, &lt;&gt
 	'columns'=>array(
 		'id',
 		'username',
-		'name',
+        'first_name',
+		'last_name',
 		'cedula',
 		/*
 		'address',

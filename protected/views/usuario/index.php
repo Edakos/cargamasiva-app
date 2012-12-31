@@ -27,7 +27,8 @@ $this->menu=array(
 	//'template'=>"{items}\n{pager}",
     'columns' => array(
         'username', 
-        'name',
+        'first_name',
+        'last_name',
         'cedula',
     ),
 )); ?>

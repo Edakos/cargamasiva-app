@@ -9,7 +9,8 @@
  * @property string $username
  * @property string $password
  * @property string $password_repeat
- * @property string $name
+ * @property string $first_name
+ * @property string $last_name
  * @property string $cedula
  * @property string $address
  * @property string $cellphone
@@ -57,13 +58,13 @@ class Usuario extends MyActiveRecord
 			array('username', 'required'),
             array('username, password', 'required', 'on' => 'insert'),
 			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
-			array('email, username, password, name, cedula, address, cellphone', 'length', 'max'=>256),
+			array('email, username, password, first_name, last_name, cedula, address, cellphone', 'length', 'max'=>256),
 			array('birthday, password_repeat, deleted, disabled, reset_password', 'safe'),
             array('email, username, cedula', 'unique'),
             array('password', 'compare'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, email, username, password, name, cedula, address, cellphone, birthday, last_login_time, created, modified, created_by, modified_by, disabled, reset_password', 'safe', 'on'=>'search'),
+			array('id, email, username, password, first_name, last_name, cedula, address, cellphone, birthday, last_login_time, created, modified, created_by, modified_by, disabled, reset_password', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -102,7 +103,8 @@ class Usuario extends MyActiveRecord
 		$criteria->compare('email',$this->email,true);
 		$criteria->compare('username',$this->username,true);
 		$criteria->compare('password',$this->password,true);
-		$criteria->compare('name',$this->name,true);
+		$criteria->compare('first_name',$this->name,true);
+        $criteria->compare('last_name',$this->name,true);
 		$criteria->compare('cedula',$this->cedula,true);
 		$criteria->compare('address',$this->address,true);
 		$criteria->compare('cellphone',$this->cellphone,true);

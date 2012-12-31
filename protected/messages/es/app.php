@@ -13,6 +13,8 @@ return array(
 'Codigo' => 'Código',
 'Code' => 'Código',
 'Name' => 'Nombre',
+'First Name' => 'Nombres',
+'Last Name' => 'Apellidos',
 'Subject' => 'Asunto',
 'Email' => 'Correo electrónico',
 'Body' => 'Mensaje',
