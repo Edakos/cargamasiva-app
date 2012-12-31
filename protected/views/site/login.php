@@ -13,7 +13,7 @@ $this->breadcrumbs=array(
 <div style="float:left;width:50%;">
 <h2>¡Bienvenido!</h2>
 <p>
-El presente sistema tiene como objetivo la actualización de datos de las instituciones de educación superior del Ecuador, correspondiente a los años 2011 y 2012.
+El presente sistema tiene como objetivo el levantamiento de datos de las instituciones de educación superior del Ecuador, correspondiente a los años 2011 y 2012.
 </p>
 
 <hr/>

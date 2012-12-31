@@ -56,8 +56,11 @@
                 array('label'=>Yii::t('app', 'Provincias'), 'url'=>array('provincia/index'), 'visible'=>!Yii::app()->user->isGuest),                
 */ 
 
-                array('label'=>Yii::t('app', 'Llenar Formulario'), 'url'=>array('formulario/llenar'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Realizar Cargas'), 'url'=>array('carga/realizar'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Formulario Institucional'), 'url'=>array('formulario/llenar'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Carreras'), 'url'=>array('ies/carreras'), 'visible'=>!Yii::app()->user->isGuest),
+                array('label'=>Yii::t('app', 'Cargas de archivos'), 'url'=>array('carga/realizar'), 'visible'=>!Yii::app()->user->isGuest),
+                
+                array('label'=>Yii::t('app', 'Configuración'), 'url'=>array('site/admin'), 'visible'=>!Yii::app()->user->isGuest), //cambio de contraseña, agregar elaborado (ver si el usuario tiene nombre), revisado, aprobado, rector (ver si se carga)
 
 				array('label'=>Yii::t('app', 'Cerrar sesión') . ' ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),

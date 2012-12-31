@@ -11,7 +11,7 @@ $this->pageTitle=Yii::app()->name;
 <div style="float:left;width:45%;">
     <hr/>
 <h2>Levantamiento de datos 2011 y 2012</h2>
-<p>Descarga el <?php echo CHtml::link('Manual de Usuario', '#'); ?> para la actualización de datos.</p>
+<p>Descarga el <?php echo CHtml::link('Manual de Usuario', 'archivo/2012_MANUAL_USUARIO.pdf'); ?> para la actualización de datos.</p>
 <hr/>
 <p>A continuación se listan los formularios para la carga de datos:</p>
 <?php
@@ -21,7 +21,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'description:html:Formulario',  
         array(
             'class'=>'CLinkColumn',
-            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : $data->name . ".xlsx"',
+            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : "2012_1001_" . $data->name . ".xlsx"',
             'header'=>'Archivo',
             'urlExpression'=>'$data->name == "IES" ? "/formulario/llenar/" . $data->id : "/archivo/download/" . $data->name . ".xlsx"',
         ),
@@ -31,7 +31,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 <hr/>
 <p>Descarga del <?php echo CHtml::link('Formulario Institucional', '#'); ?>, imprimir y remitir a la SENESCYT con la respectiva firma del rector.</p>
 <hr/>
-<p>Descarga del <?php echo CHtml::link('reporte de estado de las carreras y programas académicos', '#'); ?> (Información del Sistema Académico de la SENESCYT).</p>
+<p>Descarga del <?php echo CHtml::link('reporte de estado de las carreras y programas académicos', '/archivo/2012_1001_OFERTA_ACADEMICA.xlsx'); ?> (Información del Sistema Académico de la SENESCYT).</p>
 </div>
 <div style="float:right;width:45%;">
     <hr/>
@@ -44,7 +44,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'description:html:Formulario',  
         array(
             'class'=>'CLinkColumn',
-            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : $data->name . ".xlsx"',
+            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : "2010_1001_" . $data->name . ".xlsx"',
             'header'=>'Archivo',
             'urlExpression'=>'$data->name == "IES" ? "/formulario/view/" . $data->id : "/archivo/download/" . $data->name . ".xlsx"',
         ),
@@ -52,7 +52,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 ));
 ?>
 <hr/>
-<p>Descarga de la <?php echo CHtml::link('ficha de presentación de información y documentos físicos', '#'); ?> que la institución entregó a la SENESCYT. 
+<p>Descarga de la <?php echo CHtml::link('ficha de presentación de información y documentos físicos', 'archivos/2010_1001_FICHA_DTOS.pdf'); ?> que la institución entregó a la SENESCYT. 
 </p>
 </div>
 

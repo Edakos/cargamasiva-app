@@ -68,6 +68,12 @@ class LoginForm extends MyFormModel
 		if ($this->_identity->errorCode === UserIdentity::ERROR_NONE) {
 			$duration = $this->rememberMe ? 3600*24*30 : 0; // 30 days
 			Yii::app()->user->login($this->_identity, $duration);
+            
+            Usuario::model()->updateByPk(
+                $this->_identity->id, 
+                array('last_login_time' => new CDbExpression('NOW()'))
+            );
+            
 			return true;
 		} else {
 			return false;

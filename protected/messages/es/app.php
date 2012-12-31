@@ -21,6 +21,7 @@ return array(
 'Contact'=>'Contacto',
 'Username' => 'Nombre de usuario',
 'Password' => 'Contraseña',
+'Password Repeat' => 'Repita contraseña',
 'Remember me next time' => 'Recordarme en esta computadora',
 'Description' => 'Descripción',
 'Code' => 'Código',
@@ -28,6 +29,10 @@ return array(
 'Md5' => 'MD5',
 'Year' => 'Año',
 'Operations' => 'Opciones',
+'Birthday' => 'Fecha de nacimiento',
+'Cedula' => 'Cédula',
+'Address' => 'Dirección',
+'Cellphone' => 'Teléfono móvil',
 
 'Index' => 'Indice',
 

@@ -10,7 +10,7 @@ $this->breadcrumbs=array(
 
 <p>La Ley Orgánica de Educación Superior vigente, en su artículo 183, literal e), establece que es una función de la Secretaría Nacional de Educación Superior Ciencia, Tecnología e Innovación “Diseñar, implementar, administrar y coordinar el Sistema Nacional de Datos de la Educación Superior del Ecuador-SNIESE”.
 <p/><p>
-En cumplimiento de la disposición antes referida, se llevará a cabo el proceso de actualización de datos de las instituciones de educación superior del Ecuador, correspondiente a los años 2011 y 2012. 
+En cumplimiento de la disposición antes referida, se llevará a cabo el proceso de levantamiento de datos de las instituciones de educación superior del Ecuador, correspondiente a los años 2011 y 2012. 
 <p/><p>
 El objetivo de este proceso es contar con datos actualizados, completos y validados de las instituciones que forman parte del Sistema de Educación Superior del Ecuador.
 <p/><p>

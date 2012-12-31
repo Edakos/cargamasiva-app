@@ -5,13 +5,16 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
+
+Yii::setPathOfAlias('bootstrap', dirname(__FILE__).'/../extensions/bootstrap');
+ 
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'Carga Masiva',
 	'language' => 'es',
 	'sourceLanguage'=>'en',
     
-    'theme'=>'rhea',
+    'theme'=>'bootstrap',
     
 	// preloading 'log' component
 	'preload'=>array('log'),
@@ -31,8 +34,20 @@ return array(
 			'password'=>'ed',
 			// If removed, Gii defaults to localhost only. Edit carefully to taste.
 			'ipFilters'=>array('127.0.0.1','::1'),
+            'generatorPaths'=>array(
+                'bootstrap.gii',
+            ),
 		),
-		
+        'auth' => array(
+            'strictMode' => true, // when enabled authorization items cannot be assigned children of the same type.
+            'users' => array('admin'), // a list of users who has access to the module.
+            'userClass' => 'Usuario', // the name of the user model class.
+            'userIdColumn' => 'id', // the name of the user id column.
+            'userNameColumn' => 'username', // the name of the user name column.
+            //'appLayout' => 'application.views.layouts.main', // the layout used by the module.
+            'appLayout' => 'webroot.themes.bootstrap.views.layouts.main', // the layout used by the module.
+            'viewDir' => null, // the path to view files to use with this module.
+        ),		
 	),
 
 	// application components
@@ -41,8 +56,18 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
-		// uncomment the following to enable URLs in path-format
-		
+        
+        'authManager'=>array(
+            'class'=>'CDbAuthManager',
+            'connectionID'=>'db',
+            'itemTable'=>'auth_item',
+            'itemChildTable'=>'auth_item_child',
+            'assignmentTable'=>'auth_assignment',
+            'behaviors' => array(
+                'auth.components.AuthBehavior',
+            ),
+        ),	
+        	
 		'urlManager'=>array(
 			'urlFormat'=>'path',
 			'showScriptName' => false,
@@ -87,6 +112,9 @@ return array(
 				*/
 			),
 		),
+        'bootstrap'=>array(
+            'class'=>'bootstrap.components.Bootstrap',
+        ),
 	),
 
 	// application-level parameters that can be accessed

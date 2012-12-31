@@ -14,6 +14,7 @@
  * @property integer $modified_by
  *
  * The followings are the available model relations:
+ * @property Carrera[] $carreras
  * @property Carga[] $cargas
  */
 class Ies extends MyActiveRecord
@@ -62,6 +63,7 @@ class Ies extends MyActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'carreras' => array(self::HAS_MANY, 'Carrera', 'ies_id'),
 			'cargas' => array(self::HAS_MANY, 'Carga', 'ies_id'),
 		);
 	}
