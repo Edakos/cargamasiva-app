@@ -14,7 +14,7 @@ return array(
 	'language' => 'es',
 	'sourceLanguage'=>'en',
     
-    'theme'=>'bootstrap',
+    'theme'=>'rhea',
     
 	// preloading 'log' component
 	'preload'=>array('log'),
