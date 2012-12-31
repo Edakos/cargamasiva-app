@@ -15,24 +15,149 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 
 	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
+    <script>
+usermenu_display = 'none';
+
+
+parar_bola = true;
+
+function _$(id)
+{
+   return document.getElementById(id);
+}
+
+function p_ver_usermenu(target, origen) 
+{
+    if (_$('usermenu') != null) {
+        display = 'sin_evento';
+
+       if (origen == 'clic') {
+          //Llamada desde clic en el enlace
+          display = (usermenu_display == 'none') ? '' : 'none';
+          parar_bola = false;
+
+       } else if (origen == 'fondo' && !parar_bola) {
+          //Llama desde el fondo, inmediatamente luego del clic en el enlace
+          parar_bola = true;
+
+       } else {
+          //Llama desde el fondo
+          display = 'none';
+
+       }
+
+       if (display != 'sin_evento') {
+          usermenu_display = display;
+
+          _$('usermenu').style.display = usermenu_display;
+          _$('usermenu').style.left = getX(target) + 'px';
+          _$('usermenu').style.top = '0px';
+       }
+    }
+}
+
+
+function getX(oElement)
+{
+    if (oElement == null) {return 0;}
+    
+   var iReturnValue = 0;
+    oElement = oElement.parentNode;
+   while (oElement != null) {
+   //if (oElement != null) {
+      iReturnValue += oElement.offsetLeft;
+      oElement = oElement.offsetParent;
+   }
+   return iReturnValue;
+}
+
+function getY(oElement)
+{
+    if (oElement == null) {return 0;}
+   var iReturnValue = 0;
+
+    oElement = oElement.parentNode;
+   while (oElement != null) {
+      iReturnValue += oElement.offsetTop;
+      oElement = oElement.offsetParent;
+   }
+   return iReturnValue;
+}
+
+$(document).ready(function () {
+    p_ver_usermenu(null, 'fondo') 
+});
+
+$(document).click(function () {
+    p_ver_usermenu(null, 'fondo') 
+});
+
+
+    </script>
+    <style>
+.username {
+    padding:10px;
+    font-size:+12pt;
+    text-align:right;
+    }
+.username a{
+    color:#fff;
+    font-weight:bold;
+    }
+#usermenu {
+    background-color:#00304C;position:absolute;top:0px;left:0px;border:solid 0px #069;
+    width:200px
+    
+    }
+#usermenu .username{
+        text-align:right;
+        padding:0px !important;
+        xxxwidth:150px;
+    }
+#usermenu a {
+    display:inline-block;
+    
+    padding:10px 10px;
+    color:#000;
+    text-decoration:none;
+    background-color:#eee;
+    }
+#usermenu a.usermenu-option:hover {
+    background-color:#fff;
+}
+#usermenu .usermenu-option {
+    width:180px;
+    }
+    </style>
 </head>
 
 <body>
 
 <div class="container" id="page">
 
-	<div id="header">
+	<div id="header" style="clear:both;">
         <?php //echo CHtml::image('images/senescyt.png'); ?>
-		<div id="logo">
+		<div id="logo" style="float:left;width:520px;">
             <?php echo CHtml::link(CHtml::image(Yii::app()->request->baseUrl . '/images/carga-masiva.png', CHtml::encode(Yii::app()->name), array('width' => '200', 'height' => '100')), Yii::app()->homeUrl); ?>
             <?php echo CHtml::link(CHtml::image(Yii::app()->request->baseUrl . '/images/senescyt-logo-negro.png'), 'http://www.senescyt.gob.ec'); ?>
             
             <?php //echo CHtml::image('images/sniese.png'); ?>
             <?php //echo CHtml::encode(Yii::app()->name); ?>
         </div>
+        <div id="user" style="float:right;width:200px;">
+<?php if (!Yii::app()->user->isGuest): ?>
+<div class="username"><a href="#" onclick="p_ver_usermenu(this, 'clic'); return false;"><?php echo Yii::app()->user->name; ?> ▼</a></div>
+<div id="usermenu" style="display:none;">
+<div class="username"><a href="#" onclick="p_ver_usermenu(this, 'clic'); return false;"><?php echo Yii::app()->user->name; ?> ▼</a></div>
+<div><?php echo CHtml::link(CHtml::image('/images/edit.gif', 'Modificar datos', array('width' => '20px', 'height' => '20px')) . ' Modificar datos', array('usuario/modificar'), array('class' => 'usermenu-option')); ?></div>
+<div><?php echo CHtml::link(CHtml::image('/images/key.gif', 'Modificar datos', array('width' => '20px', 'height' => '20px')) . ' Cambiar contraseña', array('usuario/clave'), array('class' => 'usermenu-option')); ?></div>
+<div><?php echo CHtml::link(CHtml::image('/images/exit.png', 'Modificar datos', array('width' => '20px', 'height' => '20px')) . ' Cerrar sesión', array('site/logout'), array('class' => 'usermenu-option')); ?></div>
+</div>
+<?php endif; ?>
+        </div>
 	</div><!-- header -->
 
-	<div id="mainmenu">
+	<div id="mainmenu" style="clear:both;">
 		<?php $this->widget('zii.widgets.CMenu',array(
 			'items'=>array(
 				//array('label'=>'Home', 'url'=>array('/site/index')),
