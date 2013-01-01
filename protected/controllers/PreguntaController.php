@@ -62,6 +62,7 @@ class PreguntaController extends Controller
 			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
             'formularioContext + create', //check to ensure valid formulario context
+            'rights',
 		);
 	}
 

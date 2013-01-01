@@ -6,6 +6,14 @@ class SiteController extends Controller
 	/**
 	 * Declares class-based actions.
 	 */
+     
+	public function filters()
+	{
+		return array(
+            'rights',
+		);
+	}
+    
 	public function actions()
 	{
 		return array(

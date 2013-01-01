@@ -149,9 +149,9 @@ $(document).click(function () {
 <div class="username"><a href="#" onclick="p_ver_usermenu(this, 'clic'); return false;"><?php echo Yii::app()->user->name; ?> ▼</a></div>
 <div id="usermenu" style="display:none;">
 <div class="username"><a href="#" onclick="p_ver_usermenu(this, 'clic'); return false;"><?php echo Yii::app()->user->name; ?> ▼</a></div>
-<div><?php echo CHtml::link(CHtml::image('/images/edit.gif', 'Modificar datos', array('width' => '20px', 'height' => '20px')) . ' Modificar datos', array('usuario/modificar'), array('class' => 'usermenu-option')); ?></div>
-<div><?php echo CHtml::link(CHtml::image('/images/key.gif', 'Modificar datos', array('width' => '20px', 'height' => '20px')) . ' Cambiar contraseña', array('usuario/clave'), array('class' => 'usermenu-option')); ?></div>
-<div><?php echo CHtml::link(CHtml::image('/images/exit.png', 'Modificar datos', array('width' => '20px', 'height' => '20px')) . ' Cerrar sesión', array('site/logout'), array('class' => 'usermenu-option')); ?></div>
+<div><?php echo CHtml::link(CHtml::image('/images/edit.gif', 'Modificar datos', array('width' => '20px', 'height' => '20px')) . ' Modificar datos', array('/usuario/modificar'), array('class' => 'usermenu-option')); ?></div>
+<div><?php echo CHtml::link(CHtml::image('/images/key.gif', 'Cambiar contraseña', array('width' => '20px', 'height' => '20px')) . ' Cambiar contraseña', array('/usuario/clave'), array('class' => 'usermenu-option')); ?></div>
+<div><?php echo CHtml::link(CHtml::image('/images/exit.png', 'Cerrar sesión', array('width' => '20px', 'height' => '20px')) . ' Cerrar sesión', array('/site/logout'), array('class' => 'usermenu-option')); ?></div>
 </div>
 <?php endif; ?>
         </div>
