@@ -80,6 +80,7 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
             'class'=>'RWebUser', // con módulo Rights
+            'autoUpdateFlash' => false, //para que aparezcan los mensajes flash
 		),
         
         'authManager'=>array(
@@ -91,7 +92,7 @@ return array(
             'itemChildTable'=>'auth_item_child',
             'assignmentTable'=>'auth_assignment',
             'rightsTable' => 'rights', // con módulo Rights
-            'defaultRoles' => array('invitado'), // con módulo Rights
+            'defaultRoles' => array('autenticado', 'invitado'), // con módulo Rights
             //'behaviors' => array( // con módulo Auth
             //    'auth.components.AuthBehavior', // con módulo Auth
             //), // con módulo Auth

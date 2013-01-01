@@ -143,6 +143,16 @@ class Usuario extends MyActiveRecord
         return true;
     }
     
+    protected function afterSave()
+    {
+        $roles = array_keys(Rights::getAssignedRoles($this->id));
+        //echo '<pre>'; print_r($roles); echo '</pre>'; die();
+        if (empty($roles)) {
+            Rights::assign('representante', $this->id);
+        }
+        return parent::afterSave();
+    }
+    
     public function encrypt($value)
     {
         return md5($value);

@@ -71,10 +71,14 @@ class SiteController extends Controller
 	{
 		if($error=Yii::app()->errorHandler->error)
 		{
-			if(Yii::app()->request->isAjaxRequest)
+			if (Yii::app()->request->isAjaxRequest) {
 				echo $error['message'];
-			else
+            } else if (Yii::app()->errorHandler->error['code'] == 403) {
+                Yii::app()->user->setFlash('notice', Yii::app()->errorHandler->error['message']);
+                $this->rutear(); 
+			} else {
 				$this->render('error', $error);
+            }
 		}
 	}
 
@@ -118,14 +122,22 @@ class SiteController extends Controller
 			Yii::app()->end();
 		}
 
+        $rutear = false;
+        
 		// collect user input data
 		if(isset($_POST['LoginForm']))
 		{
 			$model->attributes=$_POST['LoginForm'];
 			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
-				$this->redirect(Yii::app()->user->returnUrl);
-		}
+			if ($model->validate() && $model->login()) {
+                $this->rutear();
+                
+				//$this->redirect(Yii::app()->user->returnUrl);
+            }
+		} else if (!Yii::app()->user->isGuest) {
+            $this->rutear();
+        }
+        
 		// display the login form
 		$this->render('login',array('model'=>$model));
 	}

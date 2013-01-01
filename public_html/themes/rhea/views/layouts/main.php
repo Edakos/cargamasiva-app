@@ -156,9 +156,56 @@ $(document).click(function () {
 <?php endif; ?>
         </div>
 	</div><!-- header -->
-
 	<div id="mainmenu" style="clear:both;">
+        <?php
+        function itemsMenu ($items)
+        {
+            $items_menu = array();
+            
+            foreach ($items as $label => $url) {
+                
+                if (!is_array($url)) {
+                    $url = array($url);
+                }
+                
+                $urlBase = array_shift(array_values($url));
+                
+                $operation = explode('/', $urlBase);
+                
+                if (count($operation) == 1) {
+                    $operation[] = 'index';
+                }
+                
+                foreach ($operation as & $part) {
+                    $part = ucfirst($part);
+                }
+                
+                $operation = implode('.', $operation);
+                                
+                $items_menu[] = array(
+                    'label' => Yii::t('app', $label),
+                    'url' => $url,
+                    'visible' => Yii::app()->user->checkAccess($operation),
+                );
+            }
+            
+            //echo "<pre>"; print_r($items_menu);  echo "</pre>"; die();
+            return $items_menu;
+        }
+        ?>
 		<?php $this->widget('zii.widgets.CMenu',array(
+			'items'=>itemsMenu(array(
+                'Login' => 'site/login',
+                'Home' => 'site/index',
+                'About' => array('site/page', 'view'=>'about'),
+                'Contact' => 'site/contact',
+                'Formulario Institucional' => 'ies/formulario',
+                'Carreras' => 'ies/carreras',
+                'Carreras' => 'ies/carga',
+                'Levantamientos' => 'levantamiento/admin',
+                'Usuarios' => 'usuario/admin',
+            )),
+/*
 			'items'=>array(
 				//array('label'=>'Home', 'url'=>array('/site/index')),
 				//array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
@@ -172,14 +219,14 @@ $(document).click(function () {
 				array('label'=>Yii::t('app', 'About'), 'url'=>array('site/page', 'view'=>'about'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>Yii::t('app', 'Contact'), 'url'=>array('site/contact'), 'visible'=>Yii::app()->user->isGuest),
 
-/*
-                array('label'=>Yii::t('app', 'Formularios'), 'url'=>array('formulario/index'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Tipos de dato'), 'url'=>array('tipo/index'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'IES'), 'url'=>array('ies/index'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Archivos'), 'url'=>array('archivo/index'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Areas del conocimiento'), 'url'=>array('conocimientoArea/index'), 'visible'=>!Yii::app()->user->isGuest),
-                array('label'=>Yii::t('app', 'Provincias'), 'url'=>array('provincia/index'), 'visible'=>!Yii::app()->user->isGuest),                
-*/ 
+
+                //array('label'=>Yii::t('app', 'Formularios'), 'url'=>array('formulario/index'), 'visible'=>!Yii::app()->user->isGuest),
+                //array('label'=>Yii::t('app', 'Tipos de dato'), 'url'=>array('tipo/index'), 'visible'=>!Yii::app()->user->isGuest),
+                //array('label'=>Yii::t('app', 'IES'), 'url'=>array('ies/index'), 'visible'=>!Yii::app()->user->isGuest),
+                //array('label'=>Yii::t('app', 'Archivos'), 'url'=>array('archivo/index'), 'visible'=>!Yii::app()->user->isGuest),
+                //array('label'=>Yii::t('app', 'Areas del conocimiento'), 'url'=>array('conocimientoArea/index'), 'visible'=>!Yii::app()->user->isGuest),
+                //array('label'=>Yii::t('app', 'Provincias'), 'url'=>array('provincia/index'), 'visible'=>!Yii::app()->user->isGuest),                
+
 
                 array('label'=>Yii::t('app', 'Formulario Institucional'), 'url'=>array('formulario/llenar'), 'visible'=>!Yii::app()->user->isGuest),
                 array('label'=>Yii::t('app', 'Carreras'), 'url'=>array('ies/carreras'), 'visible'=>!Yii::app()->user->isGuest),
@@ -189,6 +236,7 @@ $(document).click(function () {
 
 				//array('label'=>Yii::t('app', 'Cerrar sesión') . ' ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),
+*/
 		)); ?>
 	</div><!-- mainmenu -->
 	<?php if(isset($this->breadcrumbs) && !Yii::app()->user->isGuest):?>
@@ -206,6 +254,9 @@ $(document).click(function () {
 	</div><!-- footer -->
 
 </div><!-- page -->
+<!--pre>
+    <?php //print_r(Rights::getAssignedRoles());?>
+</pre-->
 
 </body>
 </html>

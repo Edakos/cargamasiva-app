@@ -29,6 +29,12 @@ $this->menu=array(
 /* @var $form CActiveForm */
 ?>
 
+
+<?php if (isset($_GET['obligatorio'])): ?>
+<div class="flash-notice">El sistema está bloqueado hasta que realice el cambio de su contraseña.</div>
+<?php endif; ?>
+
+
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
