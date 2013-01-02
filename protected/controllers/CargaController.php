@@ -172,13 +172,91 @@ class CargaController extends Controller
     
     public function actionRealizar() 
     {
+		$model = new Carga;
+                
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if (isset($_POST['Carga'])) {
+            
+			$model->attributes=$_POST['Carga'];
+            $model->archivo = CUploadedFile::getInstance($model,'archivo');
+            
+            
+            $es_nombre_valido = false;
+            
+            if ($model->archivo->extensionName == 'xlsx' 
+                && count($formulario = Formulario::model()->findByAttributes(array(
+                    'levantamiento_id' => 2,
+                    'name' => str_replace('.xlsx', '', $model->archivo->name),
+                )))) {
+                //busca si es un formulario
+                
+                //echo "Es un formulario"; die();
+                $es_nombre_valido = true;
+                $model->formulario_id = $formulario->id;
+                
+            } else if ($model->archivo->extensionName == 'pdf' 
+                && count($documento = Documento::model()->findByAttributes(array(
+                    'levantamiento_id' => 2,
+                    'name' => str_replace('.pdf', '', $model->archivo->name),
+                )))) {
+                //busca si es un documento
+                
+                //echo "Es un documento"; die();
+                $es_nombre_valido = true;
+                $model->documento_id = $documento->id;
+                
+            }
+            
+            if ($es_nombre_valido) {
+                $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+                
+                $name = '2012-' . $ies->code . '-' . $model->archivo->name;
+                
+                $path = Yii::app()->basePath . '/../public_html/archivos/' . $name;
+                
+                if (file_exists($path)) {
+                    $new_path = Yii::app()->basePath . '/../public_html/archivos/' . str_replace('.' . $model->archivo->extensionName, '', $name) . '-' . time() . '-' . md5_file($path) . '.' . $model->archivo->extensionName;
+                    copy($path, $new_path);
+                }
+                
+                if ($model->archivo->saveAs($path)) {
+                    if (count($archivo = Archivo::model()->findByattributes(array('name' => $name))) == 0) {
+                        //si es válido el nombre, crea el archivo
+                        $archivo = new Archivo();
+                        $archivo->name = $name;
+                        
+                        $archivo->extension = $model->archivo->extensionName;
+                    }
+                    $archivo->md5 = md5_file($path);
+                    
+                    if ($archivo->save()) {
+                        $model->archivo_id = $archivo->id;
+
+                        $model->ies_id = $ies->id;  
+                        
+                        
+                        if ($model->save()) {
+                            //echo Yii::app()->basePath; die();
+                            $this->redirect(array('/carga/realizar?success'));
+                        }
+                    }
+                }
+            }
+            $this->redirect(array('/carga/realizar?error'));
+		} 
+        
         $formDataProvider2012 = new CActiveDataProvider(
             'Formulario',
             array(
                 'criteria' => array(
                     'condition'=>'levantamiento_id=:levantamientoId and name<>:name',
                     'params'=>array(':levantamientoId'=>'2', ':name' =>'IES'),
-                )
+                ),
+                'pagination'=>array(
+                    'pageSize'=>10,
+                ),
             )
         );
         
@@ -188,14 +266,20 @@ class CargaController extends Controller
                 'criteria' => array(
                     'condition'=>'levantamiento_id=:levantamientoId',
                     'params'=>array(':levantamientoId'=>'2'),
-                )
+                ),
+                'pagination'=>array(
+                    'pageSize'=>50,
+                ),
             )
         );
+
 
         $this->layout = 'column1';
         $this->render('realizar', array(
             'formDataProvider2012' => $formDataProvider2012,
             'docDataProvider2012' => $docDataProvider2012,
+            'model'=>$model,
+            
         ));
     }
 }

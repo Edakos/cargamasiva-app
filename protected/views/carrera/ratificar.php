@@ -20,7 +20,7 @@ $this->menu=array(
  Se han ratificado todas las carreras.
 <?php else: ?>
 <?php echo CHtml::image('/images/red.png', '', array('width' => 20, 'height' => 20)); ?>
- Todavía le falta por ratificar <?php echo $total_sin_ratificar; ?> carrera<?php echo $total_sin_ratificar == 1 ? '' : 's'; ?>.
+ Todavía faltan por ratificar <?php echo $total_sin_ratificar; ?> carrera<?php echo $total_sin_ratificar == 1 ? '' : 's'; ?>.
 <?php endif; ?>
 </p>
 

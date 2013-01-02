@@ -36,6 +36,7 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+        $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
         $formDataProvider2012 = new CActiveDataProvider(
@@ -61,6 +62,7 @@ class SiteController extends Controller
 		$this->render('index', array(
             'dataProvider2012' => $formDataProvider2012,
             'dataProvider2010' => $formDataProvider2010,
+            'ies' => $ies,
         ));
 	}
 

@@ -21,6 +21,7 @@
  */
 class Carga extends MyActiveRecord
 {
+    public $archivo;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -52,6 +53,7 @@ class Carga extends MyActiveRecord
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, archivo_id, ies_id, formulario_id, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+            array('archivo', 'file', 'types'=>'xlsx, pdf'),
 		);
 	}
 
