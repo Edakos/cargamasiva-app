@@ -264,7 +264,7 @@ if (in_array('representante', array_keys(Rights::getAssignedRoles()))) {
 		<?php echo $content; ?>
 	</div>
 	<div id="footer">
-        <a href="http://www.senescyt.gob.ec">SENESCYT</a> - <?php echo date('Y'); ?>
+        <a href="http://www.senescyt.gob.ec">SENESCYT</a> - 2013
 	</div><!-- footer -->
 
 </div><!-- page -->

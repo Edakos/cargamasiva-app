@@ -35,9 +35,9 @@ $form = $this->beginWidget(
 <?php echo $form->fileField($model, 'archivo'); ?>
 <?php echo $form->error($model, 'archivo'); ?>
 
-	<div class="row buttons">
-		<?php echo CHtml::submitButton('Enviar'); ?>
-	</div>
+	
+		<?php echo CHtml::submitButton('Enviar archivo'); ?>
+	
 
 
 </div>
@@ -55,7 +55,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'description:html:Formulario',  
         array(
             'name' => 'Archivo',
-            'value' => 'CHtml::image("/images/xls.png", "", array("width"=>20,"height"=>20)) . $data->name . ".xls"',
+            'value' => 'CHtml::image("/images/xls.png", "", array("width"=>20,"height"=>20)) . $data->name . ".xlsx"',
             'type' => 'html',
         ),
         array(
