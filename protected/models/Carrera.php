@@ -47,7 +47,7 @@ class Carrera extends MyActiveRecord
 		return array(
 			array('ies_id, created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('name, code', 'length', 'max'=>256),
-			array('description, created, modified', 'safe'),
+			array('ratificar_estado, fecha_creacion', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, code, description, ies_id, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
@@ -72,6 +72,10 @@ class Carrera extends MyActiveRecord
 	public function attributeLabels()
 	{
 		return array_merge(parent::attributeLabels(), array(
+            'conocimiento_area' => 'Área del conocimiento',
+            'conocimiento_subarea' => 'Subárea del conocimiento',
+            'fecha_creacion' => 'Fecha de creación',
+            'ratificar_estado'=> 'Ratificar estado',
         ));
 	}
 

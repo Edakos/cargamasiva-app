@@ -14,35 +14,8 @@ class CarreraController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
             'rights',
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
 		);
 	}
 
@@ -87,22 +60,32 @@ class CarreraController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
+		$model = $this->loadModel($id);
 
+        
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
-		if(isset($_POST['Carrera']))
-		{
-			$model->attributes=$_POST['Carrera'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+		$this->performAjaxValidation($model);
+        
+		if (isset($_POST['Carrera'])) {
+            
+			$model->attributes = $_POST['Carrera'];
+			if ($model->save()) {
+                print_r($_POST); die();
+                if (isset($_POST['ajax'])) {
+                    echo "OK";
+                    Yii::app()->end();
+                } else {
+                    $this->redirect(array('view','id'=>$model->id));
+                }
+            }
 		}
 
 		$this->render('update',array(
 			'model'=>$model,
 		));
 	}
+    
+    
 
 	/**
 	 * Deletes a particular model.
@@ -169,4 +152,57 @@ class CarreraController extends Controller
 			Yii::app()->end();
 		}
 	}
+    
+    public function actionRatificar()
+    {
+		// Uncomment the following line if AJAX validation is needed
+		// $this->performAjaxValidation($model);
+
+		if (isset($_POST['Carrera'])) {
+            //AJAX UPDATE:
+            print_r($_POST['Carrera']);
+                        
+            $model = $this->loadModel($_POST['Carrera']['id']);
+                print_r($model->attributes);
+
+			$model->attributes = $_POST['Carrera'];
+                print_r($model->attributes);
+
+			if ($model->save()) {
+				echo "OK-----\n";
+                print_r($model->attributes);
+
+            } else {
+                echo "No se pudo guardar los datos";
+            }
+            Yii::app()->end();
+		} else {
+            //Carga de información a ser presentada:
+            
+            $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+
+            $total_sin_ratificar = Carrera::model()->count("ies_id={$ies->id} AND (ratificar_estado IS NULL OR ratificar_estado = '')");
+
+            //$data = Carrera::model()->findAllBySql("SELECT c.* FROM carrera AS c, ies WHERE c.ies_id = ies.id AND ies.code='" . Yii::app()->user->name . "'", array(
+                //':code' => Yii::app()->user->name
+            //));
+            
+            $dataProvider = new CActiveDataProvider('Carrera', array(
+                'criteria'=>array(
+                    'condition' => "ies_id=" . $ies->id,
+                ),
+                'pagination'=>array(
+                    'pageSize'=>10,
+                ),
+            ));
+            
+            $this->layout = 'column1';
+            $this->render('ratificar',array(
+                //'data'=>$data,
+                'dataProvider'=>$dataProvider,
+                'total_sin_ratificar' => $total_sin_ratificar,
+                'ies' => $ies,
+            ));
+        }
+    }
 }

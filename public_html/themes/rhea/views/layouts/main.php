@@ -99,21 +99,25 @@ $(document).click(function () {
     padding:10px;
     font-size:+12pt;
     text-align:right;
-    }
+}
 .username a{
     color:#fff;
     font-weight:bold;
-    }
+}
+#userdata {
+    text-align:right;
+    padding:10px;
+}
 #usermenu {
     background-color:#00304C;position:absolute;top:0px;left:0px;border:solid 0px #069;
     width:200px
     
-    }
+}
 #usermenu .username{
         text-align:right;
         padding:0px !important;
         xxxwidth:150px;
-    }
+}
 #usermenu a {
     display:inline-block;
     
@@ -121,13 +125,13 @@ $(document).click(function () {
     color:#000;
     text-decoration:none;
     background-color:#eee;
-    }
+}
 #usermenu a.usermenu-option:hover {
     background-color:#fff;
 }
 #usermenu .usermenu-option {
     width:180px;
-    }
+}
     </style>
 </head>
 
@@ -147,6 +151,14 @@ $(document).click(function () {
         <div id="user" style="float:right;width:200px;">
 <?php if (!Yii::app()->user->isGuest): ?>
 <div class="username"><a href="#" onclick="p_ver_usermenu(this, 'clic'); return false;"><?php echo Yii::app()->user->name; ?> ▼</a></div>
+<div id="userdata">
+<?php 
+if (in_array('representante', array_keys(Rights::getAssignedRoles()))) {
+    $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+    echo $ies->name;
+}
+?>
+</div>
 <div id="usermenu" style="display:none;">
 <div class="username"><a href="#" onclick="p_ver_usermenu(this, 'clic'); return false;"><?php echo Yii::app()->user->name; ?> ▼</a></div>
 <div><?php echo CHtml::link(CHtml::image('/images/edit.gif', 'Modificar datos', array('width' => '20px', 'height' => '20px')) . ' Modificar datos', array('/usuario/modificar'), array('class' => 'usermenu-option')); ?></div>
@@ -181,6 +193,7 @@ $(document).click(function () {
                 }
                 
                 $operation = implode('.', $operation);
+                $url[0] = '/' . $url[0];
                                 
                 $items_menu[] = array(
                     'label' => Yii::t('app', $label),
@@ -199,11 +212,12 @@ $(document).click(function () {
                 'Home' => 'site/index',
                 'About' => array('site/page', 'view'=>'about'),
                 'Contact' => 'site/contact',
-                'Formulario Institucional' => 'ies/formulario',
-                'Carreras' => 'ies/carreras',
-                'Carreras' => 'ies/carga',
+                'Formulario Institucional' => 'formulario/llenar',//'ies/formulario',
+                'Carreras' => 'carrera/ratificar', //'ies/carreras',
+                'Carga' => 'carga/realizar',//'ies/carga',
                 'Levantamientos' => 'levantamiento/admin',
                 'Usuarios' => 'usuario/admin',
+                'Permisos' => 'rights'
             )),
 /*
 			'items'=>array(
