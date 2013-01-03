@@ -1,8 +1,26 @@
 <?php
-$this->breadcrumbs = array(
-	'Llenar Formulario',
-);
 
+if (!isset($_GET['seccion']) || empty($_GET['seccion'])) {
+    $this->breadcrumbs = array(
+        'Llenar Formulario',
+    );
+} else {
+    $e = $estructura[$_GET['seccion']];
+    
+    $this->breadcrumbs = array(
+        'Llenar Formulario' => 'llenar',
+        $e['texto'],
+    );
+}
+
+foreach($estructura as $k => $v) {
+    $this->menu[] = array(
+        //'label' => $v['texto'] . ' (' . $v['cuenta']['respondidas'] . ' de ' . $v['cuenta']['total'] . ')',
+        'label' => $v['texto'],
+        'url' => array('formulario/llenar', 'seccion' => $k), 
+    );
+}
+/*
 $this->menu = array(
 	array('label'=>'Datos Generales', 'url'=>array('index')),
 	array('label'=>'Datos de Representante Legal', 'url'=>array('admin')),
@@ -17,90 +35,49 @@ $this->menu = array(
     array('label'=>'Infraestructura civil', 'url'=>array('admin')),
     array('label'=>'Infraestructura tecnológica', 'url'=>array('admin')),
 );
+*/
 ?>
+
+
+<?php if (!isset($_GET['seccion']) || empty($_GET['seccion'])): ?>
 <h1>Formulario de Datos Institucionales</h1>
 <hr/>
-<h3>Sección: Datos Generales</h3>
-<hr/>
+<p>
+Bienvenido al formulario de Datos Institucionales. Por favor seleccione una sección de la izquierda para completar el formulario.
+</p>
+<hr />
+<div>&nbsp;</div>
+<h3>Estado del llenado por secciones:</h3>
 <ol>
 
-<li>Código de la institución: <strong>1001 (Escuela Politécnica Nacional)</strong></li>
-<br/>
-<li>Número total de extensiones o sedes sin incluir la Matriz.
-<div xxclass="grid-view">
-<table xxclass="items">
-    <tr><th>2011</th><th>2012</th></tr>
-    <tr><td><input/></td><td><input/></td></tr>
-</table>
-</div>
-</li>
-<li>Número total de campus
-<table>
-    <tr><th>2011</th><th>2012</th></tr>
-    <tr><td><input/></td><td><input/></td></tr>
-</table>
-</li>
-<li>Número total de centros de apoyo.
-<table>
-    <tr><th>2011</th><th>2012</th></tr>
-    <tr><td><input/></td><td><input/></td></tr>
-</table>
-</li>
-<li>Número total de unidades académicas.
-<table>
-    <tr><th>2011</th><th>2012</th></tr>
-    <tr><td><input/></td><td><input/></td></tr>
-</table>
-</li>
-<li>Número total de carreras impartidas por la institución, por modalidad y nivel de formación.
-<table>
-    <tr><th>2011</th><th>2012</th></tr>
-    <tr><td><input/></td><td><input/></td></tr>
-</table>
-</li>
-<li>En el caso de ser una institución particular, indicar si dispone de un Sistema de Admisión centralizado 
-<table>
-    <tr><th>2011</th><th>2012</th></tr>
-    <tr><td><input type="radio" />Sí <br/> <input type="radio" />No</li></td><td><input type="radio" />Sí <br/> <input type="radio" />No</li></td></tr>
-</table>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<?php 
 
+foreach($estructura as $k => $v) {
 
-1.	 
-2.	
-3.	
-•	SI
-•	NO
-7.1 El Sistema de Admisión centralizado consiste en:
-•	Examen general de ingreso a la institución
-•	Examen específico según carrera o programa académico
-•	Curso propedéutico, nivelación o su equivalente
-•	Otros
-4.	En el caso de ser una institución particular, indicar si dispone de  un Sistema de Nivelación centralizado
-•	SI
-•	NO
-8.1 En relación al sistema de nivelación centralizado de la institución:
-•	Número de estudiantes matriculados en los cursos de nivelación
-•	Número de estudiantes que aprobaron los cursos de nivelación
-•	Duración promedio en horas cronológicas de los cursos de nivelación
-5.	La institución dispone de una unidad de Evaluación y Acreditación (Autoevaluación) o su equivalente.
-•	SI
-•	NO 
-9.1 Número de funcionarios de la unidad de Evaluación 
-6.	La institución cuenta con una unidad de planificación o su equivalente
-•	SI
-•	NO
-10.1 Número de funcionarios de la unidad de planificación 
-7.	Número total de cargos por cada tipo de autoridad de Dirección Académica
-•	Rector
-•	Vicerrectorados
-•	Decanos
-•	Subdecanos
-•	Jefes departamentales
-•	Directores de escuelas
+    echo '<li>'; 
+    
+    if ($v['cuenta']['total'] == $v['cuenta']['respondidas']) {
+        echo CHtml::image('/images/green.png', '', array('width' => 20, 'height' => 20));
+    } else {
+        echo CHtml::image('/images/red.png', '', array('width' => 20, 'height' => 20));
+    }
+    echo ' <strong><a href="/formulario/llenar?seccion=' . $k . '">' . $v['texto'] . ':</a></strong> ';
+    echo $v['cuenta']['total'] . ' preguntas, ' . $v['cuenta']['respondidas'] . ' respondidas.';
+    echo '<div>&nbsp;</div>';
+    echo '</li>';
+
+}
+?>
 
 </ol>
+
+<?php else: ?>
+
+    <h2>Sección: <?php echo $e['texto']; ?></h3>
+    <hr/>
+    <form method="post" action="/formulario/llenar">
+    <?php echo $this->generarForm($e['hijos']); ?>
+    <input type="submit" value="Enviar información de la sección '<?php echo $e['texto']; ?>'"/>
+    </form>
+
+<?php endif; ?>

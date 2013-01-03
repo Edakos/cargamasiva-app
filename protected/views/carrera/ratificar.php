@@ -13,16 +13,29 @@ $this->menu=array(
 ?>
 
 <h1>Carreras de <?php echo $ies->name; ?></h1>
-
+<p>En caso que la carrera se encuentre vigente para el segundo ciclo del 2013 seleccione "RATIFICADO" caso contrario "NO VIGENTE HABILITADO". Realizar este proceso solo para las carreras de Estado "VIGENTE"</p>
+<hr />
 <p>
+    <h4>Estado del ingreso de información:</h4>
 <?php if ($total_sin_ratificar == 0): ?>
 <?php echo CHtml::image('/images/green.png', '', array('width' => 20, 'height' => 20)); ?>
- Se han ratificado todas las carreras.
+ Se han ratificado todas las carreras vigentes.
 <?php else: ?>
 <?php echo CHtml::image('/images/red.png', '', array('width' => 20, 'height' => 20)); ?>
- Todavía faltan por ratificar <?php echo $total_sin_ratificar; ?> carrera<?php echo $total_sin_ratificar == 1 ? '' : 's'; ?>.
+ Todavía faltan por ratificar <?php echo $total_sin_ratificar; ?> carrera<?php echo $total_sin_ratificar == 1 ? '' : 's'; ?> vigente<?php echo $total_sin_ratificar == 1 ? '' : 's'; ?>.
+<?php endif; ?>
+<br />
+<?php if ($total_sin_fecha_creacion == 0): ?>
+<?php echo CHtml::image('/images/green.png', '', array('width' => 20, 'height' => 20)); ?>
+ Todas las carreras tienen su fecha de creación. Revise por favor que esta fecha sea correcta.
+<?php else: ?>
+<?php echo CHtml::image('/images/red.png', '', array('width' => 20, 'height' => 20)); ?>
+ Todavía faltan por definir la fecha de creación de <?php echo $total_sin_ratificar; ?> carrera<?php echo $total_sin_fecha_creacion == 1 ? '' : 's'; ?>.
 <?php endif; ?>
 </p>
+<hr />
+
+
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,

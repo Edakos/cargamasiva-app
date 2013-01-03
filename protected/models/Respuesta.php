@@ -49,12 +49,12 @@ class Respuesta extends MyActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created, modified', 'required'),
-			array('pregunta_id, carga_id, created_by, modified_by', 'numerical', 'integerOnly'=>true),
+			array('pregunta_id, ies_id, created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>128),
 			array('texto, numero, description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, texto, numero, pregunta_id, description, carga_id, name, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
+			array('id, texto, numero, pregunta_id, description, ies_id, name, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,7 +67,7 @@ class Respuesta extends MyActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'pregunta' => array(self::BELONGS_TO, 'Pregunta', 'pregunta_id'),
-			'carga' => array(self::BELONGS_TO, 'Carga', 'carga_id'),
+			'ies' => array(self::BELONGS_TO, 'Ies', 'ies_id'),
 		);
 	}
 
@@ -96,7 +96,7 @@ class Respuesta extends MyActiveRecord
 		$criteria->compare('numero',$this->numero,true);
 		$criteria->compare('pregunta_id',$this->pregunta_id);
 		$criteria->compare('description',$this->description,true);
-		$criteria->compare('carga_id',$this->carga_id);
+		$criteria->compare('ies_id',$this->ies_id);
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('created',$this->created,true);
 		$criteria->compare('modified',$this->modified,true);

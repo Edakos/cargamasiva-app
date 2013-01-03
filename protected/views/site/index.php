@@ -17,19 +17,22 @@ $this->pageTitle=Yii::app()->name;
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'dataProvider'=>$dataProvider2012,
+    'template'=>'{items}',
     'columns'=>array(
         'description:html:Formulario',  
         array(
             'class'=>'CLinkColumn',
-            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : "2012_' . $ies->code . '_" . $data->name . ".xlsx"',
+            //'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : "2012_' . $ies->code . '_" . $data->name . ".xlsx"',
+            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : $data->name . ".xlsx"',
             'header'=>'Archivo',
-            'urlExpression'=>'$data->name == "IES" ? "/formulario/llenar/" . $data->id : "/archivos/2012_' . $ies->code . '" . "_" . $data->name . ".xlsx"',
+            //'urlExpression'=>'$data->name == "IES" ? "/formulario/llenar/" . $data->id : "/archivos/2012_' . $ies->code . '" . "_" . $data->name . ".xlsx"',
+            'urlExpression'=>'$data->name == "IES" ? "/formulario/llenar/" . $data->id : "/archivos/" . $data->name . ".xlsx"',
         ),
     ),
 ));
 ?>
 <hr/>
-<p>Descarga del <?php echo CHtml::link('Formulario Institucional', '#'); ?>, imprimir y remitir a la SENESCYT con la respectiva firma del rector.</p>
+<p>Descarga del <?php echo CHtml::link('Formulario Institucional', '/formulario/mostrar'); ?>, imprimir y remitir a la SENESCYT con la respectiva firma del rector.</p>
 <hr/>
 <p>Descarga del <?php echo CHtml::link('reporte de estado de las carreras y programas académicos', "/archivos/2012_{$ies->code}_OFERTA_ACADEMICA.xlsx"); ?> (Información del Sistema Académico de la SENESCYT).</p>
 </div>
@@ -40,6 +43,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 <?php
 $this->widget('zii.widgets.grid.CGridView', array(
     'dataProvider'=>$dataProvider2010,
+    'template'=>'{items}',
     'columns'=>array(
         'description:html:Formulario',  
         array(

@@ -70,11 +70,14 @@ $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 
         <?php echo $form->error($model,'fecha_creacion'); ?>
     </div>
+    
+    <?php if ($model->estado == 'VIGENTE'): ?>
     <div class="row">
-        <?php echo $form->labelEx($model,'ratificar_estado', array('label' => 'Ratificar estado "' .$model->estado. '"')); ?>
+        <?php echo $form->labelEx($model,'ratificar_estado', array('label' => 'Estado: "' .$model->estado. '"')); ?>
         <?php echo $form->dropDownList($model,'ratificar_estado', array('' => '', 'RATIFICADO' => 'RATIFICADO', 'NO VIGENTE HABILITADO' => 'NO VIGENTE HABILITADO')); ?>
         <?php echo $form->error($model,'ratificar_estado'); ?>
     </div>
+    <?php endif; ?>
  
     <?php echo $form->hiddenField($model,'id'); ?>
     <?php echo $form->hiddenField($model,'ies_id'); ?>

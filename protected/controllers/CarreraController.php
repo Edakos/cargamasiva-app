@@ -181,7 +181,19 @@ class CarreraController extends Controller
             
             $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
 
-            $total_sin_ratificar = Carrera::model()->count("ies_id={$ies->id} AND (ratificar_estado IS NULL OR ratificar_estado = '')");
+            $total_sin_ratificar = Carrera::model()->count("
+                ies_id = {$ies->id} 
+                AND estado = 'VIGENTE'
+                AND (
+                    ratificar_estado IS NULL 
+                    OR ratificar_estado = ''
+                )
+            ");
+            
+            $total_sin_fecha_creacion = Carrera::model()->count("
+                ies_id = {$ies->id} 
+                AND fecha_creacion IS NULL
+            ");
 
             //$data = Carrera::model()->findAllBySql("SELECT c.* FROM carrera AS c, ies WHERE c.ies_id = ies.id AND ies.code='" . Yii::app()->user->name . "'", array(
                 //':code' => Yii::app()->user->name
@@ -201,6 +213,7 @@ class CarreraController extends Controller
                 //'data'=>$data,
                 'dataProvider'=>$dataProvider,
                 'total_sin_ratificar' => $total_sin_ratificar,
+                'total_sin_fecha_creacion' => $total_sin_fecha_creacion,
                 'ies' => $ies,
             ));
         }
