@@ -56,7 +56,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 ));
 ?>
 <hr/>
-<p>Descarga de la <?php echo CHtml::link('ficha de presentación de información y documentos físicos', "/archivos/2010_{$ies->code}_FICHA_DTOS.pdf"); ?> que la institución entregó a la SENESCYT. 
+<p>Descarga de la <?php echo CHtml::link('ficha de presentación de información y documentos físicos', "/archivos/2010_{$ies->code}_FICHA_DCTOS.pdf"); ?> que la institución entregó a la SENESCYT. 
 </p>
 </div>
 
