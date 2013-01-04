@@ -18,7 +18,7 @@ La recopilación de datos se realizará a través del <?php echo CHtml::link('po
 <p/><p>
 Una vez completados los formularios, las instituciones recibirán un reporte de los datos enviados el cual deberá ser firmado por el Rector(a), quien en su calidad de primera autoridad ejecutiva certificará que la datos suministrada es verídica, completa, verificable y que corresponde a los datos oficiales de la institución.
 <p/><p>
-Para facilitar el proceso de actualización de datos, se ha elaborado un <a href="#">Manual de Usuario</a>, el cual contiene una guía para cada uno de los formularios, un listado de los códigos de cada institución, un glosario de conceptos claves, las áreas y subáreas del conocimiento según la UNESCO y la codificación de las diferentes extensiones, campus y centros de apoyo. 
+Para facilitar el proceso de actualización de datos, se ha elaborado un <a href="/archivos/2012_MANUAL_USUARIO.pdf">Manual de Usuario</a>, el cual contiene una guía para cada uno de los formularios, un listado de los códigos de cada institución, un glosario de conceptos claves, las áreas y subáreas del conocimiento según la UNESCO y la codificación de las diferentes extensiones, campus y centros de apoyo. 
 <p/><p>
 En caso de requerir asesoría, se puede comunicar a la siguiente dirección de correo electrónico: <a href="mailto:sniese@senescyt.gob.ec">sniese@senescyt.gob.ec</a> o al teléfono 022 505 - 660 Ext. 137 o Ext. 131.
 <p/><p>

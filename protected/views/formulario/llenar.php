@@ -76,8 +76,11 @@ foreach($estructura as $k => $v) {
     <h2>Sección: <?php echo $e['texto']; ?></h3>
     <hr/>
     <form method="post" action="/formulario/llenar">
+    <input type='hidden' name="seccion" value="<?php echo $e['id']; ?>" />
+    <input type='hidden' name="secciones" value="<?php echo implode(', ', (array_keys($estructura))); ?>" />
     <?php echo $this->generarForm($e['hijos']); ?>
-    <input type="submit" value="Enviar información de la sección '<?php echo $e['texto']; ?>'"/>
+    <input type="submit" value="Guardar información e ir a la siguiente sección >>"/>
+    
     </form>
 
 <?php endif; ?>

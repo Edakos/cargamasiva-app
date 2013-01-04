@@ -11,7 +11,7 @@ $this->pageTitle=Yii::app()->name;
 <div style="float:left;width:45%;">
     <hr/>
 <h2>Levantamiento de datos 2011 y 2012</h2>
-<p>Descarga el <?php echo CHtml::link('Manual de Usuario', '/archivos/2012_MANUAL_USUARIO.pdf'); ?> para la actualización de datos.</p>
+<p>Descarga el <?php echo CHtml::link('<img src="/images/pdf.png" width="20" height="20"> Manual de Usuario', '/archivos/2012_MANUAL_USUARIO.pdf'); ?> para la actualización de datos.</p>
 <hr/>
 <p>A continuación se listan los formularios para la carga de datos:</p>
 <?php
@@ -23,7 +23,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         array(
             'class'=>'CLinkColumn',
             //'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : "2012_' . $ies->code . '_" . $data->name . ".xlsx"',
-            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : $data->name . ".xlsx"',
+            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : "<img src=\"/images/xlsx.png\" width=\"25\" height=\"25\">" . $data->name . ".xlsx"',
             'header'=>'Archivo',
             //'urlExpression'=>'$data->name == "IES" ? "/formulario/llenar/" . $data->id : "/archivos/2012_' . $ies->code . '" . "_" . $data->name . ".xlsx"',
             'urlExpression'=>'$data->name == "IES" ? "/formulario/llenar/" . $data->id : "/archivos/" . $data->name . ".xlsx"',
@@ -34,7 +34,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 <hr/>
 <p>Descarga del <?php echo CHtml::link('Formulario Institucional', '/formulario/mostrar'); ?>, imprimir y remitir a la SENESCYT con la respectiva firma del rector.</p>
 <hr/>
-<p>Descarga del <?php echo CHtml::link('reporte de estado de las carreras y programas académicos', "/archivos/2012_{$ies->code}_OFERTA_ACADEMICA.xlsx"); ?> (Información del Sistema Académico de la SENESCYT).</p>
+<p>Descarga del <?php echo CHtml::link('<img src="/images/xlsx.png" width="20" height="20"> reporte de estado de las carreras y programas académicos', "/archivos/2012_{$ies->code}_OFERTA_ACADEMICA.xlsx"); ?> (Información del Sistema Académico de la SENESCYT).</p>
 </div>
 <div style="float:right;width:45%;">
     <hr/>
@@ -48,7 +48,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'description:html:Formulario',  
         array(
             'class'=>'CLinkColumn',
-            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : "2010_' . $ies->code . '_" . $data->name . ".xlsx"',
+            'labelExpression'=>'$data->name == "IES" ? "INGRESAR" : "<img src=\"/images/xlsx.png\" width=\"25\" height=\"25\"> 2010_' . $ies->code . '_" . $data->name . ".xlsx"',
             'header'=>'Archivo',
             'urlExpression'=>'$data->name == "IES" ? "/formulario/view/" . $data->id : "/archivos/2010_' . $ies->code . '" . "_" . $data->name .".xlsx"',
         ),
@@ -56,7 +56,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 ));
 ?>
 <hr/>
-<p>Descarga de la <?php echo CHtml::link('ficha de presentación de información y documentos físicos', "/archivos/2010_{$ies->code}_FICHA_DCTOS.pdf"); ?> que la institución entregó a la SENESCYT. 
+<p>Descarga de la <?php echo CHtml::link('<img src="/images/pdf.png" width="20" height="20"> </im>ficha de presentación de información y documentos físicos', "/archivos/2010_{$ies->code}_FICHA_DCTOS.pdf"); ?> que la institución entregó a la SENESCYT. 
 </p>
 </div>
 

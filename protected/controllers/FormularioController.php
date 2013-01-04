@@ -182,8 +182,38 @@ class FormularioController extends Controller
                 
                 $respuesta->save();
             }
+            
+            $destino = 'llenar';
+            
+            if (isset($_POST['seccion']) && isset($_POST['secciones'])) {
+                $seccion = $_POST['seccion'];
+                $secciones = explode(', ', $_POST['secciones']);
+                //echo "<pre>";print_r($_POST['secciones']);echo "</pre>";die();
                 
-            $this->redirect('llenar');
+                if ($seccion != end($secciones)) {
+                    
+                    $tomar_sig_seccion = false;
+                    $sig_seccion = null;
+                    
+                    //echo "<pre>";print_r(implode(', ',$secciones));echo "</pre>";die();
+                    
+                    foreach ($secciones as $s) {
+                        if ($tomar_sig_seccion) {
+                            $sig_seccion = $s;
+                            $tomar_sig_seccion = false;
+                        }
+                        if ($s == $seccion) {
+                            $tomar_sig_seccion = true;
+                        }
+                    }
+                    
+                    if (!empty($sig_seccion)) {
+                        $destino .= '?seccion=' . $sig_seccion;
+                    }
+                }
+            }
+                
+            $this->redirect($destino);
         } else {
             $estructura = $this->getEstructura();            $preguntas = Yii::app()->db->createCommand("
                 SELECT 
