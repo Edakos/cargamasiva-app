@@ -167,6 +167,7 @@ class FormularioController extends Controller
             //echo "<pre>";print_r($_POST['Formulario']);echo "</pre>";die();
             
             foreach($_POST['Formulario'] as $k => $v) {
+                
                 $respuesta = Respuesta::model()->findByAttributes(array(
                     'ies_id' => $ies->id,
                     'pregunta_id'=> $k,
@@ -564,7 +565,7 @@ class FormularioController extends Controller
     public function contar($data, $cuenta = array('total' => 0, 'respondidas' => 0))
     {
         foreach ($data as $k => $v) {
-            if (!empty($v['tipo']) && !in_array($v['tipo'], array('Tabla', 'Seccion'))) {
+            if (!empty($v['tipo']) && !in_array($v['tipo'], array('Tabla', 'Seccion')) && empty($v['hijos'])) {
                 $cuenta['total'] += 1;
                 if ($v['respuesta'] !== null && $v['respuesta'] !== '') {
                     $cuenta['respondidas'] += 1;
