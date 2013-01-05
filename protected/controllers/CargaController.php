@@ -212,7 +212,7 @@ class CargaController extends Controller
             if ($es_nombre_valido) {
                 $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
                 
-                $name = '2012-' . $ies->code . '-' . $model->archivo->name;
+                $name = '2012_' . $ies->code . '_' . $model->archivo->name;
                 
                 $path = Yii::app()->basePath . '/../public_html/archivos/' . $name;
                 

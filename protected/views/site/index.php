@@ -34,7 +34,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 <hr/>
 <p>Descarga del <?php echo CHtml::link('Formulario Institucional', '/formulario/mostrar'); ?>, imprimir y remitir a la SENESCYT con la respectiva firma del rector.</p>
 <hr/>
-<p>Descarga del <?php echo CHtml::link('<img src="/images/xlsx.png" width="20" height="20"> reporte de estado de las carreras y programas académicos', "/archivos/2012_{$ies->code}_OFERTA_ACADEMICA.xlsx"); ?> (Información del Sistema Académico de la SENESCYT).</p>
+<p>Descarga de la <?php echo CHtml::link('<img src="/images/xlsx.png" width="20" height="20"> Oferta Académica', "/archivos/2012_{$ies->code}_OFERTA_ACADEMICA.xlsx"); ?> (Información del Sistema Académico de la SENESCYT).</p>
 </div>
 <div style="float:right;width:45%;">
     <hr/>
