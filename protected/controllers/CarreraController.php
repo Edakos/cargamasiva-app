@@ -201,7 +201,8 @@ class CarreraController extends Controller
             
             $dataProvider = new CActiveDataProvider('Carrera', array(
                 'criteria'=>array(
-                    'condition' => "ies_id=" . $ies->id,
+                    'condition' => 'ies_id=' . $ies->id . ' AND estado=' . "'VIGENTE'",
+                    
                 ),
                 'pagination'=>array(
                     'pageSize'=>10,

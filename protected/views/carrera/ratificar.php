@@ -48,7 +48,7 @@ $this->menu=array(
         'nivel',
         'ciudad',
         'fecha_creacion',
-        'estado',
+        //'estado',
         'ratificar_estado'
     ),
     'viewData' => array(),

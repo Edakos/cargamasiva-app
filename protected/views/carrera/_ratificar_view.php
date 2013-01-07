@@ -47,9 +47,11 @@ $form = $this->beginWidget('CActiveForm', array(
     <?php echo $form->errorSummary($model); ?>
  
     <div class="row">
-        <?php echo $form->labelEx($model,'fecha_creacion'); ?>
-        <?php echo $form->textField($model,'fecha_creacion'); ?>
-<?php
+        <?php if (empty($model->fecha_creacion)): ?>
+        
+            <?php echo $form->labelEx($model,'fecha_creacion'); ?>
+            <?php echo $form->textField($model,'fecha_creacion'); ?>
+    <?php
 /*
 $this->widget('zii.widgets.jui.CJuiDatePicker', array(
       'model'=>$model,
@@ -69,6 +71,7 @@ $this->widget('zii.widgets.jui.CJuiDatePicker', array(
 ?>
 
         <?php echo $form->error($model,'fecha_creacion'); ?>
+        <?php endif; ?>
     </div>
     
     <?php if ($model->estado == 'VIGENTE'): ?>
