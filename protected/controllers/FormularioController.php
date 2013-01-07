@@ -9,6 +9,8 @@ class FormularioController extends Controller
 	public $layout='//layouts/column2';
     
     public $_campos = array();
+    
+    public $_count = 0;
 
 	/**
 	 * @return array action filters
@@ -190,28 +192,33 @@ class FormularioController extends Controller
             
             if (isset($_POST['seccion']) && isset($_POST['secciones'])) {
                 $seccion = $_POST['seccion'];
-                $secciones = explode(', ', $_POST['secciones']);
-                //echo "<pre>";print_r($_POST['secciones']);echo "</pre>";die();
                 
-                if ($seccion != end($secciones)) {
+                if (isset($_POST['Guardar'])) {
+                    $destino .= '?seccion=' . $seccion;
+                } else {
+                    $secciones = explode(', ', $_POST['secciones']);
+                    //echo "<pre>";print_r($_POST['secciones']);echo "</pre>";die();
                     
-                    $tomar_sig_seccion = false;
-                    $sig_seccion = null;
-                    
-                    //echo "<pre>";print_r(implode(', ',$secciones));echo "</pre>";die();
-                    
-                    foreach ($secciones as $s) {
-                        if ($tomar_sig_seccion) {
-                            $sig_seccion = $s;
-                            $tomar_sig_seccion = false;
+                    if ($seccion != end($secciones)) {
+                        
+                        $tomar_sig_seccion = false;
+                        $sig_seccion = null;
+                        
+                        //echo "<pre>";print_r(implode(', ',$secciones));echo "</pre>";die();
+                        
+                        foreach ($secciones as $s) {
+                            if ($tomar_sig_seccion) {
+                                $sig_seccion = $s;
+                                $tomar_sig_seccion = false;
+                            }
+                            if ($s == $seccion) {
+                                $tomar_sig_seccion = true;
+                            }
                         }
-                        if ($s == $seccion) {
-                            $tomar_sig_seccion = true;
+                        
+                        if (!empty($sig_seccion)) {
+                            $destino .= '?seccion=' . $sig_seccion;
                         }
-                    }
-                    
-                    if (!empty($sig_seccion)) {
-                        $destino .= '?seccion=' . $sig_seccion;
                     }
                 }
             }
@@ -253,10 +260,20 @@ class FormularioController extends Controller
                         $r .= $this->generar($v, $k);
                         $r .= $this->generarForm($v['hijos']);
                         break;
+                    case 'Seccion':
+                        $r .= $this->generarForm($v['hijos']);
+                        break;
                     default:
                         $r .= $this->generar($v, $k);
                         $r .= $this->generarForm($v['hijos']);
                         break;
+                }
+                
+                if (in_array($v['tipo'], array('Tabla', 'Seccion'))) {
+                    if ($this->_count > 10) {
+                        $r .= '<input name="Guardar" type="submit" value="Guardar"/>';
+                        $this->_count = 0;
+                    }
                 }
                 
                 $r .= '</li>';
@@ -372,6 +389,8 @@ class FormularioController extends Controller
 
     private function generar($pregunta)
     {
+        $this->_count ++; // para saber cuándo poner un boton de Guardar
+        
         $r = '';
         $name = 'Formulario[' . $pregunta['id'] . ']';
         switch($pregunta['tipo']) {
