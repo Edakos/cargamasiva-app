@@ -7,6 +7,8 @@ class FormularioController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
+    
+    public $_campos = array();
 
 	/**
 	 * @return array action filters
@@ -216,169 +218,14 @@ class FormularioController extends Controller
                 
             $this->redirect($destino);
         } else {
-            $estructura = $this->getEstructura();            $preguntas = Yii::app()->db->createCommand("
-                SELECT 
-                    p.id
-                    ,p.name
-                    ,p.orden
-                    ,p.pregunta_id AS padre
-                    ,p.tipo_id
-                    ,t.name AS tipo
-                    ,(SELECT texto FROM respuesta AS r WHERE r.pregunta_id = p.id) AS respuesta
-                FROM 
-                    pregunta AS p
-                    ,tipo AS t
-                    ,formulario AS f
-                    ,levantamiento as l
-                WHERE
-                        p.tipo_id = t.id
-                    AND p.formulario_id = f.id
-                    AND f.levantamiento_id = l.id
-                    AND f.name = :formulario
-                    AND l.code = :levantamiento
-                ORDER BY
-                    p.orden
-            ")->bindValues(array(
-                ':formulario' => 'IES',
-                ':levantamiento' => '2012',
-            ))->queryAll();
-
-            
-            //Armada de array con ID como referencia y busca opciones de ser el caso:
-            $estructura = array();
-            
-            foreach ($preguntas as $p) {
-                //process each item here
-                $o = array();
-                
-                if ($p['tipo'] == 'Seleccion') {
-                    $opciones = Opcion::model()->findAllByAttributes(array(
-                        'pregunta_id' => $p['id'],
-                    ));
-                    
-                    foreach ($opciones as $opcion) {
-                        $o[$opcion->id] = $opcion->name;
-                    }
-                }
-                
-                $estructura[$p['id']] = array(
-                    'id' => $p['id'],
-                    'texto' => $p['name'],
-                    'tipo' => $p['tipo'],
-                    'cuenta' => array(),
-                    'respuesta' => $p['respuesta'],
-                    'opciones' => $o,
-                    'padre' => $p['padre'], 
-                    'hijos' => array(),
-                );
-            }
-            
-            //Hijos en sus padres:
-            $referencia = $estructura;
-            
-            foreach ($referencia as $id => $r) {
-                if (!empty($r['padre'])) {
-                    $estructura[$r['padre']]['hijos'][$id] = & $estructura[$id];
-                }
-            }
-            
-            //eliminación de primer nivel que no son padres:
-            
-            foreach ($referencia as $id => $r) {
-                if (!empty($r['padre'])) {
-                    unset($estructura[$id]);
-                }
-            }
-            
-            //agregar contadores:
-            foreach ($estructura as & $e) {
-                $e['cuenta'] = $this->contar($e['hijos']);
-            }
-            $preguntas = Yii::app()->db->createCommand("
-                SELECT 
-                    p.id
-                    ,p.name
-                    ,p.orden
-                    ,p.pregunta_id AS padre
-                    ,p.tipo_id
-                    ,t.name AS tipo
-                    ,(SELECT texto FROM respuesta AS r WHERE r.pregunta_id = p.id) AS respuesta
-                FROM 
-                    pregunta AS p
-                    ,tipo AS t
-                    ,formulario AS f
-                    ,levantamiento as l
-                WHERE
-                        p.tipo_id = t.id
-                    AND p.formulario_id = f.id
-                    AND f.levantamiento_id = l.id
-                    AND f.name = :formulario
-                    AND l.code = :levantamiento
-                ORDER BY
-                    p.orden
-            ")->bindValues(array(
-                ':formulario' => 'IES',
-                ':levantamiento' => '2012',
-            ))->queryAll();
-
-            
-            //Armada de array con ID como referencia y busca opciones de ser el caso:
-            $estructura = array();
-            
-            foreach ($preguntas as $p) {
-                //process each item here
-                $o = array();
-                
-                if ($p['tipo'] == 'Seleccion') {
-                    $opciones = Opcion::model()->findAllByAttributes(array(
-                        'pregunta_id' => $p['id'],
-                    ));
-                    
-                    foreach ($opciones as $opcion) {
-                        $o[$opcion->id] = $opcion->name;
-                    }
-                }
-                
-                $estructura[$p['id']] = array(
-                    'id' => $p['id'],
-                    'texto' => $p['name'],
-                    'tipo' => $p['tipo'],
-                    'cuenta' => array(),
-                    'respuesta' => $p['respuesta'],
-                    'opciones' => $o,
-                    'padre' => $p['padre'], 
-                    'hijos' => array(),
-                );
-            }
-            
-            //Hijos en sus padres:
-            $referencia = $estructura;
-            
-            foreach ($referencia as $id => $r) {
-                if (!empty($r['padre'])) {
-                    $estructura[$r['padre']]['hijos'][$id] = & $estructura[$id];
-                }
-            }
-            
-            //eliminación de primer nivel que no son padres:
-            
-            foreach ($referencia as $id => $r) {
-                if (!empty($r['padre'])) {
-                    unset($estructura[$id]);
-                }
-            }
-            
-            //agregar contadores:
-            foreach ($estructura as & $e) {
-                $e['cuenta'] = $this->contar($e['hijos']);
-            }
-
+            $estructura = $this->getEstructura($ies->id);
             //echo "<pre>";print_r($estructura);echo "</pre>";die();
 
             $this->layout = 'column2_formulario';
             $this->render('llenar', array(
                 'estructura' => $estructura,
                 'ies' => $ies,
+                'campos' => $this->_campos,
             ));
         }
     }
@@ -526,30 +373,38 @@ class FormularioController extends Controller
     private function generar($pregunta)
     {
         $r = '';
+        $name = 'Formulario[' . $pregunta['id'] . ']';
         switch($pregunta['tipo']) {
             case 'Texto':
-                $r .= '<input  name="Formulario[' . $pregunta['id'] . ']" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<input  id="' . $name . '" name="' . $name . '" value="' . $pregunta['respuesta'] . '">';
                 $r .= '<div>&nbsp;</div>';
+                break;
+            case 'Fecha':
+                $r .= '<input id="' . $name . '" name="' . $name . '" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<div>&nbsp;</div>';
+                $this->registrarValidacion($name, 'date');
                 break;
             case 'Entero':
-                $r .= '<input name="Formulario[' . $pregunta['id'] . ']" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<input id="' . $name . '" name="' . $name . '" value="' . $pregunta['respuesta'] . '">';
                 $r .= '<div>&nbsp;</div>';
+                $this->registrarValidacion($name, 'integer');
                 break;
             case 'Decimal':
-                $r .= '<input name="Formulario[' . $pregunta['id'] . ']" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<input id="' . $name . '" name="' . $name . '" value="' . $pregunta['respuesta'] . '">';
                 $r .= '<div>&nbsp;</div>';
+                $this->registrarValidacion($name, 'number');
                 break;
             case 'SiNo':
                 $r .= '<div>';
                 $checked = ( $pregunta['respuesta'] !== null && $pregunta['respuesta']) ? 'checked' : '';
-                $r .= '<input type="radio" value="1" name="Formulario[' . $pregunta['id'] . ']" ' . $checked . ' /> Sí ';
+                $r .= '<input type="radio" value="1" name="' . $name . '" ' . $checked . ' /> Sí ';
                 $r .= '<br/>';
                 $checked = ( $pregunta['respuesta'] !== null && !$pregunta['respuesta']) ? 'checked' : '';
-                $r .= '<input type="radio" value="0" name="Formulario[' . $pregunta['id'] . ']" ' . $checked . '/> No';
+                $r .= '<input type="radio" value="0" name="' . $name . '" ' . $checked . '/> No';
                 $r .= '</div>';
                 break;
             case 'Seleccion':
-                $r .= '<select name="Formulario[' . $pregunta['id'] . ']">';
+                $r .= '<select id="' . $name . '" name="' . $name . '">';
                 $r .= '<option></option>';
                 foreach ($pregunta['opciones'] as $opcion) {
                     $selected = ($opcion == $pregunta['respuesta']) ? 'selected' : '';
@@ -562,22 +417,34 @@ class FormularioController extends Controller
         return $r;
     }
     
+    protected function registrarValidacion($name, $tipo) 
+    {
+        $this->_campos[$name] = $tipo;
+    }
+    
     public function contar($data, $cuenta = array('total' => 0, 'respondidas' => 0))
     {
         foreach ($data as $k => $v) {
             if (!empty($v['tipo']) && !in_array($v['tipo'], array('Tabla', 'Seccion')) && empty($v['hijos'])) {
+                //es un campo de llenar:
                 $cuenta['total'] += 1;
+                //evalua si está respondida o no
                 if ($v['respuesta'] !== null && $v['respuesta'] !== '') {
                     $cuenta['respondidas'] += 1;
                 }
+                //agrega el campo a la lista de campos por validar:
             }
             $cuenta = $this->contar($v['hijos'], $cuenta);
         }
         return $cuenta;
     }
 
-    protected function getEstructura()
+    protected function getEstructura($ies_id = null)
     {
+        if (empty($ies_id)) {
+            $ies_id = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name))->id;
+        }
+        
         $preguntas = Yii::app()->db->createCommand("
             SELECT 
                 p.id
@@ -586,7 +453,15 @@ class FormularioController extends Controller
                 ,p.pregunta_id AS padre
                 ,p.tipo_id
                 ,t.name AS tipo
-                ,(SELECT texto FROM respuesta AS r WHERE r.pregunta_id = p.id) AS respuesta
+                ,(
+                    SELECT 
+                        texto 
+                    FROM 
+                        respuesta AS r 
+                    WHERE 
+                            r.pregunta_id = p.id
+                        AND r.ies_id = :ies_id
+                ) AS respuesta
             FROM 
                 pregunta AS p
                 ,tipo AS t
@@ -601,6 +476,7 @@ class FormularioController extends Controller
             ORDER BY
                 p.orden
         ")->bindValues(array(
+            ':ies_id' => $ies_id,
             ':formulario' => 'IES',
             ':levantamiento' => '2012',
         ))->queryAll();
@@ -663,7 +539,7 @@ class FormularioController extends Controller
     public function actionMostrar()
     {
         $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
-        $estructura = $this->getEstructura();
+        $estructura = $this->getEstructura($ies->id);
         
         
         $usuario = Usuario::model()->findByAttributes(array('username' => Yii::app()->user->name))->name;
