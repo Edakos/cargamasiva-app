@@ -16,7 +16,8 @@ $this->menu=array(
 <p>En caso que la carrera se encuentre vigente para el segundo ciclo del 2013 seleccione "RATIFICADO" caso contrario "NO VIGENTE HABILITADO". Realizar este proceso solo para las carreras de Estado "VIGENTE".</p>
 <p>Todas las carreras deben tener fecha de creación obligatoriamente, caso contrario no podrá grabar el formulario.</p>
 <hr />
-<p>
+<div style="clear:both;">
+    <div style="float:left; width:600px;xxxbackground-color:#0f0;">
     <h4>Estado del ingreso de información:</h4>
 <?php if ($total_sin_ratificar == 0): ?>
 <?php echo CHtml::image('/images/green.png', '', array('width' => 20, 'height' => 20)); ?>
@@ -28,12 +29,17 @@ $this->menu=array(
 <br />
 <?php if ($total_sin_fecha_creacion == 0): ?>
 <?php echo CHtml::image('/images/green.png', '', array('width' => 20, 'height' => 20)); ?>
- Todas las carreras tienen su fecha de creación. Revise por favor que esta fecha sea correcta.
+ Todas las carreras tienen su fecha de creación.
 <?php else: ?>
 <?php echo CHtml::image('/images/red.png', '', array('width' => 20, 'height' => 20)); ?>
  Todavía faltan por definir la fecha de creación de <?php echo $total_sin_ratificar; ?> carrera<?php echo $total_sin_fecha_creacion == 1 ? '' : 's'; ?>.
 <?php endif; ?>
-</p>
+</div>
+<div style="float:right; width:100px;xxxbackground-color:#f00;">
+<button onclick="alert('Antes de descargar el reporte, por favor primero ingrese los datos solicitados. Cuando los dos círculos a la izquierda estén verdes Usted podrá descargar el archivo.');">Descargar Reporte de Carreras</button>
+</div>
+</div>
+<div style="clear:both;">&nbsp;</div>
 <hr />
 
 
