@@ -8,7 +8,7 @@ class FormularioController extends Controller
 	 */
 	public $layout='//layouts/column2';
     
-    public $_campos = array();
+    public $campos = array();
     
     public $_count = 0;
 
@@ -226,13 +226,15 @@ class FormularioController extends Controller
             $this->redirect($destino);
         } else {
             $estructura = $this->getEstructura($ies->id);
+            
             //echo "<pre>";print_r($estructura);echo "</pre>";die();
+            //echo "<pre>";print_r($this->campos);echo "</pre>";die();
 
             $this->layout = 'column2_formulario';
             $this->render('llenar', array(
                 'estructura' => $estructura,
                 'ies' => $ies,
-                'campos' => $this->_campos,
+                //'campos' => $this->campos,
             ));
         }
     }
@@ -392,26 +394,38 @@ class FormularioController extends Controller
         $this->_count ++; // para saber cuándo poner un boton de Guardar
         
         $r = '';
+        $id = 'f' . $pregunta['id'];
         $name = 'Formulario[' . $pregunta['id'] . ']';
+        $title = $pregunta['texto'];
         switch($pregunta['tipo']) {
             case 'Texto':
-                $r .= '<input  id="' . $name . '" name="' . $name . '" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<input  id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
                 $r .= '<div>&nbsp;</div>';
                 break;
             case 'Fecha':
-                $r .= '<input id="' . $name . '" name="' . $name . '" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
                 $r .= '<div>&nbsp;</div>';
-                $this->registrarValidacion($name, 'date');
+                $this->registrarValidacion($id, 'date');
+                break;
+            case 'Cedula':
+                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<div>&nbsp;</div>';
+                $this->registrarValidacion($id, 'cedula');
+                break;
+            case 'Email':
+                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<div>&nbsp;</div>';
+                $this->registrarValidacion($id, 'email');
                 break;
             case 'Entero':
-                $r .= '<input id="' . $name . '" name="' . $name . '" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '" size="10">';
                 $r .= '<div>&nbsp;</div>';
-                $this->registrarValidacion($name, 'integer');
+                $this->registrarValidacion($id, 'integer');
                 break;
             case 'Decimal':
-                $r .= '<input id="' . $name . '" name="' . $name . '" value="' . $pregunta['respuesta'] . '">';
+                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '" size="10">';
                 $r .= '<div>&nbsp;</div>';
-                $this->registrarValidacion($name, 'number');
+                $this->registrarValidacion($id, 'number');
                 break;
             case 'SiNo':
                 $r .= '<div>';
@@ -423,7 +437,7 @@ class FormularioController extends Controller
                 $r .= '</div>';
                 break;
             case 'Seleccion':
-                $r .= '<select id="' . $name . '" name="' . $name . '">';
+                $r .= '<select id="' . $id . '" name="' . $name . '" title="' . $title . '" >';
                 $r .= '<option></option>';
                 foreach ($pregunta['opciones'] as $opcion) {
                     $selected = ($opcion == $pregunta['respuesta']) ? 'selected' : '';
@@ -436,9 +450,10 @@ class FormularioController extends Controller
         return $r;
     }
     
-    protected function registrarValidacion($name, $tipo) 
+    public function registrarValidacion($name, $tipo) 
     {
-        $this->_campos[$name] = $tipo;
+        //echo "<div>$name: $tipo</div>";
+        $this->campos[$name] = $tipo;
     }
     
     public function contar($data, $cuenta = array('total' => 0, 'respondidas' => 0))
@@ -452,6 +467,7 @@ class FormularioController extends Controller
                     $cuenta['respondidas'] += 1;
                 }
                 //agrega el campo a la lista de campos por validar:
+                
             }
             $cuenta = $this->contar($v['hijos'], $cuenta);
         }
@@ -554,6 +570,7 @@ class FormularioController extends Controller
         
         return $estructura;
     }
+    
     
     public function actionMostrar()
     {

@@ -73,6 +73,17 @@ foreach($estructura as $k => $v) {
 
 <?php else: ?>
 
+<?php
+//registrando librerías javascript para validación:
+
+  $baseUrl = Yii::app()->baseUrl; 
+  $cs = Yii::app()->getClientScript();
+  $cs->registerScriptFile($baseUrl . '/js/jquery-1.8.3.min.js');
+  $cs->registerScriptFile($baseUrl . '/js/jquery.validity.min.js');
+  $cs->registerScriptFile($baseUrl . '/js/jquery.validity.lang.es.js');
+  $cs->registerCssFile($baseUrl . '/css/jquery.validity.css');
+?>
+
     <h2>Sección: <?php echo $e['texto']; ?></h3>
     <hr/>
     <form method="post" action="/formulario/llenar">
@@ -82,5 +93,18 @@ foreach($estructura as $k => $v) {
     <input type="submit" value="Guardar información e ir a la siguiente sección >>"/>
     
     </form>
-
+<script type="text/javascript">
+$(function() { 
+    $("form").validity(function() {
+        //alert('en la validacion!');
+<?php
+//agregando validaciones:
+foreach ($this->campos as $name => $tipo)  {
+    //echo 'alert ($("#' . $name . '").id);' . "\n";
+    echo '$("#' . $name . '").match("' . $tipo . '");' . "\n";
+}
+?>
+    });
+});
+    </script>
 <?php endif; ?>

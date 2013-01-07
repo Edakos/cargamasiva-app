@@ -13,7 +13,8 @@ $this->menu=array(
 ?>
 
 <h1>Carreras de <?php echo $ies->name; ?></h1>
-<p>En caso que la carrera se encuentre vigente para el segundo ciclo del 2013 seleccione "RATIFICADO" caso contrario "NO VIGENTE HABILITADO". Realizar este proceso solo para las carreras de Estado "VIGENTE"</p>
+<p>En caso que la carrera se encuentre vigente para el segundo ciclo del 2013 seleccione "RATIFICADO" caso contrario "NO VIGENTE HABILITADO". Realizar este proceso solo para las carreras de Estado "VIGENTE".</p>
+<p>Todas las carreras deben tener fecha de creación obligatoriamente, caso contrario no podrá grabar el formulario.</p>
 <hr />
 <p>
     <h4>Estado del ingreso de información:</h4>

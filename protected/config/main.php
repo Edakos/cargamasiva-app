@@ -112,7 +112,7 @@ return array(
         
 		'db'=>array(
 			'tablePrefix'=>'',
-			'connectionString' => 'pgsql:host=10.180.1.57;port=5432;dbname=cm',
+			'connectionString' => 'pgsql:host=localhost;port=5432;dbname=cm',
 			'username'=>'postgres',
 			'password'=>'postgres',
 			'charset'=>'UTF8',

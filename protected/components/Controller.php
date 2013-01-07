@@ -33,7 +33,7 @@ class Controller extends RController
             //echo '<pre>'; print_r(Yii::app()->user->id); echo '</pre>'; die();
             $usuario = Usuario::model()->findByPk(Yii::app()->user->id);
             //$reset_password = $usuario->reset_password;
-            if ($usuario->reset_password && $action->getId() != 'clave') {
+            if (!empty($usuario) && $usuario->reset_password && $action->getId() != 'clave') {
                 $this->redirect('/usuario/clave?obligatorio');
                 //echo '<pre>'; print_r($action); echo '</pre>'; die();
             }
