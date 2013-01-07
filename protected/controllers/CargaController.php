@@ -14,37 +14,11 @@ class CargaController extends Controller
 	public function filters()
 	{
 		return array(
-			'accessControl', // perform access control for CRUD operations
 			'postOnly + delete', // we only allow deletion via POST request
             'rights',
 		);
 	}
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 */
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','realizar'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
 
 	/**
 	 * Displays a particular model.
@@ -184,6 +158,7 @@ class CargaController extends Controller
             
             
             $es_nombre_valido = false;
+            $error = '';
             
             if ($model->archivo->extensionName == 'xlsx' 
                 && count($formulario = Formulario::model()->findByAttributes(array(
@@ -240,11 +215,21 @@ class CargaController extends Controller
                         if ($model->save()) {
                             //echo Yii::app()->basePath; die();
                             $this->redirect(array('/carga/realizar?success'));
+                        } else {
+                            $error = 'carga_save';
                         }
+                        
+                    } else {
+                        $error = 'archivo_save';
                     }
+                } else {
+                    $error = 'sin_permisos';
                 }
+            } else {
+                $error = 'nombre_invalido';
             }
-            $this->redirect(array('/carga/realizar?error'));
+            
+            $this->redirect(array('/carga/realizar?error=' . $error));
 		} 
         
         $formDataProvider2012 = new CActiveDataProvider(

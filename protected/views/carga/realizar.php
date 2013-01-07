@@ -11,9 +11,22 @@ $this->breadcrumbs=array(
 <h1>Realizar Cargas de Formularios y Documentación</h1>
 <hr/>
 <?php if(isset($_GET['success'])): ?>
-<div class="flash-success">La carga del archivo se realizó con éxito.</div>
+    <div class="flash-success">La carga del archivo se realizó con éxito.</div>
 <?php elseif(isset($_GET['error'])): ?>
-<div class="flash-error">No se pudo realizar la carga del archivo.</div>
+    <div class="flash-error">No se pudo realizar la carga del archivo. 
+    <?php if ($_GET['error'] == 'nombre_invalido'): ?>
+        El nombre <strong>y la extensión</strong> del archivo debe coincidir exactamente con los listados abajo.
+        
+        Tenga en cuenta que los formularios deben tener extensión .xslx ylos documentos deben tener extensión .pdf
+        
+    <?php elseif ($_GET['error'] == 'sin_permisos'): ?>
+        Error interno de permisos de escritura. Si el error persiste, por favor contáctese a <a href="mailto:sniese@senescyt.gob.ec">sniese@senescyt.gob.ec</a> indicando sobre este problema.
+    <?php elseif ($_GET['error'] == 'archivo_save'): ?>
+        Error interno de guardado del archivo en la base de datos. Si el error persiste, por favor contáctese a <a href="mailto:sniese@senescyt.gob.ec">sniese@senescyt.gob.ec</a> indicando sobre este problema.
+    <?php elseif ($_GET['error'] == 'carga_save'): ?>
+        Error interno de guardado de la carga en la base de datos. Si el error persiste, por favor contáctese a <a href="mailto:sniese@senescyt.gob.ec">sniese@senescyt.gob.ec</a> indicando sobre este problema.
+    <?php endif; ?>
+    </div>
 <?php endif; ?>
 
 <?php
