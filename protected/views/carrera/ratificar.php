@@ -96,7 +96,8 @@ function send(id_form)
  
     $.ajax({
         type: 'POST',
-        url: '<?php echo Yii::app()->createAbsoluteUrl('carrera/ratificar'); ?>',
+        //url: '<?php echo Yii::app()->createAbsoluteUrl('carrera/ratificar'); ?>',
+        url: '/carrera/ratificar',
         data: data,
         success: function(data){
             $('#' + id_form + '_mensaje').html('<div class="flash-success">Datos registrados con éxito.</div>');
