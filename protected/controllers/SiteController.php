@@ -78,6 +78,8 @@ class SiteController extends Controller
             } else if (Yii::app()->errorHandler->error['code'] == 403) {
                 Yii::app()->user->setFlash('notice', Yii::app()->errorHandler->error['message']);
                 $this->rutear(); 
+            } else if (Yii::app()->errorHandler->error['code'] == 404) {
+                $this->render('sin_archivo');
 			} else {
 				$this->render('error', $error);
             }
