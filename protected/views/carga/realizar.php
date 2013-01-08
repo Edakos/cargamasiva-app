@@ -68,7 +68,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'description:html:Formulario',  
         array(
             'name' => 'Archivo',
-            'value' => 'CHtml::image("/images/xls.png", "", array("width"=>20,"height"=>20)) . $data->name . ".xlsx"',
+            'value' => 'CHtml::image("/images/xls.png", "", array("width"=>20,"height"=>20)) . $data->name . ".csv"',
             'type' => 'html',
         ),
         array(

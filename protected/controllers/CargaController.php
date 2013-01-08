@@ -160,10 +160,10 @@ class CargaController extends Controller
             $es_nombre_valido = false;
             $error = '';
             
-            if ($model->archivo->extensionName == 'xlsx' 
+            if ($model->archivo->extensionName == 'csv' 
                 && count($formulario = Formulario::model()->findByAttributes(array(
                     'levantamiento_id' => 2,
-                    'name' => str_replace('.xlsx', '', $model->archivo->name),
+                    'name' => str_replace('.csv', '', $model->archivo->name),
                 )))) {
                 //busca si es un formulario
                 
@@ -238,6 +238,7 @@ class CargaController extends Controller
                 'criteria' => array(
                     'condition'=>'levantamiento_id=:levantamientoId and name<>:name',
                     'params'=>array(':levantamientoId'=>'2', ':name' =>'IES'),
+                    'order'=>'orden',
                 ),
                 'pagination'=>array(
                     'pageSize'=>10,

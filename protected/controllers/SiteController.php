@@ -45,6 +45,7 @@ class SiteController extends Controller
                 'criteria' => array(
                     'condition'=>'levantamiento_id=:levantamientoId',
                     'params'=>array(':levantamientoId'=>'2'),
+                    'order'=>'orden ASC'
                 )
             )
         );
@@ -55,6 +56,7 @@ class SiteController extends Controller
                 'criteria' => array(
                     'condition'=>'levantamiento_id=:levantamientoId',
                     'params'=>array(':levantamientoId'=>'1'),
+                    'order'=>'orden ASC'
                 )
             )
         );
