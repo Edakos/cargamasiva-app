@@ -32,7 +32,7 @@ $this->menu=array(
  Todas las carreras tienen su fecha de creación.
 <?php else: ?>
 <?php echo CHtml::image('/images/red.png', '', array('width' => 20, 'height' => 20)); ?>
- Todavía faltan por definir la fecha de creación de <?php echo $total_sin_ratificar; ?> carrera<?php echo $total_sin_fecha_creacion == 1 ? '' : 's'; ?>.
+ Todavía faltan por definir la fecha de creación de <?php echo $total_sin_fecha_creacion; ?> carrera<?php echo $total_sin_fecha_creacion == 1 ? '' : 's'; ?>.
 <?php endif; ?>
 </div>
 <div style="float:right; width:100px;xxxbackground-color:#f00;">
