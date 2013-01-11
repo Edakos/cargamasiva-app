@@ -1,6 +1,6 @@
 <?php
 
-if (!isset($_GET['seccion']) || empty($_GET['seccion'])) {
+if (!isset($_GET['seccion']) || empty($_GET['seccion']) || !isset($estructura[$_GET['seccion']])) {
     $this->breadcrumbs = array(
         'Llenar Formulario',
     );
@@ -39,7 +39,7 @@ $this->menu = array(
 ?>
 
 
-<?php if (!isset($_GET['seccion']) || empty($_GET['seccion'])): ?>
+<?php if (!isset($_GET['seccion']) || empty($_GET['seccion']) || !isset($estructura[$_GET['seccion']])): ?>
 <h1>Formulario de Datos Institucionales</h1>
 <hr/>
 <p>
