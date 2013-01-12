@@ -300,3 +300,7 @@ div.search-form
    -webkit-box-shadow:0 0 3px #000000;
    box-shadow:0 0 3px #000000;	
 }
+
+input {
+    text-transform:uppercase;
+}
