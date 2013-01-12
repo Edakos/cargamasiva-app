@@ -301,6 +301,6 @@ div.search-form
    box-shadow:0 0 3px #000000;	
 }
 
-input {
+#form_ies input:not([type]), input[type="text"] {
     text-transform:uppercase;
 }
