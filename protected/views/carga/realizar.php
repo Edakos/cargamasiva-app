@@ -10,22 +10,49 @@ $this->breadcrumbs=array(
 
 <h1>Realizar Cargas de Formularios y Documentación</h1>
 <hr/>
-<?php if(isset($_GET['success'])): ?>
-    <div class="flash-success">La carga del archivo se realizó con éxito.</div>
-<?php elseif(isset($_GET['error'])): ?>
-    <div class="flash-error">No se pudo realizar la carga del archivo. 
-    <?php if ($_GET['error'] == 'nombre_invalido'): ?>
+<?php if($success): ?>
+    <div class="flash-success">La carga del archivo "<?php echo $archivo_cargado; ?>" se realizó con éxito.</div>
+<?php elseif(isset($error) && !empty($error)): ?>
+    <div class="flash-error">No se pudo realizar la carga del archivo "<?php echo $archivo_cargado; ?>". 
+    <?php if ($error == 'sin_archivo'): ?>
+        No escogió ningún archivo. 
+    <?php elseif ($error == 'nombre_invalido'): ?>
         El nombre <strong>y la extensión</strong> del archivo debe coincidir exactamente con los listados abajo.
-        
-        Tenga en cuenta que los formularios deben tener extensión .xslx ylos documentos deben tener extensión .pdf
-        
-    <?php elseif ($_GET['error'] == 'sin_permisos'): ?>
+        <br />Tenga en cuenta que los formularios deben ser exportados a formato <strong>.csv</strong>, y que los documentos deben tener extensión <strong>.pdf</strong>
+    <?php elseif ($error == 'sin_permisos'): ?>
         Error interno de permisos de escritura. Si el error persiste, por favor contáctese a <a href="mailto:sniese@senescyt.gob.ec">sniese@senescyt.gob.ec</a> indicando sobre este problema.
-    <?php elseif ($_GET['error'] == 'archivo_save'): ?>
+    <?php elseif ($error == 'archivo_save'): ?>
         Error interno de guardado del archivo en la base de datos. Si el error persiste, por favor contáctese a <a href="mailto:sniese@senescyt.gob.ec">sniese@senescyt.gob.ec</a> indicando sobre este problema.
-    <?php elseif ($_GET['error'] == 'carga_save'): ?>
+    <?php elseif ($error == 'carga_save'): ?>
         Error interno de guardado de la carga en la base de datos. Si el error persiste, por favor contáctese a <a href="mailto:sniese@senescyt.gob.ec">sniese@senescyt.gob.ec</a> indicando sobre este problema.
+    <?php elseif ($error == 'validacion'): ?>
+        Error en la validación de los datos enviados.
     <?php endif; ?>
+    <div>&nbsp;</div>
+
+    <?php if (isset($mensaje) && !empty($mensaje)): ?>
+
+    <div><strong>Detalles:</strong></div>
+    
+    <ul>
+<?php
+        if (is_array($mensaje)) {
+            foreach ($mensaje as $msg) {
+                if (is_array($msg)) {
+                    foreach ($msg as $m) {
+                        echo "<li>$m</li>";
+                    }
+                } else {
+                    echo "<li>$msg</li>";
+                }
+            }
+        } else {
+            echo "<li>$mensaje</li>";
+        }
+?>
+    </ul>
+    <?php endif; ?>
+    
     </div>
 <?php endif; ?>
 
@@ -44,13 +71,13 @@ $form = $this->beginWidget(
 ?>
 <div style="padding:20px;text-align:center;">
 
-<?php echo $form->labelEx($model, 'archivo'); ?>:
-<?php echo $form->fileField($model, 'archivo'); ?>
-<?php echo $form->error($model, 'archivo'); ?>
+<?php echo $form->labelEx($model, 'archivo_cargado'); ?>:
+<?php echo $form->fileField($model, 'archivo_cargado'); ?>
+
 
 	
 		<?php echo CHtml::submitButton('Enviar archivo'); ?>
-	
+<strong><?php echo $form->error($model, 'archivo_cargado'); ?>	</strong>
 
 
 </div>

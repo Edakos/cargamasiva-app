@@ -21,7 +21,7 @@
  */
 class Carga extends MyActiveRecord
 {
-    public $archivo;
+    public $archivo_cargado;
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -49,11 +49,12 @@ class Carga extends MyActiveRecord
 		// will receive user inputs.
 		return array(
 			array('created, modified', 'required'),
+            array('documento_id, formulario_id, archivo_id, ies_id', 'safe'),
 			array('archivo_id, ies_id, formulario_id, created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, archivo_id, ies_id, formulario_id, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),
-            array('archivo', 'file', 'types'=>'xlsx, pdf'),
+            array('archivo_cargado', 'file', 'types'=>'csv, pdf', 'safe'=>true),
 		);
 	}
 
@@ -65,7 +66,7 @@ class Carga extends MyActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'respuestas' => array(self::HAS_MANY, 'Respuesta', 'carga_id'),
+			//'respuestas' => array(self::HAS_MANY, 'Respuesta', 'carga_id'),
 			'archivo' => array(self::BELONGS_TO, 'Archivo', 'archivo_id'),
 			'formulario' => array(self::BELONGS_TO, 'Formulario', 'formulario_id'),
 			'ies' => array(self::BELONGS_TO, 'Ies', 'ies_id'),
