@@ -192,6 +192,7 @@ class CarreraController extends Controller
             
             $total_sin_fecha_creacion = Carrera::model()->count("
                 ies_id = {$ies->id} 
+                AND estado = 'VIGENTE'
                 AND fecha_creacion IS NULL
             ");
 
