@@ -324,103 +324,124 @@ class CargaController extends Controller
             
             //recorre las filas que no tienen datos:
             for ($i = 0; $i < 3; $i++) fgetcsv($gestor);
+            $delimiter = ',';
             
             //obtiene la fila con los títulos de las columnas:
-            $columnas = fgetcsv($gestor);
+            $columnas = fgetcsv($gestor, 10000, $delimiter);
             
-            //las pasa a UTF8:
-            foreach ($columnas as & $columna) {
-                $columna = utf8_encode(trim($columna));
+            //busca el delimitador:
+            if (count($columnas) == 1) {
+                $delimiter = '';
+                
+                $posibles_delimitadores = array(';', "\t", '|');
+                
+                foreach ($posibles_delimitadores as $delimitador_candidato) {
+                    if (count($nuevas_columnas = explode($delimitador_candidato, array_shift($columnas))) > 1) {
+                        $delimiter = $delimitador_candidato;
+                        $columnas = $nuevas_columnas;
+                        break;
+                    }
+                }
             }
             
-            //echo "<pre>";print_r($columnas);echo "</pre>";
-            
-            
-            $preguntas = Pregunta::model()->with('formulario')->findAllByAttributes(array(
-                'name' => $formulario_name,
-            ));
-            
-            $preguntas = Formulario::model()->findByAttributes(array('name' => $formulario_name))->preguntas;
-            
-            
-            
-            $p = array();
-            $todos_constan = true;
-            
-            foreach ($preguntas as $pregunta) {
-                $opciones = array();
+            if (!empty($delimiter)) {
                 
-                if ($pregunta->tipo->name == 'Seleccion') {
-                    foreach ($pregunta->opcions as $opcion) {
-                        if (!empty($opcion->fuente) && class_exists($clase = $opcion->fuente)) {
-                            $fuentes = $clase::model()->findAll();
-                            foreach ($fuentes as $fuente) {
-                                $opciones[] = $fuente->name;
+                //las pasa a UTF8:
+                foreach ($columnas as & $columna) {
+                    $columna = utf8_encode(trim($columna));
+                }
+                
+                //echo "<pre>";print_r($columnas);echo "</pre>";
+                
+                
+                $preguntas = Pregunta::model()->with('formulario')->findAllByAttributes(array(
+                    'name' => $formulario_name,
+                ));
+                
+                $preguntas = Formulario::model()->findByAttributes(array('name' => $formulario_name))->preguntas;
+                
+                
+                
+                $p = array();
+                $todos_constan = true;
+                
+                foreach ($preguntas as $pregunta) {
+                    $opciones = array();
+                    
+                    if ($pregunta->tipo->name == 'Seleccion') {
+                        foreach ($pregunta->opcions as $opcion) {
+                            if (!empty($opcion->fuente) && class_exists($clase = $opcion->fuente)) {
+                                $fuentes = $clase::model()->findAll();
+                                foreach ($fuentes as $fuente) {
+                                    $opciones[] = $fuente->name;
+                                }
+                            } else {
+                                $opciones[] = $opcion->name;
+                            }
+                        }
+                    }
+                    
+                    $p[$pregunta->name] = array(
+                        'tipo' => $pregunta->tipo->name,
+                        'patron' => $pregunta->tipo->patron,
+                        'mensaje' => $pregunta->tipo->mensaje,
+                        'id' => $pregunta->id,
+                        'opciones' => $opciones,
+                    );
+                    $todos_constan = $todos_constan ? in_array($pregunta->name, $columnas) : false;
+                    
+    /*  
+                    if (!in_array($pregunta->name, $columnas)) {
+                        echo "<pre>";print_r($pregunta->name . ': ' . in_array($pregunta->name, $columnas));echo "</pre>";
+                    }
+    */
+                    
+                }
+                //echo "<pre>";print_r($p);echo "</pre>";die();
+                
+                if ($todos_constan) {
+                    
+                    //echo "<pre>";print_r($p);echo "</pre>";
+                    
+                    $fila = 4;
+                    $demasiados_errores = false;
+                    while (($datos = fgetcsv($gestor, 10000, $delimiter)) !== FALSE && $contador_vacios < 20 && !$demasiados_errores) {
+                        
+                        $fila++;
+                        //$numero = count($datos);
+                        if (count($datos) > 0 && trim(implode('',$datos)) != '') {
+                            //echo "<pre>";print_r('[' . trim(implode('',$datos)) . ']');echo "</pre>";die();
+                            
+                            for ($c = 0; $c < count($datos); $c++) {
+                                $datos[$c] = utf8_encode($datos[$c]);
+                                
+                                //echo $fila . "." . ($c + 1) . " " . $datos[$c] . ": " . $this->validarDato($datos[$c], $p[$columnas[$c]]) . "<br />\n";
+                                if (!$this->validarDato($datos[$c], $p[$columnas[$c]])) {
+                                    $dato = filter_var($datos[$c], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                                    $dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
+                                    $letra_columna = ($c <= ord('Z') - ord('A')) ? chr(ord('A') + $c) : chr(ord('A') + floor($c / (ord('Z') - ord('A') + 1)) - 1) . chr(ord('A') + ($c % (ord('Z') - ord('A') + 1)));
+                                    //$errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido para la columna ' . $columnas[$c] . ' de tipo ' . $p[$columnas[$c]]['tipo'] . '.' ;
+                                    $errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido, ya que todo valor en la columna ' . str_replace('#{field}', $columnas[$c], $p[$columnas[$c]]['mensaje']);
+                                }
                             }
                         } else {
-                            $opciones[] = $opcion->name;
+                            $contador_vacios++;
                         }
-                    }
-                }
-                
-                $p[$pregunta->name] = array(
-                    'tipo' => $pregunta->tipo->name,
-                    'patron' => $pregunta->tipo->patron,
-                    'mensaje' => $pregunta->tipo->mensaje,
-                    'id' => $pregunta->id,
-                    'opciones' => $opciones,
-                );
-                $todos_constan = $todos_constan ? in_array($pregunta->name, $columnas) : false;
-                
-/*  
-                if (!in_array($pregunta->name, $columnas)) {
-                    echo "<pre>";print_r($pregunta->name . ': ' . in_array($pregunta->name, $columnas));echo "</pre>";
-                }
-*/
-                
-            }
-            //echo "<pre>";print_r($p);echo "</pre>";die();
-            
-            if ($todos_constan) {
-                
-                //echo "<pre>";print_r($p);echo "</pre>";
-                
-                $fila = 4;
-                $demasiados_errores = false;
-                while (($datos = fgetcsv($gestor, 10000, ",")) !== FALSE && $contador_vacios < 20 && !$demasiados_errores) {
-                    
-                    $fila++;
-                    //$numero = count($datos);
-                    if (count($datos) > 0 && trim(implode('',$datos)) != '') {
-                        //echo "<pre>";print_r('[' . trim(implode('',$datos)) . ']');echo "</pre>";die();
+                        $demasiados_errores = (count($errores) >= 10) ;
                         
-                        for ($c = 0; $c < count($datos); $c++) {
-                            $datos[$c] = utf8_encode($datos[$c]);
-                            
-                            //echo $fila . "." . ($c + 1) . " " . $datos[$c] . ": " . $this->validarDato($datos[$c], $p[$columnas[$c]]) . "<br />\n";
-                            if (!$this->validarDato($datos[$c], $p[$columnas[$c]])) {
-                                $dato = filter_var($datos[$c], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                                $dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
-                                $letra_columna = ($c <= ord('Z') - ord('A')) ? chr(ord('A') + $c) : chr(ord('A') + floor($c / (ord('Z') - ord('A') + 1)) - 1) . chr(ord('A') + ($c % (ord('Z') - ord('A') + 1)));
-                                //$errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido para la columna ' . $columnas[$c] . ' de tipo ' . $p[$columnas[$c]]['tipo'] . '.' ;
-                                $errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido, ya que todo valor en la columna ' . str_replace('#{field}', $columnas[$c], $p[$columnas[$c]]['mensaje']);
-                            }
-                        }
-                    } else {
-                        $contador_vacios++;
                     }
-                    $demasiados_errores = (count($errores) >= 10) ;
                     
+                    if ($demasiados_errores) {
+                        $errores[] = '<strong>El archivo tiene demasiados errores. Atienda las indicaciones anteriores y vuelva a intentar la carga del archivo.</strong>';
+                    }
+                } else {
+                    //echo "Faltan columnas. Revise el archivo.";
+                    $errores[] = 'El archivo enviado no tiene las columnas esperadas. Por favor revise que disponga de la última versión del archivo <a href="/archivos/' . $formulario_name . '.xlsx">' . $formulario_name . '.xlsx</a>';
                 }
-                
-                if ($demasiados_errores) {
-                    $errores[] = '<strong>El archivo tiene demasiados errores. Atienda las indicaciones anteriores y vuelva a intentar la carga del archivo.</strong>';
-                }
+                fclose($gestor);
             } else {
-                //echo "Faltan columnas. Revise el archivo.";
-                $errores[] = 'El archivo enviado no tiene las columnas esperadas. Por favor revise que disponga de la última versión del archivo <a href="/archivos/' . $formulario_name . '.xlsx">' . $formulario_name . '.xlsx</a>';
+                $errores[] = 'No se detecta el caracter delimitador del archivo CSV. Intente generar el archivo CSV desde otra computadora.';
             }
-            fclose($gestor);
         } else {
             $errores[] = 'No se puede validar el archivo cargado. Si el problema persiste por favor contáctese con el administrador del sistema.';
         }
