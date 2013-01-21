@@ -32,7 +32,33 @@ $this->widget('zii.widgets.grid.CGridView', array(
 ));
 ?>
 <hr/>
-<p>Descarga del <?php echo CHtml::link('Formulario Institucional', '#', array('onclick' => 'alert("Ingrese primero toda la información solicitada en el formulario institucional.");return false;')); //CHtml::link('Formulario Institucional', '/formulario/mostrar'); ?>, imprimir y remitir a la SENESCYT con la respectiva firma del rector.</p>
+<?php 
+
+$descargar_formulario_institucional = true;
+
+foreach($estructura as $k => $v) {
+
+    if ($v['cuenta']['total'] != $v['cuenta']['respondidas']) {
+        $descargar_formulario_institucional = false;
+    }
+}
+?>
+
+<p>Descarga del 
+<?php if ($descargar_formulario_institucional): ?>
+
+    <?php if ($ies->bloqueado_formulario): ?>
+        <?php echo CHtml::link('Formulario Institucional', '/formulario/actualizarResponsables');  ?>
+    <?php else: ?>
+        <?php echo CHtml::link('Formulario Institucional', '/formulario/actualizarResponsables', array('onclick' => 'return confirm("Una vez descargado el Formulario Institucional, Usted ya no podrá modificar su información. ¿Desea continuar?");')); //CHtml::link('Formulario Institucional', '/formulario/mostrar'); ?>
+    <?php endif; ?>
+
+
+<?php else: ?>
+    <?php echo CHtml::link('Formulario Institucional', '#', array('onclick' => 'alert("Ingrese primero toda la información solicitada en el formulario institucional.");return false;')); //CHtml::link('Formulario Institucional', '/formulario/mostrar'); ?>
+<?php endif; ?>
+, imprimir y remitir a la SENESCYT con la respectiva firma del rector.</p>
+
 <hr/>
 <p>Descarga de la <?php echo CHtml::link('<img src="/images/xlsx.png" width="20" height="20"> Oferta Académica', "/archivos/2012_{$ies->code}_OFERTA_ACADEMICA.xlsx"); ?> (Información del Sistema Académico de la SENESCYT).</p>
 </div>

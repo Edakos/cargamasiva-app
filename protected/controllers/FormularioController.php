@@ -11,6 +11,8 @@ class FormularioController extends Controller
     public $campos = array();
     
     public $_count = 0;
+    
+    public $soloLectura = false;
 
 	/**
 	 * @return array action filters
@@ -163,9 +165,38 @@ class FormularioController extends Controller
 		}
 	}
     
+    public function actionActualizarResponsables() 
+    {
+        $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+        $usuario = Usuario::model()->findByAttributes(array('username' => Yii::app()->user->name));
+        
+        $formModel = new ResponsableForm();
+        
+        if (isset ($_POST['ResponsableForm'])) {
+            $formModel->attributes = $_POST['ResponsableForm'];
+            
+            if ($formModel->validate()) {
+                if ($formModel->save()) {
+                    $this->redirect(array('mostrar'));
+                }
+            }
+        }
+
+        //$this->layout = 'column1';
+		$this->render('actualizar_responsables', array(
+			'model' => $formModel,
+            'ies' => $ies,
+            'usuario' => $usuario,
+		));
+    }
+    
     public function actionLlenar()
     {
         $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+        
+        if ($ies->bloqueado_formulario) {
+            $this->redirect(array('actualizarResponsables'));
+        }
         
         if(isset($_POST['Formulario'])) {
             //echo "<pre>";print_r($_POST['Formulario']);echo "</pre>";die();
@@ -225,7 +256,7 @@ class FormularioController extends Controller
                 
             $this->redirect($destino);
         } else {
-            $estructura = $this->getEstructura($ies->id);
+            $estructura = $ies->getEstructura();
             
             //echo "<pre>";print_r($estructura);echo "</pre>";die();
             //echo "<pre>";print_r($this->campos);echo "</pre>";die();
@@ -239,7 +270,7 @@ class FormularioController extends Controller
         }
     }
     
-    public function generarForm($data)
+    public function generarForm($data, $solo_lectura = false)
     {
         if (empty($data)) {
             return;
@@ -252,26 +283,26 @@ class FormularioController extends Controller
                 $r .= $v['texto'];
                 switch ($v['tipo']) {
                     case 'Tabla':
-                        $r .= $this->generarTabla($v['hijos']);
+                        $r .= $this->generarTabla($v['hijos'], $solo_lectura);
                         break;
                     case 'Entero':
-                        $r .= $this->generar($v, $k);
-                        $r .= $this->generarForm($v['hijos']);
+                        $r .= $this->generar($v, $k, $solo_lectura);
+                        $r .= $this->generarForm($v['hijos'], $solo_lectura);
                         break;
                     case 'Texto':
-                        $r .= $this->generar($v, $k);
-                        $r .= $this->generarForm($v['hijos']);
+                        $r .= $this->generar($v, $k, $solo_lectura);
+                        $r .= $this->generarForm($v['hijos'], $solo_lectura);
                         break;
                     case 'Seccion':
-                        $r .= $this->generarForm($v['hijos']);
+                        $r .= $this->generarForm($v['hijos'], $solo_lectura);
                         break;
                     default:
-                        $r .= $this->generar($v, $k);
-                        $r .= $this->generarForm($v['hijos']);
+                        $r .= $this->generar($v, $k, $solo_lectura);
+                        $r .= $this->generarForm($v['hijos'], $solo_lectura);
                         break;
                 }
                 
-                if (in_array($v['tipo'], array('Tabla', 'Seccion'))) {
+                if (!$solo_lectura && in_array($v['tipo'], array('Tabla', 'Seccion'))) {
                     if ($this->_count > 10) {
                         $r .= '<input name="Guardar" type="submit" value="Guardar"/>';
                         $this->_count = 0;
@@ -285,9 +316,10 @@ class FormularioController extends Controller
         }
     }
     
-    private function generarTabla($data)
+    private function generarTabla($data, $solo_lectura = false)
     {
         $tabla = '';
+        $tabla .= '<div class="nobreak">';
         $tabla .= '<table style="background-color:#FFF;">';
         
         $primero = array_shift(array_values($data));
@@ -336,7 +368,7 @@ class FormularioController extends Controller
                     foreach ($d['hijos'] as $d2) {
                         foreach ($d2['hijos'] as $d3) {
                             //$tabla .= '<td>' . '<input>' . '</td>';
-                            $tabla .= '<td>' . $this->generar($d3) . '</td>';
+                            $tabla .= '<td>' . $this->generar($d3, $solo_lectura) . '</td>';
                         }
                     }
                     
@@ -366,7 +398,7 @@ class FormularioController extends Controller
                     $tabla .= '<th>' . $d['texto'] . '</th>';
                     
                     foreach ($d['hijos'] as $d2) {
-                        $tabla .= '<td>' . $this->generar($d2) . '</td>';
+                        $tabla .= '<td>' . $this->generar($d2, $solo_lectura) . '</td>';
                     }
                     $tabla .= '</tr>';
                 }
@@ -377,7 +409,7 @@ class FormularioController extends Controller
             $detalle = '';
             foreach ($data as $d) {
                 $cabecera .= '<th>' . $d['texto'] . '</th>';
-                $detalle .= '<td>' . $this->generar($d) . '</td>';
+                $detalle .= '<td>' . $this->generar($d, $solo_lectura) . '</td>';
             }
             $tabla .= '<tr>' . $cabecera . '</tr>';
             $tabla .= '<tr>' . $detalle . '</tr>';
@@ -385,11 +417,12 @@ class FormularioController extends Controller
         
         
         $tabla .= '</table>';
+        $tabla .= '</div>';
         
         return $tabla;
     }
 
-    private function generar($pregunta)
+    private function generar($pregunta, $solo_lectura = false)
     {
         $this->_count ++; // para saber cuándo poner un boton de Guardar
         
@@ -397,55 +430,61 @@ class FormularioController extends Controller
         $id = 'f' . $pregunta['id'];
         $name = 'Formulario[' . $pregunta['id'] . ']';
         $title = $pregunta['texto'];
-        switch($pregunta['tipo']) {
-            case 'Texto':
-                $r .= '<input  id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
-                $r .= '<div>&nbsp;</div>';
-                break;
-            case 'Fecha':
-                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
-                $r .= '<div>&nbsp;</div>';
-                $this->registrarValidacion($id, 'date');
-                break;
-            case 'Cedula':
-                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
-                $r .= '<div>&nbsp;</div>';
-                $this->registrarValidacion($id, 'cedula');
-                break;
-            case 'Email':
-                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
-                $r .= '<div>&nbsp;</div>';
-                $this->registrarValidacion($id, 'email');
-                break;
-            case 'Entero':
-                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '" size="10">';
-                $r .= '<div>&nbsp;</div>';
-                $this->registrarValidacion($id, 'integer');
-                break;
-            case 'Decimal':
-                $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '" size="10">';
-                $r .= '<div>&nbsp;</div>';
-                $this->registrarValidacion($id, 'number');
-                break;
-            case 'SiNo':
-                $r .= '<div>';
-                $checked = ( $pregunta['respuesta'] !== null && $pregunta['respuesta']) ? 'checked' : '';
-                $r .= '<input type="radio" value="1" name="' . $name . '" ' . $checked . ' /> Sí ';
-                $r .= '<br/>';
-                $checked = ( $pregunta['respuesta'] !== null && !$pregunta['respuesta']) ? 'checked' : '';
-                $r .= '<input type="radio" value="0" name="' . $name . '" ' . $checked . '/> No';
-                $r .= '</div>';
-                break;
-            case 'Seleccion':
-                $r .= '<select id="' . $id . '" name="' . $name . '" title="' . $title . '" >';
-                $r .= '<option></option>';
-                foreach ($pregunta['opciones'] as $opcion) {
-                    $selected = ($opcion == $pregunta['respuesta']) ? 'selected' : '';
-                    $r .= '<option value="' . $opcion . '" ' . $selected . '>' . $opcion . '</option>';
-                }
-                $r .= '</select>';
-                $r .= '<div>&nbsp;</div>';
-                break;
+        
+        if ($solo_lectura) {
+            $r .= $pregunta['respuesta'] . '&nbsp;';
+            $r .= '<div>&nbsp;</div>';
+        } else {
+            switch($pregunta['tipo']) {
+                case 'Texto':
+                    $r .= '<input  id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
+                    $r .= '<div>&nbsp;</div>';
+                    break;
+                case 'Fecha':
+                    $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
+                    $r .= '<div>&nbsp;</div>';
+                    $this->registrarValidacion($id, 'date');
+                    break;
+                case 'Cedula':
+                    $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
+                    $r .= '<div>&nbsp;</div>';
+                    $this->registrarValidacion($id, 'cedula');
+                    break;
+                case 'Email':
+                    $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '">';
+                    $r .= '<div>&nbsp;</div>';
+                    $this->registrarValidacion($id, 'email');
+                    break;
+                case 'Entero':
+                    $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '" size="10">';
+                    $r .= '<div>&nbsp;</div>';
+                    $this->registrarValidacion($id, 'integer');
+                    break;
+                case 'Decimal':
+                    $r .= '<input id="' . $id . '" name="' . $name . '" title="' . $title . '" value="' . $pregunta['respuesta'] . '" size="10">';
+                    $r .= '<div>&nbsp;</div>';
+                    $this->registrarValidacion($id, 'number');
+                    break;
+                case 'SiNo':
+                    $r .= '<div>';
+                    $checked = ( $pregunta['respuesta'] !== null && $pregunta['respuesta']) ? 'checked' : '';
+                    $r .= '<input type="radio" value="1" name="' . $name . '" ' . $checked . ' /> Sí ';
+                    $r .= '<br/>';
+                    $checked = ( $pregunta['respuesta'] !== null && !$pregunta['respuesta']) ? 'checked' : '';
+                    $r .= '<input type="radio" value="0" name="' . $name . '" ' . $checked . '/> No';
+                    $r .= '</div>';
+                    break;
+                case 'Seleccion':
+                    $r .= '<select id="' . $id . '" name="' . $name . '" title="' . $title . '" >';
+                    $r .= '<option></option>';
+                    foreach ($pregunta['opciones'] as $opcion) {
+                        $selected = ($opcion == $pregunta['respuesta']) ? 'selected' : '';
+                        $r .= '<option value="' . $opcion . '" ' . $selected . '>' . $opcion . '</option>';
+                    }
+                    $r .= '</select>';
+                    $r .= '<div>&nbsp;</div>';
+                    break;
+            }
         }
         return $r;
     }
@@ -455,7 +494,8 @@ class FormularioController extends Controller
         //echo "<div>$name: $tipo</div>";
         $this->campos[$name] = $tipo;
     }
-    
+
+/*    
     public function contar($data, $cuenta = array('total' => 0, 'respondidas' => 0))
     {
         foreach ($data as $k => $v) {
@@ -473,7 +513,9 @@ class FormularioController extends Controller
         }
         return $cuenta;
     }
+*/
 
+    /*
     protected function getEstructura($ies_id = null)
     {
         if (empty($ies_id)) {
@@ -570,21 +612,77 @@ class FormularioController extends Controller
         
         return $estructura;
     }
-    
-    
+    */
+
+/*    
+    public function actionGenerarPdf()
+    {
+        require_once(Yii::app()->basePath . '');
+    }
+*/
+
     public function actionMostrar()
     {
+        //echo 111; die();
         $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
-        $estructura = $this->getEstructura($ies->id);
+        /*
+        if (isset($_GET['ies']) && !empty($_GET['ies']) && is_numeric($_GET['ies'])) {
+            $ies = Ies::model()->findByPk($_GET['ies']);
+        } else {
+            Yii::app()->end();
+        }
+        */
         
+        $this->soloLectura = true;
+        $estructura = $ies->getEstructura();
+        $this->soloLectura = false;
         
-        $usuario = Usuario::model()->findByAttributes(array('username' => Yii::app()->user->name))->name;
+        //$usuario = Usuario::model()->findByAttributes(array('username' => Yii::app()->user->name))->name;
+        $usuario = Usuario::model()->findByAttributes(array('username' => $ies->code));
         
-        $this->layout = 'column1';
-        $this->render('mostrar', array(
+        $this->layout = 'print';
+        $html = $this->render('mostrar', array(
             'estructura' => $estructura,
             'ies' => $ies,
             'usuario' => $usuario,
-        ));        
+        ), true); 
+        //echo $html;
+        //$pdf = new WkHtmlToPdf();
+        
+        $pdf = new WkHtmlToPdf(array(
+            //'no-outline',         // Make Chrome not complain
+            //'margin-top'    => 20,
+            //'margin-right'  => 20,
+            //'margin-bottom' => 20,
+            //'margin-left'   => 20,
+            'encoding' => 'utf-8',
+        ));
+        //echo Yii::app()->basePath; die();
+        $pdf->setPageOptions(array(
+            //'disable-smart-shrinking',
+            //'user-style-sheet' => 'pdf.css',
+            //'user-style-sheet' => Yii::app()->basePath . '/../public_html/css/pdf.css',
+            'footer-left' => 'Formulario Institucional',
+            'footer-right' => 'Pag. [page] de [topage]',
+            'footer-line',
+        ));
+        // Add a HTML file, a HTML string or a page from a URL
+        $pdf->addPage($html);
+
+        // Add a cover (same sources as above are possible)
+        //$pdf->addCover('mycover.pdf');
+
+        // Add a Table of contents
+        //$pdf->addToc();
+
+        // Save the PDF
+        //$pdf->saveAs('/tmp/new.pdf');
+
+        // ... or send to client for inline display
+        //$pdf->send();
+        // ... or send to client as file download
+        $pdf->send('formulario_institucional.pdf');
+        $ies->bloqueado_formulario = 1;
+        $ies->save();
     }
 }

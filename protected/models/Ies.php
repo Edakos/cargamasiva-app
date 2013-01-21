@@ -101,4 +101,115 @@ class Ies extends MyActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+    
+    public function getEstructura()
+    {
+        $preguntas = Yii::app()->db->createCommand("
+            SELECT 
+                p.id
+                ,p.name
+                ,p.orden
+                ,p.pregunta_id AS padre
+                ,p.tipo_id
+                ,t.name AS tipo
+                ,(
+                    SELECT 
+                        texto 
+                    FROM 
+                        respuesta AS r 
+                    WHERE 
+                            r.pregunta_id = p.id
+                        AND r.ies_id = :ies_id
+                ) AS respuesta
+            FROM 
+                pregunta AS p
+                ,tipo AS t
+                ,formulario AS f
+                ,levantamiento as l
+            WHERE
+                    p.tipo_id = t.id
+                AND p.formulario_id = f.id
+                AND f.levantamiento_id = l.id
+                AND f.name = :formulario
+                AND l.code = :levantamiento
+            ORDER BY
+                p.orden
+        ")->bindValues(array(
+            ':ies_id' => $this->id,
+            ':formulario' => 'IES',
+            ':levantamiento' => '2012',
+        ))->queryAll();
+
+        
+        //Armada de array con ID como referencia y busca opciones de ser el caso:
+        $estructura = array();
+        
+        foreach ($preguntas as $p) {
+            //process each item here
+            $o = array();
+            
+            if ($p['tipo'] == 'Seleccion') {
+                $opciones = Opcion::model()->findAllByAttributes(array(
+                    'pregunta_id' => $p['id'],
+                ));
+                
+                foreach ($opciones as $opcion) {
+                    $o[$opcion->id] = $opcion->name;
+                }
+            }
+            
+            $estructura[$p['id']] = array(
+                'id' => $p['id'],
+                'texto' => $p['name'],
+                'tipo' => $p['tipo'],
+                'cuenta' => array(),
+                'respuesta' => $p['respuesta'],
+                'opciones' => $o,
+                'padre' => $p['padre'], 
+                'hijos' => array(),
+            );
+        }
+        
+        //Hijos en sus padres:
+        $referencia = $estructura;
+        
+        foreach ($referencia as $id => $r) {
+            if (!empty($r['padre'])) {
+                $estructura[$r['padre']]['hijos'][$id] = & $estructura[$id];
+            }
+        }
+        
+        //eliminación de primer nivel que no son padres:
+        
+        foreach ($referencia as $id => $r) {
+            if (!empty($r['padre'])) {
+                unset($estructura[$id]);
+            }
+        }
+        
+        //agregar contadores:
+        foreach ($estructura as & $e) {
+            $e['cuenta'] = $this->contar($e['hijos']);
+        }
+        
+        return $estructura;
+    }
+    
+    public function contar($data, $cuenta = array('total' => 0, 'respondidas' => 0))
+    {
+        foreach ($data as $k => $v) {
+            if (!empty($v['tipo']) && !in_array($v['tipo'], array('Tabla', 'Seccion')) && empty($v['hijos'])) {
+                //es un campo de llenar:
+                $cuenta['total'] += 1;
+                //evalua si está respondida o no
+                if ($v['respuesta'] !== null && $v['respuesta'] !== '') {
+                    $cuenta['respondidas'] += 1;
+                }
+                //agrega el campo a la lista de campos por validar:
+                
+            }
+            $cuenta = $this->contar($v['hijos'], $cuenta);
+        }
+        return $cuenta;
+    }
 }

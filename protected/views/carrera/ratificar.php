@@ -36,7 +36,14 @@ $this->menu=array(
 <?php endif; ?>
 </div>
 <div style="float:right; width:100px;xxxbackground-color:#f00;">
+    
+<?php if ($total_sin_ratificar == 0 && $total_sin_fecha_creacion == 0): ?>
+<form action="/carrera/actualizarResponsables" onsubmit="return confirm('Una vez descargado el reporte, Usted ya no podrá modificar la información de las carreras. ¿Desea continuar?');">
+<button>Descargar Reporte de Carreras</button>
+</form>
+<?php else: ?>
 <button onclick="alert('Antes de descargar el reporte, por favor primero ingrese los datos solicitados. Cuando los dos círculos a la izquierda estén verdes Usted podrá descargar el archivo.');">Descargar Reporte de Carreras</button>
+<?php endif; ?>
 </div>
 </div>
 <div style="clear:both;">&nbsp;</div>

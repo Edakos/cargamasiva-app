@@ -61,10 +61,13 @@ class SiteController extends Controller
             )
         );
         
+        $estructura = $ies->getEstructura();
+        
 		$this->render('index', array(
             'dataProvider2012' => $formDataProvider2012,
             'dataProvider2010' => $formDataProvider2010,
             'ies' => $ies,
+            'estructura' => $estructura,
         ));
 	}
 

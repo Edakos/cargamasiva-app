@@ -79,10 +79,6 @@ class CarreraController extends Controller
                 }
             }
 		}
-
-		$this->render('update',array(
-			'model'=>$model,
-		));
 	}
     
     
@@ -153,10 +149,132 @@ class CarreraController extends Controller
 		}
 	}
     
+    public function actionMostrar() 
+    {
+        $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+        $usuario = Usuario::model()->findByAttributes(array('username' => Yii::app()->user->name));
+        
+        /*
+        $dataProvider = new CActiveDataProvider('Carrera', array(
+            'criteria'=>array(
+                'condition' => 'ies_id=:ies_id AND estado=:estado',
+                'params'=>array(':ies_id'=>$ies->id, ':estado' =>'VIGENTE'),
+                'order' => 'name, code',
+            ),
+            'pagination' => false,
+        ));
+        */
+        
+        $carreras_ies = Yii::app()->db->createCommand("
+            SELECT
+                code,
+                name,
+                to_char(fecha_creacion, 'DD/MM/YYYY') AS fecha_creacion,
+                estado,
+                ratificar_estado
+            FROM
+                carrera
+            WHERE
+                ies_id=:ies_id
+                AND estado = :estado
+            ORDER BY
+                name, code
+        ")->bindValues(array(
+            ':ies_id' => $ies->id,
+            ':estado' => 'VIGENTE',
+        ))->queryAll();
+
+        $this->layout = 'print';
+        $html = $this->render('mostrar',array(
+            //'data'=>$data,
+            //'dataProvider'=>$dataProvider,
+            'ies' => $ies,
+            'carreras_ies' => $carreras_ies,
+            'usuario' => $usuario,
+        ), true);
+        //echo $html;die();
+        //$pdf = new WkHtmlToPdf();
+        
+        $pdf = new WkHtmlToPdf(array(
+            //'no-outline',         // Make Chrome not complain
+            //'margin-top'    => 30,
+            //'margin-right'  => 0,
+            //'margin-bottom' => 30,
+            //'margin-left'   => 0,
+            'encoding' => 'utf-8',
+        ));
+        //echo Yii::app()->basePath; die();
+        $pdf->setPageOptions(array(
+            //'disable-smart-shrinking',
+            //'user-style-sheet' => Yii::app()->basePath . '/../public_html/css/print.css'
+            //'user-style-sheet' => '/css/print.css'
+            //'user-style-sheet' => Yii::app()->basePath . '/../public_html/css/pdf.css',
+            //'header-left' => 'Secretaría Nacional de Eduación Superior, Ciencia, Tecnología e Innovación',
+            //'header-html' => 'http://cargamasiva.senescyt.gob.ec/images/senescyt-logo.png',
+            //'header-spacing' => '1',
+            'footer-left' => 'Reporte de Carreras Vigentes',
+            'footer-right' => 'Pag. [page] de [topage]',
+            'footer-line',
+            //'footer-spacing' => '1',
+        ));
+        // Add a HTML file, a HTML string or a page from a URL
+        $pdf->addPage($html);
+        
+        //echo Yii::app()->basePath . '/../public_html/css/print.css'; die();
+
+        // Add a cover (same sources as above are possible)
+        //$pdf->addCover('mycover.pdf');
+
+        // Add a Table of contents
+        //$pdf->addToc();
+
+        // Save the PDF
+        //$pdf->saveAs('/tmp/new.pdf');
+
+        // ... or send to client for inline display
+        //$pdf->send();
+        // ... or send to client as file download
+        $pdf->send('reporte_carreras_vigentes.pdf');
+        
+        $ies->bloqueado_carreras = 1;
+        $ies->save();
+    }
+    
+    public function actionActualizarResponsables() 
+    {
+        $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+        $usuario = Usuario::model()->findByAttributes(array('username' => Yii::app()->user->name));
+        
+        $formModel = new ResponsableForm();
+        
+        if (isset ($_POST['ResponsableForm'])) {
+            $formModel->attributes = $_POST['ResponsableForm'];
+            
+            if ($formModel->validate()) {
+                if ($formModel->save()) {
+                    $this->redirect(array('mostrar'));
+                }
+            }
+        }
+
+        //$this->layout = 'column1';
+		$this->render('actualizar_responsables', array(
+			'model' => $formModel,
+            'ies' => $ies,
+            'usuario' => $usuario,
+		));
+    }
+    
     public function actionRatificar()
     {
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
+        $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+        
+        if ($ies->bloqueado_carreras) {
+            $this->redirect(array('actualizarResponsables'));
+        }
+        
 
 		if (isset($_POST['Carrera'])) {
             //AJAX UPDATE:
@@ -179,7 +297,7 @@ class CarreraController extends Controller
 		} else {
             //Carga de información a ser presentada:
             
-            $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+            
 
             $total_sin_ratificar = Carrera::model()->count("
                 ies_id = {$ies->id} 
