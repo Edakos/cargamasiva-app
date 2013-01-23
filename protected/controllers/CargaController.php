@@ -351,6 +351,8 @@ class CargaController extends Controller
                     $columna = utf8_encode(trim($columna));
                 }
                 
+                $indices_columnas = array_reverse($columnas);
+                
                 //echo "<pre>";print_r($columnas);echo "</pre>";
                 
                 
@@ -360,9 +362,10 @@ class CargaController extends Controller
                 
                 $preguntas = Formulario::model()->findByAttributes(array('name' => $formulario_name))->preguntas;
                 
-                
+                //echo "<pre>";print_r($preguntas);echo "</pre>";die();
                 
                 $p = array();
+                $p_id = array();
                 $todos_constan = true;
                 
                 foreach ($preguntas as $pregunta) {
@@ -382,12 +385,21 @@ class CargaController extends Controller
                     }
                     
                     $p[$pregunta->name] = array(
+                        'name' => $pregunta->name,
                         'tipo' => $pregunta->tipo->name,
                         'patron' => $pregunta->tipo->patron,
-                        'mensaje' => $pregunta->tipo->mensaje,
+                        'mensaje' => (!empty($pregunta->validacion_mensaje) ? $pregunta->validacion_mensaje : $pregunta->tipo->mensaje),
                         'id' => $pregunta->id,
                         'opciones' => $opciones,
+                        'opcional' => $pregunta->opcional,
+                        'gatillo' => $pregunta->gatillo,
+                        'gatillo_ref' => $pregunta->gatillo_ref,
+                        'gatillo_ref_validacion' => $pregunta->gatillo_ref_validacion,
+                        'gatillo_ref_validacion_mensaje' => $pregunta->gatillo_ref_validacion_mensaje,
                     );
+                    
+                    $p_id[$pregunta->id] = & $p[$pregunta->name];
+                    
                     $todos_constan = $todos_constan ? in_array($pregunta->name, $columnas) : false;
                     
     /*  
@@ -412,17 +424,53 @@ class CargaController extends Controller
                         if (count($datos) > 0 && trim(implode('',$datos)) != '') {
                             //echo "<pre>";print_r('[' . trim(implode('',$datos)) . ']');echo "</pre>";die();
                             
+                            $d = array();
                             for ($c = 0; $c < count($datos); $c++) {
                                 $datos[$c] = utf8_encode($datos[$c]);
-                                
-                                //echo $fila . "." . ($c + 1) . " " . $datos[$c] . ": " . $this->validarDato($datos[$c], $p[$columnas[$c]]) . "<br />\n";
-                                if (!$this->validarDato($datos[$c], $p[$columnas[$c]])) {
-                                    $dato = filter_var($datos[$c], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                                $d[$columnas[$c]] = utf8_encode($datos[$c]);
+                            }
+                            
+                            $count = 0;
+                            foreach ($d as $columna => $valor) {
+                                $pregunta = $p[$columna];
+                                //valida tipo de dato:
+                                if (!$this->validarDato($valor, $pregunta)) {
+                                    $dato = filter_var($valor, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                                     $dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
-                                    $letra_columna = ($c <= ord('Z') - ord('A')) ? chr(ord('A') + $c) : chr(ord('A') + floor($c / (ord('Z') - ord('A') + 1)) - 1) . chr(ord('A') + ($c % (ord('Z') - ord('A') + 1)));
+                                    $letra_columna = $this->getLetraColumna($count);
                                     //$errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido para la columna ' . $columnas[$c] . ' de tipo ' . $p[$columnas[$c]]['tipo'] . '.' ;
-                                    $errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido, ya que todo valor en la columna ' . str_replace('#{field}', $columnas[$c], $p[$columnas[$c]]['mensaje']);
+                                    $errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido, ya que todo valor en la columna ' . str_replace('#{field}', $columna, $pregunta['mensaje']);
+                                //} else if (!$this->validarGatillo($datos[$c], $p[$columnas[$c]])) {
+                                } else if (!empty($pregunta['gatillo'])) {  
+                                    //valida gatillo:
+                                    $gatillo = $pregunta['gatillo'];
+                                    $ref = $pregunta['gatillo_ref'];
+
+                                    
+                                    if (isset($p_id[$ref]) && preg_match($gatillo, $valor)) {
+                                        // se dispara el gatillo:                                        
+                                        $pregunta_ref = $p_id[$ref];
+                                        $valor_ref = $d[$pregunta_ref['name']];
+                                            
+                                        $validacion = $pregunta['gatillo_ref_validacion'];
+                                        $mensaje = $pregunta['gatillo_ref_validacion_mensaje'];
+
+                                        
+
+                                        //$ref = $p_id[$ref];
+                                        
+                                        if (!preg_match($validacion, $valor_ref)) {
+                                            //(!empty($p[$columnas[$c]]['gatillo']))
+                                            $dato = filter_var($valor, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                                            //$dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
+                                            $letra_columna = $this->getLetraColumna($indices_columnas[$pregunta_ref['name']]);
+                                            
+                                            $errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido, ya que todo valor en la columna ' . str_replace('#{field}', $columna, $mensaje) . ' cuando el valor de ' . $columna . ' es ' . $valor;
+                                        }
+                                    }
                                 }
+                                
+                                $count ++;
                             }
                         } else {
                             $contador_vacios++;
@@ -461,11 +509,28 @@ class CargaController extends Controller
         return Yii::app()->basePath . '/../public_html/archivos/';
     }
     
+    protected function getLetraColumna($c) {
+        return ($c <= ord('Z') - ord('A')) ? chr(ord('A') + $c) : chr(ord('A') + floor($c / (ord('Z') - ord('A') + 1)) - 1) . chr(ord('A') + ($c % (ord('Z') - ord('A') + 1)));;
+    }
+    
     protected function validarDato($dato, $pregunta)
     {
+        if ($pregunta['opcional'] && empty($dato)) {
+            return true;
+        }
+        
         if ($pregunta['tipo'] == 'Seleccion') {
             return in_array($dato, $pregunta['opciones']);
         }
         return preg_match($pregunta['patron'], $dato);
+    }
+    
+    protected function validarGatillo($dato, $pregunta)
+    {
+        if (!empty($pregunta['gatillo'])) {
+            
+        } 
+        
+        return true;
     }
 }
