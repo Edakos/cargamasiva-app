@@ -426,7 +426,7 @@ class CargaController extends Controller
                             
                             $d = array();
                             for ($c = 0; $c < count($datos); $c++) {
-                                $datos[$c] = utf8_encode($datos[$c]);
+                                //$datos[$c] = utf8_encode($datos[$c]);
                                 $d[$columnas[$c]] = utf8_encode($datos[$c]);
                             }
                             
@@ -437,6 +437,7 @@ class CargaController extends Controller
                                 if (!$this->validarDato($valor, $pregunta)) {
                                     $dato = filter_var($valor, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                                     $dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
+                                    //$dato = utf8_decode($dato);
                                     $letra_columna = $this->getLetraColumna($count);
                                     //$errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido para la columna ' . $columnas[$c] . ' de tipo ' . $p[$columnas[$c]]['tipo'] . '.' ;
                                     $errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido, ya que todo valor en la columna ' . str_replace('#{field}', $columna, $pregunta['mensaje']);
@@ -462,6 +463,7 @@ class CargaController extends Controller
                                         if (!preg_match($validacion, $valor_ref)) {
                                             //(!empty($p[$columnas[$c]]['gatillo']))
                                             $dato = filter_var($valor, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                                            //$dato = utf8_decode($dato);
                                             //$dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
                                             $letra_columna = $this->getLetraColumna($indices_columnas[$pregunta_ref['name']]);
                                             
