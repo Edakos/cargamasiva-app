@@ -286,18 +286,18 @@ class FormularioController extends Controller
                         $r .= $this->generarTabla($v['hijos'], $solo_lectura);
                         break;
                     case 'Entero':
-                        $r .= $this->generar($v, $k, $solo_lectura);
+                        $r .= $this->generar($v, $solo_lectura);
                         $r .= $this->generarForm($v['hijos'], $solo_lectura);
                         break;
                     case 'Texto':
-                        $r .= $this->generar($v, $k, $solo_lectura);
+                        $r .= $this->generar($v, $solo_lectura);
                         $r .= $this->generarForm($v['hijos'], $solo_lectura);
                         break;
                     case 'Seccion':
                         $r .= $this->generarForm($v['hijos'], $solo_lectura);
                         break;
                     default:
-                        $r .= $this->generar($v, $k, $solo_lectura);
+                        $r .= $this->generar($v, $solo_lectura);
                         $r .= $this->generarForm($v['hijos'], $solo_lectura);
                         break;
                 }
@@ -424,13 +424,15 @@ class FormularioController extends Controller
 
     private function generar($pregunta, $solo_lectura = false)
     {
+        
+        
         $this->_count ++; // para saber cuándo poner un boton de Guardar
         
         $r = '';
         $id = 'f' . $pregunta['id'];
         $name = 'Formulario[' . $pregunta['id'] . ']';
         $title = $pregunta['texto'];
-        
+
         if ($solo_lectura) {
             $r .= $pregunta['respuesta'] . '&nbsp;';
             $r .= '<div>&nbsp;</div>';
