@@ -432,7 +432,11 @@ class CargaController extends Controller
                             
                             $count = 0;
                             foreach ($d as $columna => $valor) {
-                                $pregunta = $p[$columna];
+                                if (isset ($p[$columna])) {   
+                                    $pregunta = $p[$columna];
+                                } else {   
+                                    $pregunta = null;
+                                }
                                 //valida tipo de dato:
                                 if (!$this->validarDato($valor, $pregunta)) {
                                     $dato = filter_var($valor, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -517,6 +521,10 @@ class CargaController extends Controller
     
     protected function validarDato($dato, $pregunta)
     {
+        if (empty($pregunta)) {
+            return false;
+        }
+        
         if ($pregunta['opcional'] && empty($dato)) {
             return true;
         }
