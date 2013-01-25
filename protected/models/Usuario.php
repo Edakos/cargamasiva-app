@@ -58,7 +58,7 @@ class Usuario extends MyActiveRecord
 			array('username', 'required'),
             array('username, password', 'required', 'on' => 'insert'),
 			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
-			array('email, username, password, first_name, last_name, cedula, address, cellphone', 'length', 'max'=>256),
+			array('email, username, password, first_name, last_name, name, cedula, address, cellphone', 'length', 'max'=>256),
 			array('birthday, password_repeat, deleted, disabled, reset_password', 'safe'),
             array('email, username, cedula', 'unique'),
             array('password', 'compare'),
@@ -85,6 +85,7 @@ class Usuario extends MyActiveRecord
 	public function attributeLabels()
 	{
 		return array_merge(parent::attributeLabels(), array(
+            'name' => 'Nombre que aparecerá en los reportes PDF',
         ));
 	}
 

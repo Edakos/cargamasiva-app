@@ -63,6 +63,12 @@
 		<?php echo $form->error($model,'last_name'); ?>
 	</div>
 
+	<div class="row">
+		<?php echo $form->labelEx($model,'name'); ?>
+		<?php echo $form->textField($model,'name',array('size'=>60,'maxlength'=>256, 'autocomplete' => 'off')); ?>
+		<?php echo $form->error($model,'name'); ?>
+	</div>
+
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'cedula'); ?>
