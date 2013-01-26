@@ -440,7 +440,7 @@ class CargaController extends Controller
                                 //valida tipo de dato:
                                 if (!$this->validarDato($valor, $pregunta)) {
                                     $dato = filter_var($valor, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                                    $dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
+                                    //$dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
                                     //$dato = utf8_decode($dato);
                                     $letra_columna = $this->getLetraColumna($count);
                                     //$errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido para la columna ' . $columnas[$c] . ' de tipo ' . $p[$columnas[$c]]['tipo'] . '.' ;
@@ -524,12 +524,19 @@ class CargaController extends Controller
         if (empty($pregunta)) {
             return false;
         }
+        $dato = trim($dato);
         
         if ($pregunta['opcional'] && empty($dato)) {
             return true;
         }
         
         if ($pregunta['tipo'] == 'Seleccion') {
+            
+            //echo "<pre>";
+            //print_r($dato);
+            //echo "<hr>";
+            //print_r($pregunta);
+            //echo "</pre>"; 
             return in_array($dato, $pregunta['opciones']);
         }
         return preg_match($pregunta['patron'], $dato);
