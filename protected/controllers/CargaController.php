@@ -351,7 +351,7 @@ class CargaController extends Controller
                     $columna = utf8_encode(trim($columna));
                 }
                 
-                $indices_columnas = array_reverse($columnas);
+                $indices_columnas = array_flip($columnas);
                 
                 //echo "<pre>";print_r($columnas);echo "</pre>";
                 
@@ -469,9 +469,11 @@ class CargaController extends Controller
                                             $dato = filter_var($valor, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                                             //$dato = utf8_decode($dato);
                                             //$dato = strlen($dato) > 20 ? substr($dato, 0, 19) . '...' : $dato;
+                                            //echo "<pre>";print_r($indices_columnas);echo "</pre>";die();
+                                            
                                             $letra_columna = $this->getLetraColumna($indices_columnas[$pregunta_ref['name']]);
                                             
-                                            $errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $dato . '" no es un dato válido, ya que todo valor en la columna ' . str_replace('#{field}', $columna, $mensaje) . ' cuando el valor de ' . $columna . ' es ' . $valor;
+                                            $errores[] = 'Error en la celda ' . $letra_columna . $fila . ': "' . $valor_ref . '" no es un dato válido, ya que todo valor en la columna ' . str_replace('#{field}', $pregunta_ref['name'], $mensaje) . ' cuando el valor de ' . $columna . ' es "' . $valor . '".';
                                         }
                                     }
                                 }
