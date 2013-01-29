@@ -526,7 +526,7 @@ class CargaController extends Controller
         }
         $dato = trim($dato);
         
-        if ($pregunta['opcional'] && empty($dato)) {
+        if ($pregunta['opcional'] && (empty($dato) || $dato == 'NO DISPONE')) {
             return true;
         }
         
