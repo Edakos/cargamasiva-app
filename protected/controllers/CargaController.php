@@ -330,7 +330,7 @@ class CargaController extends Controller
             $columnas = fgetcsv($gestor, 10000, $delimiter);
             
             //busca el delimitador:
-            if (count($columnas) == 1) {
+            if (is_array($columnas) && count($columnas) == 1) {
                 $delimiter = '';
                 
                 $posibles_delimitadores = array(';', "\t", '|');
