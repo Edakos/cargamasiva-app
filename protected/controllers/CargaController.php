@@ -336,7 +336,9 @@ class CargaController extends Controller
                 $posibles_delimitadores = array(';', "\t", '|');
                 
                 foreach ($posibles_delimitadores as $delimitador_candidato) {
-                    if (count($nuevas_columnas = explode($delimitador_candidato, array_shift($columnas))) > 1) {
+                    $nuevas_columnas = explode($delimitador_candidato, array_shift($columnas));
+                    
+                    if (is_array($nuevas_columnas) && count($nuevas_columnas) > 1) {
                         $delimiter = $delimitador_candidato;
                         $columnas = $nuevas_columnas;
                         break;
