@@ -334,14 +334,15 @@ class CargaController extends Controller
                 $delimiter = '';
                 
                 $posibles_delimitadores = array(';', "\t", '|');
+                $seguir_buscando_delimitador = true;
                 
                 foreach ($posibles_delimitadores as $delimitador_candidato) {
                     $nuevas_columnas = explode($delimitador_candidato, array_shift($columnas));
                     
-                    if (is_array($nuevas_columnas) && count($nuevas_columnas) > 1) {
+                    if (is_array($nuevas_columnas) && count($nuevas_columnas) > 1 && $seguir_buscando_delimitador) {
                         $delimiter = $delimitador_candidato;
                         $columnas = $nuevas_columnas;
-                        break;
+                        $seguir_buscando_delimitador = false;
                     }
                 }
             }
