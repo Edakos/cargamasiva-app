@@ -346,7 +346,7 @@ class CargaController extends Controller
                 }
             }
             
-            if (!empty($delimiter)) {
+            if (!empty($delimiter) && is_array($columnas)) {
                 
                 //las pasa a UTF8:
                 foreach ($columnas as & $columna) {
