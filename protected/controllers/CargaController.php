@@ -329,26 +329,30 @@ class CargaController extends Controller
             //obtiene la fila con los títulos de las columnas:
             $columnas = fgetcsv($gestor, 10000, $delimiter);
             
+            
             //busca el delimitador:
             if (is_array($columnas) && count($columnas) == 1) {
                 $delimiter = '';
                 
                 $posibles_delimitadores = array(';', "\t", '|');
-                $seguir_buscando_delimitador = true;
                 
                 foreach ($posibles_delimitadores as $delimitador_candidato) {
                     $nuevas_columnas = explode($delimitador_candidato, array_shift($columnas));
                     
-                    if (is_array($nuevas_columnas) && count($nuevas_columnas) > 1 && $seguir_buscando_delimitador) {
+                    if (is_array($nuevas_columnas) && count($nuevas_columnas) > 1) {
+                        //echo "<pre>NUEVAS:";print_r($nuevas_columnas);echo "</pre>";
                         $delimiter = $delimitador_candidato;
                         $columnas = $nuevas_columnas;
-                        $seguir_buscando_delimitador = false;
+                        break;
+                        
                     }
                 }
+                
             }
             
             if (!empty($delimiter) && is_array($columnas)) {
                 
+                //echo "<pre>";print_r($columnas);echo "</pre>";
                 //las pasa a UTF8:
                 foreach ($columnas as & $columna) {
                     $columna = utf8_encode(trim($columna));
@@ -405,7 +409,7 @@ class CargaController extends Controller
                     
                     $todos_constan = $todos_constan ? in_array($pregunta->name, $columnas) : false;
                     
-    /*  
+    /*
                     if (!in_array($pregunta->name, $columnas)) {
                         echo "<pre>";print_r($pregunta->name . ': ' . in_array($pregunta->name, $columnas));echo "</pre>";
                     }
