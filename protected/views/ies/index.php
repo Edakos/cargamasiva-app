@@ -7,14 +7,15 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-	array('label'=>'Create Ies', 'url'=>array('create')),
-	array('label'=>'Manage Ies', 'url'=>array('admin')),
+	//array('label'=>'Create Ies', 'url'=>array('create')),
+	//array('label'=>'Manage Ies', 'url'=>array('admin')),
 );
 ?>
 
-<h1>Ies</h1>
+<h1>IES</h1>
 
 <?php $this->widget('zii.widgets.CListView', array(
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
+    'template'=>'{summary}{pager}{items}{pager}',
 )); ?>

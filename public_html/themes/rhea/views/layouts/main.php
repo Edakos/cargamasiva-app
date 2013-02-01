@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="language" content="en" />
+	<meta name="language" content="es" />
 
 	<!-- blueprint CSS framework -->
 	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
@@ -215,9 +215,10 @@ if (in_array('representante', array_keys(Rights::getAssignedRoles()))) {
                 'Formulario Institucional' => 'formulario/llenar',//'ies/formulario',
                 'Carreras' => 'carrera/ratificar', //'ies/carreras',
                 'Carga' => 'carga/realizar',//'ies/carga',
-                'Levantamientos' => 'levantamiento/admin',
+                //'Levantamientos' => 'levantamiento/admin',
                 'Usuarios' => 'usuario/admin',
-                'Permisos' => 'rights'
+                'Permisos' => 'rights',
+                'IES' => 'ies',
             )),
 /*
 			'items'=>array(

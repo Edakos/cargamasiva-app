@@ -96,7 +96,19 @@ class IesController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Ies');
+		$dataProvider=new CActiveDataProvider(
+            'Ies',
+            array(
+                'criteria' => array(
+                    //'condition'=>'levantamiento_id=:levantamientoId and name<>:name',
+                    //'params'=>array(':levantamientoId'=>'2', ':name' =>'IES'),
+                    'order'=>'code',
+                ),
+                'pagination'=>array(
+                    'pageSize'=>10,
+                ),
+            )
+        );
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
