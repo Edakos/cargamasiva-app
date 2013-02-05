@@ -224,31 +224,37 @@ class CargaController extends Controller
                             //echo "<pre>";print_r($model);echo "</pre>";die();
                             //echo "<pre>";print_r($carga->getPrimaryKey());echo "</pre>";die();
                             
-                            if ($model->save()) {
-                                //echo Yii::app()->basePath; die();
-                                if ($model->archivo_cargado->extensionName == 'csv') {
-                                    //Se hace la validación a los archivos csv:
-                                    $this->model = $model;
-                                    if ($this->validar()) {
-                                        //$this->redirect(array('/carga/realizar?success'));
+                            
+                            //echo Yii::app()->basePath; die();
+                            if ($model->archivo_cargado->extensionName == 'csv') {
+                                //Se hace la validación a los archivos csv:
+                                $this->model = $model;
+                                if ($this->validar()) {
+                                    //$this->redirect(array('/carga/realizar?success'));
+                                    if ($model->save()) {
                                         $success = true;
                                     } else {
-                                        $model->delete();
+                                        //echo "<pre>";print_r($model->getErrors());echo "</pre>";die();
                                         
-                                        $mensaje = $this->errores_validacion;
-                                        $error = 'validacion';
+                                        $mensaje = $model->getErrors();
+                                        $error = 'carga_save';
                                     }
                                 } else {
-                                    //$this->redirect(array('/carga/realizar?success'));
-                                    $success = true;
+                                    
+                                    $mensaje = $this->errores_validacion;
+                                    $error = 'validacion';
                                 }
                             } else {
-                                //echo "<pre>";print_r($model->getErrors());echo "</pre>";die();
-                                
-                                $mensaje = $model->getErrors();
-                                $error = 'carga_save';
+                                //$this->redirect(array('/carga/realizar?success'));
+                                if ($model->save()) {
+                                    $success = true;
+                                } else {
+                                    //echo "<pre>";print_r($model->getErrors());echo "</pre>";die();
+                                    
+                                    $mensaje = $model->getErrors();
+                                    $error = 'carga_save';
+                                }
                             }
-                            
                         } else {
                             $mensaje = $archivo->getErrors();
                             $error = 'archivo_save';
@@ -434,7 +440,9 @@ class CargaController extends Controller
                             $d = array();
                             for ($c = 0; $c < count($datos); $c++) {
                                 //$datos[$c] = utf8_encode($datos[$c]);
-                                $d[$columnas[$c]] = utf8_encode($datos[$c]);
+                                if (isset($columnas[$c])) {
+                                    $d[$columnas[$c]] = utf8_encode($datos[$c]);
+                                }
                             }
                             
                             $count = 0;
