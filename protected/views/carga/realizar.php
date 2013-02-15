@@ -56,6 +56,10 @@ $this->breadcrumbs=array(
     </div>
 <?php endif; ?>
 
+
+<?php if ($bloquear_carga): ?>
+<div class="flash-error">El sistema ya no permite realizar más cargas.</div>
+<?php else: ?>
 <?php
 $form = $this->beginWidget(
     'CActiveForm',
@@ -82,6 +86,7 @@ $form = $this->beginWidget(
 
 </div>
 <?php $this->endWidget(); ?>
+<?php endif; ?>
 
 <hr/>
 <div style="clear:both;">

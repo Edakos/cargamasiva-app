@@ -219,6 +219,7 @@ if (in_array('representante', array_keys(Rights::getAssignedRoles()))) {
                 'Usuarios' => 'usuario/admin',
                 'Permisos' => 'rights',
                 'IES' => 'ies',
+                'Bloqueo' => 'parametro/bloquear',
             )),
 /*
 			'items'=>array(

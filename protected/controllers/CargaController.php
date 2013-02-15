@@ -152,12 +152,14 @@ class CargaController extends Controller
         $error = '';
         $mensaje = '';
         $success = false;
+        
+        $bloquear_carga = Parametro::model()->findByAttributes(array('name' => 'bloquear_carga'))->valor;
 
                 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-        if (isset($_POST['Carga'])) {
+        if (isset($_POST['Carga']) && !$bloquear_carga) {
             
 			$model->attributes = $_POST['Carga'];
             
@@ -311,6 +313,7 @@ class CargaController extends Controller
             'mensaje' => $mensaje,
             'success' => $success,
             'archivo_cargado' => $archivo_cargado,
+            'bloquear_carga' => $bloquear_carga,
         ));
     }
     
