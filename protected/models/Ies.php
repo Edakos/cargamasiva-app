@@ -109,6 +109,7 @@ class Ies extends MyActiveRecord
                 p.id
                 ,p.name
                 ,p.orden
+                ,p.opcional
                 ,p.pregunta_id AS padre
                 ,p.tipo_id
                 ,t.name AS tipo
@@ -162,6 +163,7 @@ class Ies extends MyActiveRecord
                 'id' => $p['id'],
                 'texto' => $p['name'],
                 'tipo' => $p['tipo'],
+                'opcional' => $p['opcional'],
                 'cuenta' => array(),
                 'respuesta' => $p['respuesta'],
                 'opciones' => $o,
@@ -195,10 +197,12 @@ class Ies extends MyActiveRecord
         return $estructura;
     }
     
+    //Cuenta las preguntas no opcionales existentes, y cuenta de ellas las que están respondidas:
+    
     public function contar($data, $cuenta = array('total' => 0, 'respondidas' => 0))
     {
         foreach ($data as $k => $v) {
-            if (!empty($v['tipo']) && !in_array($v['tipo'], array('Tabla', 'Seccion')) && empty($v['hijos'])) {
+            if (!empty($v['tipo']) && !in_array($v['tipo'], array('Tabla', 'Seccion')) && empty($v['hijos']) && !$v['opcional']) {
                 //es un campo de llenar:
                 $cuenta['total'] += 1;
                 //evalua si está respondida o no

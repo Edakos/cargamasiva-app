@@ -62,7 +62,7 @@ foreach($estructura as $k => $v) {
         echo CHtml::image('/images/red.png', '', array('width' => 20, 'height' => 20));
     }
     echo ' <strong><a href="/formulario/llenar?seccion=' . $k . '">' . $v['texto'] . ':</a></strong> ';
-    echo $v['cuenta']['total'] . ' preguntas, ' . $v['cuenta']['respondidas'] . ' respondidas.';
+    echo $v['cuenta']['total'] . ' preguntas obligatorias, ' . $v['cuenta']['respondidas'] . ' respondidas.';
     echo '<div>&nbsp;</div>';
     echo '</li>';
 
