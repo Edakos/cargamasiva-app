@@ -2,18 +2,21 @@
 /* @var $this ParametroController */
 /* @var $model Parametro */
 
-$this->breadcrumbs=array(
-	'Parametros'=>array('index'),
-	$model->name=>array('view','id'=>$model->id),
-	'Update',
+$this->breadcrumbs = array(
+	//'Parametros' => array('index'),
+	'Bloqueo' => array('parametro/bloquear'),
+	'Cargas',
 );
 
-$this->menu=array(
-	array('label'=>'List Parametro', 'url'=>array('index')),
-	array('label'=>'Create Parametro', 'url'=>array('create')),
-	array('label'=>'View Parametro', 'url'=>array('view', 'id'=>$model->id)),
-	array('label'=>'Manage Parametro', 'url'=>array('admin')),
+
+$this->menu = array(
+	array('label'=>'Bloquear Cargas', 'url'=>array('parametro/bloquear')),
+	//array('label'=>'Create Parametro', 'url'=>array('create')),
+    
+	//array('label'=>'View Parametro', 'url'=>array('view', 'id'=>$model->id)),
+	//array('label'=>'Manage Parametro', 'url'=>array('admin')),
 );
+
 ?>
 
 <h1>Bloquear / desbloquear cargas</h1>
