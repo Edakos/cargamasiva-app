@@ -48,7 +48,7 @@ class Ies extends MyActiveRecord
 			array('created_by, modified_by', 'numerical', 'integerOnly'=>true),
 			array('code', 'length', 'max'=>100),
 			array('name', 'length', 'max'=>200),
-			array('notas, created, modified', 'safe'),
+			array('notas, created, modified, bloqueado_carga_pdf, bloqueado_carga_matriz, bloqueado_carreras, bloqueado_formulario', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, code, name, notas, created, modified, created_by, modified_by', 'safe', 'on'=>'search'),

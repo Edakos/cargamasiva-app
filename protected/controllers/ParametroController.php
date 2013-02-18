@@ -143,19 +143,59 @@ class ParametroController extends Controller
     
 	public function actionBloquear()
 	{
-		$model = $this->loadModel(1);
-
+        
+        
+        /*
+        $lista_ies = Yii::app()->db->createCommand("
+            SELECT
+                 id
+                ,name
+                ,code
+                ,bloqueado_carga_pdf
+                ,bloqueado_carga_matriz
+            FROM 
+                ies
+            ORDER BY
+                code
+        ")->queryAll();
+*/
 	
 		if (isset($_POST['Parametro'])) {
-			$model->attributes = $_POST['Parametro'];
+            $parametro = $this->loadModel($_POST['Parametro']['id']);
+			$parametro->attributes = $_POST['Parametro'];
             
-			if ($model->save()) {
+			if ($parametro->save()) {
 				//$this->redirect(array('view', 'id' => $model->id));
+                if ($parametro->id == 2) {
+                    Ies::model()->updateAll(array('bloqueado_carga_matriz' => $parametro->valor));
+                } else if ($parametro->id == 3) {
+                    Ies::model()->updateAll(array('bloqueado_carga_pdf' => $parametro->valor));
+                }
             }
 		}
 
+		if (isset($_POST['Ies'])) {
+            
+            $ies = Ies::model()->findByPk($_POST['Ies']['id']);
+			$ies->attributes = $_POST['Ies'];
+            //echo '<pre>'; print_r($_POST['Ies']); echo '</pre>'; 
+            //echo '<pre>'; print_r($ies->attributes); echo '</pre>'; die();
+			if ($ies->save()) {
+                
+				//$this->redirect(array('view', 'id' => $model->id));
+            }
+		}
+        $lista_ies = Ies::model()->findAll(array('order' => 'code'));
+		$bloquear_carga = $this->loadModel(1);
+        $bloquear_carga_matriz = $this->loadModel(2);
+        $bloquear_carga_pdf = $this->loadModel(3);
+
+
 		$this->render('bloquear', array(
-			'model' => $model,
+			'bloquear_carga' => $bloquear_carga,
+            'bloquear_carga_matriz' => $bloquear_carga_matriz,
+            'bloquear_carga_pdf' => $bloquear_carga_pdf,
+            'lista_ies' => $lista_ies,
 		));
 	}
 

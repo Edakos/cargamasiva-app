@@ -16,6 +16,8 @@ $this->breadcrumbs=array(
     <div class="flash-error">No se pudo realizar la carga del archivo "<?php echo $archivo_cargado; ?>". 
     <?php if ($error == 'sin_archivo'): ?>
         No escogió ningún archivo. 
+    <?php elseif ($error == 'bloqueado'): ?>
+        El administrador del sistema ha bloqueado la carga de este tipo de archivos. Cualquier duda por favor contáctese a <a href="mailto:sniese@senescyt.gob.ec">sniese@senescyt.gob.ec</a>
     <?php elseif ($error == 'nombre_invalido'): ?>
         El nombre <strong>y la extensión</strong> del archivo debe coincidir exactamente con los listados abajo.
         <br />Tenga en cuenta que los formularios deben ser exportados a formato <strong>.csv</strong>, y que los documentos deben tener extensión <strong>.pdf</strong>

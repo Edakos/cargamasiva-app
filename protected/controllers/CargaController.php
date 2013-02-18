@@ -167,71 +167,102 @@ class CargaController extends Controller
 
 
             $es_nombre_valido = false;
+            $no_bloqueado = false;
+            $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
             
             
             if ($model->archivo_cargado = CUploadedFile::getInstance($model,'archivo_cargado')) {
 
                 if ($model->archivo_cargado->extensionName == 'csv' 
-                    && count($formulario = Formulario::model()->findByAttributes(array(
-                        'levantamiento_id' => 2,
-                        'name' => str_replace('.csv', '', $model->archivo_cargado->name),
-                    )))) {
+                    && !$ies->bloqueado_carga_matriz) {
                     //busca si es un formulario
                     
                     //echo "Es un formulario"; die();
-                    $es_nombre_valido = true;
-                    $model->formulario_id = $formulario->id;
-                    
+                    $no_bloqueado = true;
                 } else if ($model->archivo_cargado->extensionName == 'pdf' 
-                    && count($documento = Documento::model()->findByAttributes(array(
-                        'levantamiento_id' => 2,
-                        'name' => str_replace('.pdf', '', $model->archivo_cargado->name),
-                    )))) {
+                    && !$ies->bloqueado_carga_pdf) {
                     //busca si es un documento
                     
                     //echo "Es un documento"; die();
-                    $es_nombre_valido = true;
-                    $model->documento_id = $documento->id;
-                    
+                    $no_bloqueado = true;                    
                 }
                 
-                if ($es_nombre_valido) {
-                    $ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
-                    
-                    $name = '2012_' . $ies->code . '_' . $model->archivo_cargado->name;
-                    
-                    $path = $this->getPath() . $name;
-                    
-                    if (file_exists($path)) {
-                        $new_path = $this->getPath() . str_replace('.' . $model->archivo_cargado->extensionName, '', $name) . '-' . time() . '-' . md5_file($path) . '.' . $model->archivo_cargado->extensionName;
-                        copy($path, $new_path);
+                if ($no_bloqueado) {
+                    if ($model->archivo_cargado->extensionName == 'csv' 
+                        && count($formulario = Formulario::model()->findByAttributes(array(
+                            'levantamiento_id' => 2,
+                            'name' => str_replace('.csv', '', $model->archivo_cargado->name),
+                        )))) {
+                        //busca si es un formulario
+                        
+                        //echo "Es un formulario"; die();
+                        $es_nombre_valido = true;
+                        $model->formulario_id = $formulario->id;
+                        
+                    } else if ($model->archivo_cargado->extensionName == 'pdf' 
+                        && count($documento = Documento::model()->findByAttributes(array(
+                            'levantamiento_id' => 2,
+                            'name' => str_replace('.pdf', '', $model->archivo_cargado->name),
+                        )))) {
+                        //busca si es un documento
+                        
+                        //echo "Es un documento"; die();
+                        $es_nombre_valido = true;
+                        $model->documento_id = $documento->id;
+                        
                     }
                     
-                    if ($model->archivo_cargado->saveAs($path)) {
-                        if (count($archivo = Archivo::model()->findByattributes(array('name' => $name))) == 0) {
-                            //si es válido el nombre, crea el archivo
-                            $archivo = new Archivo();
-                            $archivo->name = $name;
-                            
-                            $archivo->extension = $model->archivo_cargado->extensionName;
-                        }
-                        $archivo->md5 = md5_file($path);
+                    if ($es_nombre_valido) {
                         
-                        if ($archivo->save()) {
-                            $model->archivo_id = $archivo->id;
+                        $name = '2012_' . $ies->code . '_' . $model->archivo_cargado->name;
+                        
+                        $path = $this->getPath() . $name;
+                        
+                        if (file_exists($path)) {
+                            $new_path = $this->getPath() . str_replace('.' . $model->archivo_cargado->extensionName, '', $name) . '-' . time() . '-' . md5_file($path) . '.' . $model->archivo_cargado->extensionName;
+                            copy($path, $new_path);
+                        }
+                        
+                        if ($model->archivo_cargado->saveAs($path)) {
+                            if (count($archivo = Archivo::model()->findByattributes(array('name' => $name))) == 0) {
+                                //si es válido el nombre, crea el archivo
+                                $archivo = new Archivo();
+                                $archivo->name = $name;
+                                
+                                $archivo->extension = $model->archivo_cargado->extensionName;
+                            }
+                            $archivo->md5 = md5_file($path);
+                            
+                            if ($archivo->save()) {
+                                $model->archivo_id = $archivo->id;
 
-                            $model->ies_id = $ies->id;  
-                            $model->id = null;  
-                            
-                            //echo "<pre>";print_r($model);echo "</pre>";die();
-                            //echo "<pre>";print_r($carga->getPrimaryKey());echo "</pre>";die();
-                            
-                            
-                            //echo Yii::app()->basePath; die();
-                            if ($model->archivo_cargado->extensionName == 'csv') {
-                                //Se hace la validación a los archivos csv:
-                                $this->model = $model;
-                                if ($this->validar()) {
+                                $model->ies_id = $ies->id;  
+                                $model->id = null;  
+                                
+                                //echo "<pre>";print_r($model);echo "</pre>";die();
+                                //echo "<pre>";print_r($carga->getPrimaryKey());echo "</pre>";die();
+                                
+                                
+                                //echo Yii::app()->basePath; die();
+                                if ($model->archivo_cargado->extensionName == 'csv') {
+                                    //Se hace la validación a los archivos csv:
+                                    $this->model = $model;
+                                    if ($this->validar()) {
+                                        //$this->redirect(array('/carga/realizar?success'));
+                                        if ($model->save()) {
+                                            $success = true;
+                                        } else {
+                                            //echo "<pre>";print_r($model->getErrors());echo "</pre>";die();
+                                            
+                                            $mensaje = $model->getErrors();
+                                            $error = 'carga_save';
+                                        }
+                                    } else {
+                                        
+                                        $mensaje = $this->errores_validacion;
+                                        $error = 'validacion';
+                                    }
+                                } else {
                                     //$this->redirect(array('/carga/realizar?success'));
                                     if ($model->save()) {
                                         $success = true;
@@ -241,32 +272,20 @@ class CargaController extends Controller
                                         $mensaje = $model->getErrors();
                                         $error = 'carga_save';
                                     }
-                                } else {
-                                    
-                                    $mensaje = $this->errores_validacion;
-                                    $error = 'validacion';
                                 }
                             } else {
-                                //$this->redirect(array('/carga/realizar?success'));
-                                if ($model->save()) {
-                                    $success = true;
-                                } else {
-                                    //echo "<pre>";print_r($model->getErrors());echo "</pre>";die();
-                                    
-                                    $mensaje = $model->getErrors();
-                                    $error = 'carga_save';
-                                }
+                                $mensaje = $archivo->getErrors();
+                                $error = 'archivo_save';
                             }
                         } else {
-                            $mensaje = $archivo->getErrors();
-                            $error = 'archivo_save';
+                            $mensaje = 'El código del error es ' . $model->archivo_cargado->getError();
+                            $error = 'sin_permisos';
                         }
                     } else {
-                        $mensaje = 'El código del error es ' . $model->archivo_cargado->getError();
-                        $error = 'sin_permisos';
+                        $error = 'nombre_invalido';
                     }
                 } else {
-                    $error = 'nombre_invalido';
+                    $error = 'bloqueado';
                 }
             } else {
                 $error = 'sin_archivo';
