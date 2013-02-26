@@ -31,6 +31,7 @@ foreach ($ies->cargas as $carga){
 
     <b>Formulario Institucional:</b>
 	<?php echo CHtml::encode($data->bloqueado_formulario ? 'FINALIZADO (BLOQUEADO)' : 'No finalizado'); ?>
+    <?php echo CHtml::link(' (Mostrar)', '/formulario/html/' . $ies->id, array('target'=>'_blank')); ?>
 	<br />
 
     <b>Información de Carreras:</b>

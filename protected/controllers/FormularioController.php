@@ -623,6 +623,50 @@ class FormularioController extends Controller
     }
 */
 
+    public function actionHtml($id)
+    {
+        //echo 111; die();
+        //$ies = Ies::model()->findByAttributes(array('code' => Yii::app()->user->name));
+        $ies = Ies::model()->findByPk($id);
+        /*
+        if (isset($_GET['ies']) && !empty($_GET['ies']) && is_numeric($_GET['ies'])) {
+            $ies = Ies::model()->findByPk($_GET['ies']);
+        } else {
+            Yii::app()->end();
+        }
+        */
+        
+        $this->soloLectura = true;
+        $estructura = $ies->getEstructura();
+        $this->soloLectura = false;
+        
+        //$usuario = Usuario::model()->findByAttributes(array('username' => Yii::app()->user->name))->name;
+        $usuario = Usuario::model()->findByAttributes(array('username' => $ies->code));
+        
+        $this->layout = 'print';
+        
+          $filename = "formulario_institucional_{$ies->code}.xls";
+
+    
+          
+                    
+            header("Content-Type: application/vnd.ms-excel");
+            header("Expires: 0");
+            header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+            header("Content-Type: application/force-download");
+            header("Content-Type: application/octet-stream");
+            header("Content-Type: application/download");
+            header("Content-Disposition: attachment; filename=\"$filename\"");
+        
+        
+        
+        $this->render('mostrar', array(
+            'estructura' => $estructura,
+            'ies' => $ies,
+            'usuario' => $usuario,
+        )); 
+    }
+
     public function actionMostrar()
     {
         //echo 111; die();
