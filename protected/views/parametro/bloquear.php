@@ -61,6 +61,7 @@ $this->menu = array(
     <th>IES</th>
     <th>Matrices</th>
     <th>PDF</th>
+    <th>Formulario</th>
 </tr>
 
 <tr>
@@ -127,6 +128,7 @@ $this->menu = array(
 <?php $this->endWidget(); ?>
 
 </td>
+<td>&nbsp;</td>
 </tr>
 
     
@@ -177,6 +179,33 @@ $this->menu = array(
 <?php $this->endWidget(); ?>
 </div>
 </td>
+
+
+
+<td>
+    <div class="<?php echo ($ies->bloqueado_formulario? 'flash-error' : 'flash-success'); ?>">
+    <?php if (!$ies->bloqueado_formulario): ?>
+        Formulario desbloqueado
+    <?php else: ?>
+    
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id' => 'form_formulario_' . $ies['id'],
+	'enableAjaxValidation'=>false,
+)); ?>
+    <?php echo $form->hiddenField($ies, 'id', array('value' => $ies->id)); ?>
+    <?php echo $form->hiddenField($ies,'bloqueado_formulario',array('rows'=>6, 'cols'=>50, 'value' => ($ies->bloqueado_formulario ? 0 : 1))); ?>
+
+	<div class="row buttons">
+		<?php echo CHtml::submitButton($ies->bloqueado_formulario  ? 'Desbloquear' : 'Bloquear'); ?>
+	</div>
+
+<?php $this->endWidget(); ?>
+<?php endif; ?>
+</div>
+</td>
+
+
+
 </tr>
 <?php endforeach;?>
 </table>
