@@ -184,9 +184,9 @@ $this->menu = array(
 
 <td>
     <div class="<?php echo ($ies->bloqueado_formulario? 'flash-error' : 'flash-success'); ?>">
-    <?php if (!$ies->bloqueado_formulario): ?>
-        Formulario desbloqueado
-    <?php else: ?>
+    <?php //if (!$ies->bloqueado_formulario): ?>
+        <!-- Formulario desbloqueado -->
+    <?php //else: ?>
     
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id' => 'form_formulario_' . $ies['id'],
@@ -200,7 +200,7 @@ $this->menu = array(
 	</div>
 
 <?php $this->endWidget(); ?>
-<?php endif; ?>
+<?php //endif; ?>
 </div>
 </td>
 
