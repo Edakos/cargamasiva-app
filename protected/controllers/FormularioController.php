@@ -270,6 +270,24 @@ class FormularioController extends Controller
         }
     }
     
+    public function actionMatriz()
+    {
+        
+        $ies_todas = Ies::model()->findAll(array('order' => 'code'));
+        
+        $filename = "matriz_formulario_institucional.xls";
+
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Disposition: attachment;filename=\"$filename\"");
+        header("Cache-Control: max-age=0");
+
+        
+        $this->layout = 'print';
+        $this->render('matriz', array(
+                'ies_todas' => $ies_todas,
+        ));
+    }
+    
     public function generarForm($data, $solo_lectura = false)
     {
         if (empty($data)) {
@@ -315,6 +333,77 @@ class FormularioController extends Controller
             return $r;
         }
     }
+
+
+    public function generarTitulosMatriz($data, $legado = '')
+    {
+        if (empty($data)) {
+            return;
+        } else {
+            $r = '';
+            foreach ($data as $k => $v) {
+                
+                switch ($v['tipo']) {
+                    case 'Tabla':
+                        $r .= $this->generarTitulosMatriz($v['hijos'], $legado . ' - ' . $v['texto']);
+                        break;
+                    case 'Seccion':
+                        $r .= $this->generarTitulosMatriz($v['hijos'], (empty($legado) ? $v['texto'] : $legado . ' - ' . $v['texto']));
+                        break;
+                    default:
+                        if (!empty($v['hijos'])) {
+                            $r .= $this->generarTitulosMatriz($v['hijos'], $legado . ' - ' . $v['texto']);
+                        } else {
+                            $r .= '<th>' . $legado . ' - ' . $v['texto'] . '</th>';
+                        }
+                        break;
+                }
+                
+                
+            }
+            return $r;
+        }
+    }
+
+
+    public function generarFilaMatriz($data)
+    {
+        if (empty($data)) {
+            return;
+        } else {
+            $r = '';
+            foreach ($data as $k => $v) {
+                $respuesta = ($v['respuesta'] == '') ? '&nbsp;' : $v['respuesta'];
+                //$respuesta = $v['respuesta'];
+                
+                switch ($v['tipo']) {
+                    case 'Tabla':
+                        
+                        $r .= $this->generarFilaMatriz($v['hijos']);
+                        break;
+                    case 'SiNo':
+                        $r .= '<td>' . ($respuesta == '1' ? 'SI' : $respuesta == '0' ? 'NO' : $respuesta) . '</td>';
+
+                        break;
+                    case 'Seccion':
+                        $r .= $this->generarFilaMatriz($v['hijos']);
+                        break;
+                    default:
+                        if (!empty($v['hijos'])) {
+                            $r .= $this->generarFilaMatriz($v['hijos']);
+                        } else {
+                            $r .= '<td>' . $respuesta . '</td>';
+                        }
+                        break;
+                }
+                
+                
+            }
+            return $r;
+        }
+    }
+
+
     
     private function generarTabla($data, $solo_lectura = false)
     {
@@ -647,9 +736,11 @@ class FormularioController extends Controller
         
           $filename = "formulario_institucional_{$ies->code}.xls";
 
-    
-          
-                    
+header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header("Content-Disposition: attachment;filename=\"filename.xlsx\"");
+header("Cache-Control: max-age=0");
+
+/*                    
             header("Content-Type: application/vnd.ms-excel");
             header("Expires: 0");
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -657,9 +748,7 @@ class FormularioController extends Controller
             header("Content-Type: application/octet-stream");
             header("Content-Type: application/download");
             header("Content-Disposition: attachment; filename=\"$filename\"");
-        
-        
-        
+*/
         $this->render('mostrar', array(
             'estructura' => $estructura,
             'ies' => $ies,

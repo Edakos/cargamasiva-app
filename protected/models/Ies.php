@@ -121,6 +121,9 @@ class Ies extends MyActiveRecord
                     WHERE 
                             r.pregunta_id = p.id
                         AND r.ies_id = :ies_id
+                    ORDER BY
+                        r.id DESC
+                    LIMIT 1
                 ) AS respuesta
             FROM 
                 pregunta AS p
