@@ -220,6 +220,7 @@ if (in_array('representante', array_keys(Rights::getAssignedRoles()))) {
                 'Permisos' => 'rights',
                 'IES' => 'ies',
                 'Bloqueo' => 'parametro/bloquear',
+                'Matriz' => 'formulario/matriz',
             )),
 /*
 			'items'=>array(
